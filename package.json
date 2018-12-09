@@ -1,0 +1,16 @@
+{
+  "name": "hr-app",
+  "version": "1.0.0",
+  "description": "Hr-App",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://Nur939@bitbucket.org/arafat-bd/hr-app.git"
+  },
+  "author": "Nur A Alam",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/arafat-bd/hr-app#readme"
+}
