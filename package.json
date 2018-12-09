@@ -4,7 +4,7 @@
   "description": "Hr-App",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app"
   },
   "repository": {
     "type": "git",
@@ -12,5 +12,10 @@
   },
   "author": "Nur A Alam",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/arafat-bd/hr-app#readme"
+  "homepage": "https://bitbucket.org/arafat-bd/hr-app#readme",
+  "dependencies": {
+    "bower": "^1.8.4",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4"
+  }
 }
