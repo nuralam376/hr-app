@@ -11,7 +11,7 @@ let UserModel = require("../models/userModel");
 router.get("/",function(req,res){
     if(req.isAuthenticated())
     {
-        res.redirect("/");
+        res.redirect("/user");
     }
     else
         res.render("login");

@@ -26,7 +26,7 @@ const upload = multer({
 router.get("/",function(req,res){
     if(req.isAuthenticated())
     {
-        res.redirect("/");
+        res.redirect("/user");
     }
     else
     {
