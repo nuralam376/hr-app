@@ -27,4 +27,21 @@ router.get("/",function(req,res){
     }    
 });
 
+router.get("/:id",function(req,res){
+    let query = {_id : req.params.id};
+
+    UserModel.findOne(query,function(err,user){
+        if(err)
+        {
+            console.log(err);
+        }
+        else
+        {
+            res.render("users/view",{
+                user : user
+            });
+        }
+    });
+});
+
 module.exports = router;
