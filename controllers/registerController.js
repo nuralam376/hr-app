@@ -70,8 +70,8 @@ router.post("/",upload.any(),[
         
         if(req.files.length)
         {
-            forms.profile_photo =req.files[0].path;
-            forms.passport_photo =req.files[1].path;
+            forms.profile_photo =req.files[0].filename;
+            forms.passport_photo =req.files[1].filename;
         }
        
 

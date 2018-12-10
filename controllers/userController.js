@@ -2,10 +2,23 @@ const express = require("express");
 
 const router = express.Router();
 
+let UserModel = require("../models/userModel");
+
 router.get("/",function(req,res){
     if(req.isAuthenticated())
     {
-        res.render("users/index");
+        UserModel.find({},function(err,users){
+            if(err)
+            {
+                console.log(err);
+            }
+            else
+            {
+                res.render("users/index",{
+                    users : users
+                });
+            }
+        });
     }
     else
     {

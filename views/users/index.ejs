@@ -1,8 +1,26 @@
 <% include ../layouts/header %>
+    <h1 class = "text-center">User Home</h1>
     <div class="card">
         <div class="card-body">
-            <h1 class = "text-center">User Home</h1>
+            <h2>All Users</h2>        
             <br><br>
+
+            <table class = "table">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Photo</th>
+                </tr>
+                <% if(users) { %>
+                    <% users.forEach(function(user) { %>
+                        <tr>
+                            <td><a href = "/user/<%= user._id %>"><%= user.name %></a></td>
+                            <td><%= user.email %></td>
+                            <td><img src = "uploads\<%= user.profile_photo %>" height = "100px" width = "100px"></td>
+                        </tr>
+                    <% }) %>
+                <% } %>
+            </table>
         </div>
     </div>
 <% include ../layouts/footer %>
