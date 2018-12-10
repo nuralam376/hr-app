@@ -55,9 +55,11 @@ app.get("/",function(req,res){
 //Other Routes
 let register = require("./controllers/registerController");
 let login = require("./controllers/loginController");
+let user = require("./controllers/userController");
 
 app.use("/register",register);
 app.use("/login",login);
+app.use("/user",user);
 // Start the server
 app.listen(port,function(){
     console.log("Server started on port " + port);

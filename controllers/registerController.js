@@ -24,7 +24,14 @@ const upload = multer({
 
 
 router.get("/",function(req,res){
-    res.render("register");
+    if(req.isAuthenticated())
+    {
+        res.redirect("/");
+    }
+    else
+    {
+        res.render("register");
+    }    
 });
 
 router.post("/",upload.any(),[
@@ -38,7 +45,7 @@ router.post("/",upload.any(),[
     check("present_address").not().isEmpty().withMessage("Present Addres is required"),
     check("permanent_address").not().isEmpty().withMessage("Permanent Address is required"),
     check("password").not().isEmpty().withMessage("Password is required"),
-    check("password").isLength({min:6}).withMessage("Password is required"),
+    check("password").isLength({min:6}).withMessage("Password must be 6 characters"),
     sanitizeBody("name").trim().unescape(),
     sanitizeBody("email").trim().unescape(),
     sanitizeBody("password").trim().unescape(),
