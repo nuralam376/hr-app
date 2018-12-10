@@ -47,10 +47,15 @@ router.get("/edit/:id",ensureAuthenticated,function(req,res){
 
 });
 
-router.get("/delete/:id",ensureAuthenticated,function(req,res){
+router.delete("/delete/:id",ensureAuthenticated,function(req,res){
     if(req.user.isAdmin)
     {
-        res.redirect("/");
+        let query = {_id : req.params.id};
+
+        UserModel.deleteOne(query,function(err){
+            req.flash("danger","User Deleted");
+            res.redirect("/user");
+        });
     }
     else
     {
