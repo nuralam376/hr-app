@@ -61,8 +61,6 @@ router.post("/update/:id",[
     check("passport").not().isEmpty().withMessage("Passport Id is required"),
     check("present_address").not().isEmpty().withMessage("Present Addres is required"),
     check("permanent_address").not().isEmpty().withMessage("Permanent Address is required"),
-    check("password").not().isEmpty().withMessage("Password is required"),
-    check("password").isLength({min:6}).withMessage("Password must be 6 characters"),
     sanitizeBody("name").trim().unescape(),
     sanitizeBody("email").trim().unescape(),
     sanitizeBody("password").trim().unescape(),
@@ -82,7 +80,6 @@ router.post("/update/:id",[
             birth_date : req.body.birth_date,
             nid : req.body.nid,
             passport : req.body.passport,
-            password : req.body.password
         };
 
        
@@ -113,46 +110,25 @@ router.post("/update/:id",[
                 user.permanent_address = forms.permanent_address;
                 user.profile_photo = newUser.profile_photo;
                 user.passport_photo = newUser.passport_photo;
-                user.password = forms.password;
-    
-                bcrypt.genSalt(10,function(err,salt){
+                user.password = newUser.password;
+  
+                UserModel.updateOne(query,user,function(err){
                     if(err)
                     {
                         console.log(err);
                     }
                     else
                     {
-                        bcrypt.hash(user.password, salt, function(err,hash){
-                            if(err)
-                            {
-                                console.log(err);
-                            }
-                            else
-                            {
-                                user.password = hash;
-    
-                                UserModel.updateOne(query,user,function(err){
-                                    if(err)
-                                    {
-                                        console.log(err);
-                                    }
-                                    else
-                                    {
-                                        req.flash("success","User Details Updated");
-                                        res.redirect("/user");
-                                    }
-                                });
-                            }
-                        });
+                        req.flash("success","User Details Updated");
+                        res.redirect("/user");
                     }
                 });
-               
             }
         });
-
-        
-    
+                    
 });
+               
+          
 
 router.delete("/delete/:id",ensureAuthenticated,function(req,res){
     if(req.user.isAdmin)
