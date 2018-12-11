@@ -44,8 +44,6 @@ router.post("/",upload.any(),[
     check("passport").not().isEmpty().withMessage("Passport Id is required"),
     check("present_address").not().isEmpty().withMessage("Present Addres is required"),
     check("permanent_address").not().isEmpty().withMessage("Permanent Address is required"),
-    check("profile_photo").not().isEmpty().withMessage("Profile Photo is required"),
-    check("passport_photo").not().isEmpty().withMessage("Personal Photo is required"),
     check("password").not().isEmpty().withMessage("Password is required"),
     check("password").isLength({min:6}).withMessage("Password must be 6 characters"),
     sanitizeBody("name").trim().unescape(),
@@ -70,17 +68,11 @@ router.post("/",upload.any(),[
             password : req.body.password
         };
         
-        if(req.files.length > 0)
+        if(req.files.length)
         {
-            if(typeof req.files[0] != undefined)
-            {
-                req.body.profile_photo =req.files[0].filename;
-            }
-            if(typeof req.files[1] != undefined)
-            {
-                req.body.passport_photo =req.files[1].filename;
-            }       
-        }    
+            forms.profile_photo =req.files[0].filename;
+            forms.passport_photo =req.files[1].filename;
+        }
        
 
         let errors = validationResult(req);
@@ -92,7 +84,54 @@ router.post("/",upload.any(),[
                 form : forms
             });
         }
-        
+        else
+        {
+            let user = new UserModel();
+            user.name = forms.name;
+            user.email = forms.email;
+            user.birth_date = forms.birth_date;
+            user.blood_group = forms.blood;
+            user.nid = forms.nid;
+            user.passport = forms.passport;
+            user.present_address = forms.present_address;
+            user.permanent_address = forms.permanent_address;
+            user.profile_photo = forms.profile_photo;
+            user.passport_photo = forms.passport_photo;
+            user.password = forms.password;
+
+            bcrypt.genSalt(10,function(err,salt){
+                if(err)
+                {
+                    console.log(err);
+                }
+                else
+                {
+                    bcrypt.hash(user.password, salt, function(err,hash){
+                        if(err)
+                        {
+                            console.log(err);
+                        }
+                        else
+                        {
+                            user.password = hash;
+
+                            user.save(function(err){
+                                if(err)
+                                {
+                                    console.log(err);
+                                }
+                                else
+                                {
+                                    req.flash("success","You are now registered and can log in");
+                                    res.redirect("/login");
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+           
+        }
     
 });
 
