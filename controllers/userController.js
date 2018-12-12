@@ -1,12 +1,40 @@
 const express = require("express");
-
+const path = require("path");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
+const fs = require("fs");
 
 const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody} = require("express-validator/filter");
+const multer = require("multer");
 
 let UserModel = require("../models/userModel");
+
+const storage = multer.diskStorage({
+    destination : "./public/uploads",
+    filename : function(req,file,cb)
+    {
+        cb(null,file.fieldname + "-" + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage : storage,
+    fileFilter : function(req,file,cb){
+        checkFileType(req,file,cb)
+    }
+});
+
+function checkFileType(req,file,cb)
+{
+    let ext = path.extname(file.originalname);
+    let size = file.size;
+    if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
+         req.fileValidationError = "Forbidden extension";
+         return cb(null, false, req.fileValidationError);
+   }
+   cb(null, true);
+}
 
 router.get("/",ensureAuthenticated,function(req,res){
     UserModel.find({},function(err,users){
@@ -51,7 +79,7 @@ router.get("/edit/:id",ensureAuthenticated,function(req,res){
 
 });
 
-router.post("/update/:id",[
+router.post("/update/:id",upload.any(),[
     check("name").not().isEmpty().withMessage("Name is required"),
     check("email").not().isEmpty().withMessage("Email is required"),
     check("email").isEmail().withMessage("Email must be valid"),
@@ -82,19 +110,36 @@ router.post("/update/:id",[
             passport : req.body.passport,
         };
 
+
        
         let query = {_id : req.params.id};
 
         UserModel.findOne(query,function(err,newUser){
             let errors = validationResult(req);
+            forms.profile_photo = newUser.profile_photo;
+            forms.passport_photo = newUser.passport_photo;
+
+            if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+            {
+                if(req.files[0].fieldname == "profile_photo")
+                    forms.profile_photo = req.files[0].filename;
+                else
+                    forms.passport_photo = req.files[0].filename;
+            }
+            
+            if(typeof req.files[1] !== "undefined" && req.files[1].fieldname == "passport_photo" && req.fileValidationError == null)
+            {
+                forms.passport_photo = req.files[1].filename;
+            }
 
             if(!errors.isEmpty())
             {
                
                 res.render("users/edit",{
                     errors : errors.array(),
-                    newUser : newUser
-                })
+                    newUser : newUser,
+                    fileError : req.fileValidationError
+                });
               
             }
             else
@@ -111,6 +156,8 @@ router.post("/update/:id",[
                 user.profile_photo = newUser.profile_photo;
                 user.passport_photo = newUser.passport_photo;
                 user.password = newUser.password;
+                user.profile_photo = forms.profile_photo;
+                user.passport_photo = forms.passport_photo;
   
                 UserModel.updateOne(query,user,function(err){
                     if(err)

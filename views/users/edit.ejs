@@ -1,7 +1,7 @@
 <% include ../layouts/header %>
     <h1><%= newUser.name %></h1> 
     
-    <form action = "/user/update/<%= newUser._id %>" method = "POST">
+    <form action = "/user/update/<%= newUser._id %>" method = "POST" enctype = "multipart/form-data">
         <div class="form-group">
             <label for="name">Name</label>
             <input type="text" name = "name" id = "name" class = "form-control" value = "<%= newUser.name %>" >
@@ -36,10 +36,12 @@
         </div>
         <div class="form-group">
             <label for="profile_photo">Profile Photo</label>
+            <input type = "file" name = "profile_photo" id = "profile_photo">
             <img src = "/uploads/<%= newUser.profile_photo %>" height = "100px" width = "100px">
         </div>
         <div class="form-group">
             <label for="passport_photo">Passport Photo</label>
+            <input type = "file" name = "passport_photo" id = "passport_photo">
             <img src = "/uploads/<%= newUser.passport_photo %>" height = "100px" width = "100px">
         </div>
         <div class="form-group">

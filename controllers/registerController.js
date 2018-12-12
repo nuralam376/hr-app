@@ -108,6 +108,14 @@ router.post("/",upload.any(),[
                 fileError : req.fileValidationError
             });
         }
+        else if(req.fileValidationError !== null)
+        {
+            res.render("register",{
+                errors : errors.array(),
+                form : forms,
+                fileError : req.fileValidationError
+            });
+        }
         else
         {
             let user = new UserModel();
