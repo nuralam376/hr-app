@@ -13,11 +13,13 @@
                 </tr>
                 <% if(users) { %>
                     <% users.forEach(function(user) { %>
+                        <% if (user.isAdmin == false) { %>
                         <tr>
                             <td><a href = "/user/<%= user._id %>"><%= user.name %></a></td>
                             <td><%= user.email %></td>
                             <td><img src = "uploads\<%= user.profile_photo %>" height = "100px" width = "100px"></td>
                         </tr>
+                        <% } %>
                     <% }) %>
                 <% } %>
             </table>
