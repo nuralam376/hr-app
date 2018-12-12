@@ -144,6 +144,25 @@ router.post("/update/:id",upload.any(),[
             }
             else
             {
+                if(newUser.profile_photo !== forms.profile_photo)
+                {
+                    fs.unlink("./public/uploads/"+newUser.profile_photo, function(err){
+                         if(err)
+                         {
+                             console.log(err);
+                         }
+                     });
+                }
+                if(newUser.passport_photo !== forms.passport_photo)
+                {
+                    fs.unlink("./public/uploads/"+newUser.passport_photo, function(err){
+                        if(err)
+                         {
+                             console.log(err);
+                         }
+                     });
+                }
+
                 let user = {};
                 user.name = forms.name;
                 user.email = forms.email;
@@ -158,6 +177,8 @@ router.post("/update/:id",upload.any(),[
                 user.password = newUser.password;
                 user.profile_photo = forms.profile_photo;
                 user.passport_photo = forms.passport_photo;
+
+              
   
                 UserModel.updateOne(query,user,function(err){
                     if(err)
