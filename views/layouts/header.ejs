@@ -42,3 +42,8 @@
     <div class="container">
         <% include ../includes/messages %>
         <%- messages('includes/express-messages', locals) %>
+        <% if(fileError) { %>
+            <div class = "alert alert-danger">
+                <%= fileError %>
+            </div>
+        <% } %>

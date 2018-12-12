@@ -18,7 +18,21 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage : storage,
+    fileFilter : function(req,file,cb){
+        checkFileType(req,file,cb)
+    }
 });
+
+function checkFileType(req,file,cb)
+{
+    let ext = path.extname(file.originalname);
+    let size = file.size;
+    if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
+         req.fileValidationError = "Forbidden extension";
+         return cb(null, false, req.fileValidationError);
+   }
+   cb(null, true);
+}
 
 
 
@@ -44,6 +58,7 @@ router.post("/",upload.any(),[
     check("passport").not().isEmpty().withMessage("Passport Id is required"),
     check("present_address").not().isEmpty().withMessage("Present Addres is required"),
     check("permanent_address").not().isEmpty().withMessage("Permanent Address is required"),
+
     check("password").not().isEmpty().withMessage("Password is required"),
     check("password").isLength({min:6}).withMessage("Password must be 6 characters"),
     sanitizeBody("name").trim().unescape(),
@@ -65,15 +80,23 @@ router.post("/",upload.any(),[
             birth_date : req.body.birth_date,
             nid : req.body.nid,
             passport : req.body.passport,
-            password : req.body.password
+            password : req.body.password,
+            profile_photo : "dummy.jpeg",
+            passport_photo : "dummy.jpeg",
         };
-        
-        if(req.files.length)
+
+        if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
         {
-            forms.profile_photo =req.files[0].filename;
-            forms.passport_photo =req.files[1].filename;
+            if(req.files[0].fieldname == "profile_photo")
+                forms.profile_photo = req.files[0].filename;
+            else
+                forms.passport_photo = req.files[0].filename;
         }
-       
+        
+        if(typeof req.files[1] !== "undefined" && req.files[1].fieldname == "passport_photo" && req.fileValidationError == null)
+        {
+            forms.passport_photo = req.files[1].filename;
+        }
 
         let errors = validationResult(req);
 
@@ -81,7 +104,8 @@ router.post("/",upload.any(),[
         {
             res.render("register",{
                 errors : errors.array(),
-                form : forms
+                form : forms,
+                fileError : req.fileValidationError
             });
         }
         else
