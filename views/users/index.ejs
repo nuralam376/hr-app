@@ -5,23 +5,31 @@
             <h2>All Users</h2>        
             <br><br>
 
-            <table class = "table">
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Photo</th>
-                </tr>
-                <% if(users) { %>
-                    <% users.forEach(function(user) { %>
-                        <% if (user.isAdmin == false) { %>
-                        <tr>
-                            <td><a href = "/user/<%= user._id %>"><%= user.name %></a></td>
-                            <td><%= user.email %></td>
-                            <td><img src = "uploads\<%= user.profile_photo %>" height = "100px" width = "100px"></td>
-                        </tr>
-                        <% } %>
-                    <% }) %>
-                <% } %>
+            <table class = "table" id = "myTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Passport ID</th>
+                        <th>Photo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(users) { %>
+                        <% users.forEach(function(user) { %>
+                            <% if (user.isAdmin == false) { %>
+                            <tr>
+                                <td><a href = "/user/<%= user._id %>"><%= user._id %></a></td>
+                                <td><%= user.name %></td>
+                                <td><%= user.email %></td>
+                                <td><%= user.passport %></td>
+                                <td><img src = "uploads\<%= user.profile_photo %>" height = "100px" width = "100px"></td>
+                            </tr>
+                            <% } %>
+                        <% }) %>
+                    <% } %>
+                 </tbody>   
             </table>
         </div>
     </div>
