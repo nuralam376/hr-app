@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 // Mongodb database connection
-mongoose.connect("mongodb://nuraalam939@gmail.com:Aa*25800@ds117509.mlab.com:17509/hr-app");
+mongoose.connect("mongodb://hr-app:hr123456@ds117509.mlab.com:17509/hr-app");
 
 let db = mongoose.connection;
 
