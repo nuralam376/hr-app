@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const passport = require("passport");
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 8000;
 
 // Mongodb database connection
 mongoose.connect("mongodb://hr-app:hr123456@ds117509.mlab.com:17509/hr-app");
