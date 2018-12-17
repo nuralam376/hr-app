@@ -8,7 +8,7 @@ const app = express();
 const port = 3000;
 
 // Mongodb database connection
-mongoose.connect("mongodb://localhost/hr-app", {useNewUrlParser : true});
+mongoose.connect("mongodb://hr-app:hr123456@ds117509.mlab.com:17509/hr-app");
 
 let db = mongoose.connection;
 
