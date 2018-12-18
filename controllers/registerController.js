@@ -108,7 +108,7 @@ router.post("/",upload.any(),[
                 fileError : req.fileValidationError
             });
         }
-        else if(req.fileValidationError !== null)
+        else if(typeof req.fileValidationError != undefined && req.fileValidationError != null)
         {
             res.render("register",{
                 errors : errors.array(),
