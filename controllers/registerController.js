@@ -1,3 +1,6 @@
+/** This is the register controller page. User Registration related functions are here. */
+
+/** Required modules */
 const express = require("express");
 const path = require("path");
 const router = express.Router();
@@ -6,8 +9,10 @@ const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody } = require("express-validator/filter");
 const multer = require("multer");
 
+/** User Model Schema */
 let UserModel = require("../models/userModel");
 
+/** Initialize Multer storage Variable for file upload */
 const storage = multer.diskStorage({
     destination : "./public/uploads",
     filename : function(req,file,cb)
@@ -16,12 +21,20 @@ const storage = multer.diskStorage({
     }
 });
 
+
+/** Implements File upload validation */
 const upload = multer({
     storage : storage,
     fileFilter : function(req,file,cb){
         checkFileType(req,file,cb)
     }
 });
+
+
+/**
+ * Checks Whether the file is an image or not
+ * 
+ */
 
 function checkFileType(req,file,cb)
 {
@@ -36,7 +49,7 @@ function checkFileType(req,file,cb)
 
 
 
-
+/** Shows Registration page */
 router.get("/",function(req,res){
     if(req.isAuthenticated())
     {
@@ -48,6 +61,8 @@ router.get("/",function(req,res){
     }    
 });
 
+
+/** Receives user input data for registration */
 router.post("/",upload.any(),[
     check("name").not().isEmpty().withMessage("Name is required"),
     check("email").not().isEmpty().withMessage("Email is required"),
@@ -85,6 +100,7 @@ router.post("/",upload.any(),[
             passport_photo : "dummy.jpeg",
         };
 
+        /** Checks if the user uploads any file */
         if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
         {
             if(req.files[0].fieldname == "profile_photo")

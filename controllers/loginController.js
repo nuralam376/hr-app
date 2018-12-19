@@ -1,3 +1,6 @@
+/** This is the login controller page. Login related functions are here. */
+
+/** Required modules */
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
@@ -5,8 +8,13 @@ const {check, validationResult} = require("express-validator/check");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
-
+/** User Model Schema */
 let UserModel = require("../models/userModel");
+
+/**
+ * Shows Login Page
+ * 
+ */
 
 router.get("/",function(req,res){
     if(req.isAuthenticated())
@@ -17,6 +25,8 @@ router.get("/",function(req,res){
         res.render("login");
 });
 
+
+/** Implements Passport  */
 passport.use(new LocalStrategy(
 	function (username, password, done) {
         let query = {email : username};
@@ -47,6 +57,12 @@ passport.deserializeUser(function (id, done) {
 	});
 });
 
+
+/**
+ * Receives User's email and passport and authenticate
+ * 
+ */
+
 router.post("/data",[
     check("username").not().isEmpty().withMessage("Email is required"),
     check("password").not().isEmpty().withMessage("Password is required")
@@ -70,6 +86,8 @@ router.post("/data",[
     }
 });
 
+
+/**  Logout logged in user */
 router.get("/logout",function(req,res){
     req.logout();
     req.flash("success","You are now logged out");

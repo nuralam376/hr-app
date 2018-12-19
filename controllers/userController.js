@@ -1,3 +1,6 @@
+/** This is the User controller page. User CRUD Functions are here .*/
+
+/** Required modules */
 const express = require("express");
 const path = require("path");
 const router = express.Router();
@@ -8,8 +11,10 @@ const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody} = require("express-validator/filter");
 const multer = require("multer");
 
+/** User Model Schema */
 let UserModel = require("../models/userModel");
 
+/** Initialize Multer storage Variable for file upload */
 const storage = multer.diskStorage({
     destination : "./public/uploads",
     filename : function(req,file,cb)
@@ -18,6 +23,8 @@ const storage = multer.diskStorage({
     }
 });
 
+
+/** Implements File upload validation */
 const upload = multer({
     storage : storage,
     fileFilter : function(req,file,cb){
@@ -25,6 +32,11 @@ const upload = multer({
     }
 });
 
+
+/**
+ * Checks Whether the file is an image or not
+ * 
+ */
 function checkFileType(req,file,cb)
 {
     let ext = path.extname(file.originalname);
@@ -35,6 +47,11 @@ function checkFileType(req,file,cb)
    }
    cb(null, true);
 }
+
+/**
+ * Shows User Home Page
+ * 
+ */
 
 router.get("/",ensureAuthenticated,function(req,res){
     UserModel.find({},function(err,users){
@@ -51,7 +68,12 @@ router.get("/",ensureAuthenticated,function(req,res){
     });
 });
 
-
+/**
+ * Represents User Edit Options.
+ * 
+ * @param {string} id - The Object Id of the User.
+ *
+ */
 
 router.get("/edit/:id",ensureAuthenticated,function(req,res){
   if(req.user.isAdmin)
@@ -78,6 +100,11 @@ router.get("/edit/:id",ensureAuthenticated,function(req,res){
   }
 
 });
+
+/**
+ * Receives User input data for updating the user
+ * @param {string} id - The Object Id of the User.
+*/
 
 router.post("/update/:id",upload.any(),[
     check("name").not().isEmpty().withMessage("Name is required"),
@@ -196,7 +223,11 @@ router.post("/update/:id",upload.any(),[
                     
 });
                
-          
+
+/**
+ * Represents User Delete options
+ * @param {string} id - The Object Id of the User.
+*/
 
 router.delete("/delete/:id",ensureAuthenticated,function(req,res){
     if(req.user.isAdmin)
@@ -216,6 +247,11 @@ router.delete("/delete/:id",ensureAuthenticated,function(req,res){
   
 });
 
+/**
+ * Shows Individual User
+ * @param {string} id - The Object Id of the User.
+*/
+
 router.get("/:id",ensureAuthenticated,function(req,res){
     let query = {_id : req.params.id};
 
@@ -231,8 +267,9 @@ router.get("/:id",ensureAuthenticated,function(req,res){
             });
         }
     });
-});  
+}); 
 
+/** Checks Whether the user is logged in or not*/
 function ensureAuthenticated(req,res,next)
 {
     if(req.isAuthenticated())
