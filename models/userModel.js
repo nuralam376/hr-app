@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 /** User Table Field .*/
 
-let UserSchema = mongoose.Schema({
+const UserSchema = mongoose.Schema({
     name : 
     {
         type : String,
@@ -74,4 +74,4 @@ let UserSchema = mongoose.Schema({
     }
 });
 
-let User = module.exports = mongoose.model("User",UserSchema);
+const User = module.exports = mongoose.model("User",UserSchema);

@@ -1,9 +1,9 @@
 /** Mongoose Module .*/
 const mongoose = require("mongoose");
 
-/** User Table Field .*/
+/** Supplier Table Field .*/
 
-let SupplierSchema = mongoose.Schema({
+const SupplierSchema = mongoose.Schema({
     name : 
     {
         type : String,
@@ -68,4 +68,4 @@ let SupplierSchema = mongoose.Schema({
     }
 });
 
-let Supplier = module.exports = mongoose.model("Supplier",SupplierSchema);
+const Supplier = module.exports = mongoose.model("Supplier",SupplierSchema);
