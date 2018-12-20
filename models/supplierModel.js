@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 /** User Table Field .*/
 
-let UserSchema = mongoose.Schema({
+let SupplierSchema = mongoose.Schema({
     name : 
     {
         type : String,
@@ -65,13 +65,7 @@ let UserSchema = mongoose.Schema({
     {
         type : String,
         required : true
-    },
-    supplier : 
-    {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Supplier',
-        required : false
     }
 });
 
-let User = module.exports = mongoose.model("User",UserSchema);
+let Supplier = module.exports = mongoose.model("Supplier",SupplierSchema);
