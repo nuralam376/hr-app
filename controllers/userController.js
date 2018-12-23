@@ -261,21 +261,20 @@ router.delete("/delete/:id",ensureAuthenticated,function(req,res){
  * @param {string} id - The Object Id of the User.
 */
 
-router.get("/:id",ensureAuthenticated,function(req,res){
-    let query = {_id : req.params.id};
+router.get("/:id",ensureAuthenticated,async(req,res) => {
+    try{
+        let query = {_id : req.params.id};
 
-    UserModel.findOne(query,function(err,user){
-        if(err)
-        {
-            console.log(err);
-        }
-        else
-        {
-            res.render("users/view",{
-                newUser : user
-            });
-        }
-    });
+        let user = await UserModel.findOne(query).populate("supplier").exec();
+        res.render("users/view",{
+            newUser : user
+        });
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+
 }); 
 
 /** Checks Whether the user is logged in or not*/
