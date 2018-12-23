@@ -13,6 +13,7 @@ const multer = require("multer");
 
 /** User Model Schema */
 let UserModel = require("../models/userModel");
+let SupplierModel = require("../models/supplierModel");
 
 /** Initialize Multer storage Variable for file upload */
 const storage = multer.diskStorage({
@@ -75,29 +76,32 @@ router.get("/",ensureAuthenticated,function(req,res){
  *
  */
 
-router.get("/edit/:id",ensureAuthenticated,function(req,res){
-  if(req.user.isAdmin)
-  {
-    let query = {_id : req.params.id};
-
-    UserModel.findOne(query,function(err,user){
-        if(err)
+router.get("/edit/:id",ensureAuthenticated,async(req,res) => {
+    try
+    {
+        if(req.user.isAdmin)
         {
-            console.log(err);
+          let query = {_id : req.params.id};
+      
+          let user = await UserModel.findOne(query);
+          let suppliers = await SupplierModel.find({});
+          
+          res.render("users/edit",{
+              newUser : user,
+              suppliers : suppliers
+          });
         }
         else
         {
-            res.render("users/edit",{
-                newUser : user
-            });
+            req.flash("danger","Unauthorize Access");
+            res.redirect("/user");
         }
-    });
-  }
-  else
-  {
-      req.flash("danger","Unauthorize Access");
-      res.redirect("/user");
-  }
+    }
+    catch(error)
+    {
+        console.log(error);
+    }   
+ 
 
 });
 
@@ -136,7 +140,6 @@ router.post("/update/:id",upload.any(),[
             nid : req.body.nid,
             passport : req.body.passport,
         };
-
 
        
         let query = {_id : req.params.id};
@@ -205,6 +208,12 @@ router.post("/update/:id",upload.any(),[
                 user.profile_photo = forms.profile_photo;
                 user.passport_photo = forms.passport_photo;
 
+                // Checks If the user has any supplier and assigned supplier to user
+                if(req.body.supplier !== "")
+                {
+                    forms.supplier = req.body.supplier;
+                    user.supplier = forms.supplier;
+                }
               
   
                 UserModel.updateOne(query,user,function(err){

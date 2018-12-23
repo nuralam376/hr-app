@@ -35,10 +35,22 @@
             <textarea name="permanent_address" id="permanent_address" cols="30" rows="5" class = "form-control"><%= newUser.permanent_address %></textarea>
         </div>
         <div class="form-group">
+            <label for="supplier">Assign Supplier</label>
+            <select name="supplier" id="supplier" class = "form-control">
+                <option value="">No Supplier</option>
+                <% if(suppliers.length) { %>
+                    <% suppliers.forEach(supplier =>  { %>
+                        <option value="<%= supplier._id %>"><%= supplier.name %></option>
+                    <% }) %>
+                <% } %>
+            </select>
+        </div>
+        <div class="form-group">
             <label for="profile_photo">Profile Photo</label>
             <input type = "file" name = "profile_photo" id = "profile_photo">
             <img src = "/uploads/<%= newUser.profile_photo %>" height = "100px" width = "100px">
         </div>
+       
         <div class="form-group">
             <label for="passport_photo">Passport Photo</label>
             <input type = "file" name = "passport_photo" id = "passport_photo">
