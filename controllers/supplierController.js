@@ -209,6 +209,30 @@ router.post("/register",upload.any(),[
 });
 
 
+/**
+ * Shows Individual Supplier
+ * @param {string} id - The Object Id of the Supplier.
+*/
+
+router.get("/:id",ensureAuthenticated,async(req,res) => {
+    try{
+        let query = {_id : req.params.id};
+        let supplier = await SupplierModel.findOne(query).exec();
+        if(supplier)
+        {
+            res.render("supplier/view",{
+                supplier : supplier
+            });
+        }    
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+
+}); 
+
+
 
 /** Checks Whether the user is logged in or not*/
 function ensureAuthenticated(req,res,next)
