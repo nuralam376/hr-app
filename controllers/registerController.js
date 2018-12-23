@@ -53,11 +53,11 @@ function checkFileType(req,file,cb)
 router.get("/",function(req,res){
     if(req.isAuthenticated())
     {
-        res.redirect("/user");
+        res.render("register");
     }
     else
     {
-        res.render("register");
+        res.redirect("/user");
     }    
 });
 
