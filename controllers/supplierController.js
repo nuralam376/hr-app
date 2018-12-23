@@ -208,6 +208,40 @@ router.post("/register",upload.any(),[
     
 });
 
+/**
+ * Represents Supplier Edit Options.
+ * 
+ * @param {string} id - The Object Id of the Supplier.
+ *
+ */
+
+router.get("/edit/:id",ensureAuthenticated,async(req,res) => {
+    try
+    {
+        if(req.user.isAdmin)
+        {
+          let query = {_id : req.params.id};
+      
+          let supplier = await SupplierModel.findOne(query);
+          
+          res.render("supplier/edit",{
+              supplier : supplier,
+          });
+        }
+        else
+        {
+            req.flash("danger","Unauthorize Access");
+            res.redirect("/user");
+        }
+    }
+    catch(error)
+    {
+        console.log(error);
+    }   
+ 
+
+});
+
 
 /**
  * Shows Individual Supplier
