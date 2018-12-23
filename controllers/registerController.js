@@ -171,7 +171,7 @@ router.post("/",upload.any(),[
                                 else
                                 {
                                     req.flash("success","You are now registered and can log in");
-                                    res.redirect("/login");
+                                    res.redirect("/user");
                                 }
                             });
                         }

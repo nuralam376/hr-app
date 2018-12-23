@@ -22,11 +22,11 @@
                     <% if(suppliers) { %>
                         <% suppliers.forEach((supplier) => { %>
                             <tr>
-                                <td><a href = "/user/<%= user._id %>"><%= user._id %></a></td>
-                                <td><%= user.name %></td>
-                                <td><%= user.email %></td>
-                                <td><%= user.passport %></td>
-                                <td><img src = "uploads\<%= user.profile_photo %>" height = "100px" width = "100px"></td>
+                                <td><a href = "/supplier/<%= user._id %>"><%= supplier._id %></a></td>
+                                <td><%= supplier.name %></td>
+                                <td><%= supplier.email %></td>
+                                <td><%= supplier.passport %></td>
+                                <td><img src = "uploads\supplier\<%= supplier.profile_photo %>" height = "100px" width = "100px"></td>
                             </tr>
                         <% }) %>
                     <% } %>
