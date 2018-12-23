@@ -18,5 +18,24 @@ $(document).ready(function(){
         });
     });
 
+    $(".delete-supplier").on("click",function(e){
+        $target = $(e.target);
+        const id = $target.attr("data-id");
+
+        $.ajax({
+            type : "Delete",
+            url : "/supplier/delete/" + id,
+            success : function(response)
+            {
+                window.location.href = "/supplier";
+            },
+
+            error : function(err)
+            {
+                window.location.href = "/supplier";
+            }
+        });
+    });
+
     $('#myTable').DataTable();
 });

@@ -374,6 +374,36 @@ router.post("/update/:id",upload.any(),[
                     
 });
 
+/**
+ * Represents Supplier Delete options
+ * @param {string} id - The Object Id of the Supplier.
+*/
+
+router.delete("/delete/:id",ensureAuthenticated,async(req,res) => {
+    try
+    {
+        if(req.user.isAdmin)
+        {
+            let query = {_id : req.params.id};
+
+            SupplierModel.deleteOne(query,function(err){
+                req.flash("danger","Supplier Deleted");
+                res.redirect("/supplier");
+            });
+        }
+        else
+        {
+            req.flash("danger","Unauthorize Access");
+            res.redirect("/supplier");
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+  
+});
+
 
 /**
  * Shows Individual Supplier
