@@ -242,6 +242,138 @@ router.get("/edit/:id",ensureAuthenticated,async(req,res) => {
 
 });
 
+/**
+ * Receives Supplier input data for updating the supplier
+ * @param {string} id - The Object Id of the Supplier.
+*/
+
+router.post("/update/:id",upload.any(),[
+    check("name").not().isEmpty().withMessage("Name is required"),
+    check("email").not().isEmpty().withMessage("Email is required"),
+    check("email").isEmail().withMessage("Email must be valid"),
+    check("birth_date").not().isEmpty().withMessage("Birth Date is required"),
+    check("blood").not().isEmpty().withMessage("Blood Group is required"),
+    check("nid").not().isEmpty().withMessage("National ID is required"),
+    check("passport").not().isEmpty().withMessage("Passport Id is required"),
+    check("present_address").not().isEmpty().withMessage("Present Addres is required"),
+    check("permanent_address").not().isEmpty().withMessage("Permanent Address is required"),
+    sanitizeBody("name").trim().unescape(),
+    sanitizeBody("email").trim().unescape(),
+    sanitizeBody("password").trim().unescape(),
+    sanitizeBody("birth_date").trim().unescape(),
+    sanitizeBody("blood").trim().unescape(),
+    sanitizeBody("passport").trim().unescape(),
+    sanitizeBody("present_address").trim().unescape(),
+    sanitizeBody("permanent_address").trim().unescape(),
+    sanitizeBody("nid").trim().toInt(),
+],async(req,res) => {
+
+    try{
+        let forms = {
+            name : req.body.name,
+            email : req.body.email,
+            blood : req.body.blood,
+            present_address : req.body.present_address,
+            permanent_address : req.body.permanent_address,
+            birth_date : req.body.birth_date,
+            nid : req.body.nid,
+            passport : req.body.passport,
+        };
+
+       
+            let query = {_id : req.params.id};
+
+            let newSupplier = await SupplierModel.findOne(query);
+
+            if(newSupplier)
+            {
+                let errors = validationResult(req);
+                forms.profile_photo = newSupplier.profile_photo;
+                forms.passport_photo = newSupplier.passport_photo;
+    
+                if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+                {
+                    if(req.files[0].fieldname == "profile_photo")
+                        forms.profile_photo = req.files[0].filename;
+                    else
+                        forms.passport_photo = req.files[0].filename;
+                }
+                
+                if(typeof req.files[1] !== "undefined" && req.files[1].fieldname == "passport_photo" && req.fileValidationError == null)
+                {
+                    forms.passport_photo = req.files[1].filename;
+                }
+    
+                if(!errors.isEmpty())
+                {
+                   
+                    res.render("users/edit",{
+                        errors : errors.array(),
+                        supplier : supplier,
+                        fileError : req.fileValidationError
+                    });
+                  
+                }
+                else
+                {
+                    if(newSupplier.profile_photo !== forms.profile_photo)
+                    {
+                        fs.unlink("./public/uploads/supplier"+newSupplier.profile_photo, (err) => {
+                             if(err)
+                             {
+                                 console.log(err);
+                             }
+                         });
+                    }
+                    if(newSupplier.passport_photo !== forms.passport_photo)
+                    {
+                        fs.unlink("./public/uploads/supplier"+newSupplier.passport_photo, (err) => {
+                            if(err)
+                             {
+                                 console.log(err);
+                             }
+                         });
+                    }
+    
+                    let supplier = {};
+                    supplier.name = forms.name;
+                    supplier.email = forms.email;
+                    supplier.birth_date = forms.birth_date;
+                    supplier.blood_group = forms.blood;
+                    supplier.nid = forms.nid;
+                    supplier.passport = forms.passport;
+                    supplier.present_address = forms.present_address;
+                    supplier.permanent_address = forms.permanent_address;
+                    supplier.profile_photo = newSupplier.profile_photo;
+                    supplier.passport_photo = newSupplier.passport_photo;
+                    supplier.password = newSupplier.password;
+                    supplier.profile_photo = forms.profile_photo;
+                    supplier.passport_photo = forms.passport_photo;
+    
+      
+                    SupplierModel.updateOne(query,supplier,(err) => {
+                        if(err)
+                        {
+                            console.log(err);
+                        }
+                        else
+                        {
+                            req.flash("success","Supplier Details Updated");
+                            res.redirect("/supplier");
+                        }
+                    });
+                }
+            }  
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+       
+        
+                    
+});
+
 
 /**
  * Shows Individual Supplier
