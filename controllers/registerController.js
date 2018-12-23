@@ -11,6 +11,7 @@ const multer = require("multer");
 
 /** User Model Schema */
 let UserModel = require("../models/userModel");
+let SupplierModel = require("../models/supplierModel");
 
 /** Initialize Multer storage Variable for file upload */
 const storage = multer.diskStorage({
@@ -50,15 +51,25 @@ function checkFileType(req,file,cb)
 
 
 /** Shows Registration page */
-router.get("/",function(req,res){
-    if(req.isAuthenticated())
+router.get("/",async(req,res) => {
+    try
     {
-        res.render("register");
+        if(req.isAuthenticated())
+        {
+            let suppliers = await SupplierModel.find({}).exec();
+            res.render("register",{
+                suppliers : suppliers
+            });
+        }
+        else
+        {
+            res.redirect("/user");
+        }    
     }
-    else
+    catch(error)    
     {
-        res.redirect("/user");
-    }    
+        console.log(error);
+    }
 });
 
 
@@ -85,7 +96,9 @@ router.post("/",upload.any(),[
     sanitizeBody("present_address").trim().unescape(),
     sanitizeBody("permanent_address").trim().unescape(),
     sanitizeBody("nid").trim().toInt(),
-],function(req,res){
+],async(req,res) => {
+    try
+    {
         let forms = {
             name : req.body.name,
             email : req.body.email,
@@ -114,24 +127,29 @@ router.post("/",upload.any(),[
             forms.passport_photo = req.files[1].filename;
         }
 
-        let errors = validationResult(req);
+            let suppliers = await SupplierModel.find({}).exec();
+            
+            let errors = validationResult(req);
 
-        if(!errors.isEmpty())
-        {
-            res.render("register",{
-                errors : errors.array(),
-                form : forms,
-                fileError : req.fileValidationError
-            });
-        }
-        else if(typeof req.fileValidationError != undefined && req.fileValidationError != null)
-        {
-            res.render("register",{
-                errors : errors.array(),
-                form : forms,
-                fileError : req.fileValidationError
-            });
-        }
+            if(!errors.isEmpty())
+            {
+                res.render("register",{
+                    errors : errors.array(),
+                    form : forms,
+                    suppliers : suppliers,
+                    fileError : req.fileValidationError
+                });
+            }
+            else if(typeof req.fileValidationError != undefined && req.fileValidationError != null)
+            {
+                res.render("register",{
+                    errors : errors.array(),
+                    form : forms,
+                    suppliers : suppliers,
+                    fileError : req.fileValidationError
+                });
+            }
+        
         else
         {
             let user = new UserModel();
@@ -146,6 +164,13 @@ router.post("/",upload.any(),[
             user.profile_photo = forms.profile_photo;
             user.passport_photo = forms.passport_photo;
             user.password = forms.password;
+
+              // Checks If the user has any supplier and assigned supplier to user
+              if(req.body.supplier !== "")
+              {
+                  forms.supplier = req.body.supplier;
+                  user.supplier = forms.supplier;
+              }
 
             bcrypt.genSalt(10,function(err,salt){
                 if(err)
@@ -180,6 +205,12 @@ router.post("/",upload.any(),[
             });
            
         }
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+        
     
 });
 

@@ -58,8 +58,15 @@ app.use(function(req,res,next){
 app.set("view engine","ejs");
 
 /** Home Route */
-app.get("/",function(req,res){
-    res.render("home");
+app.get("/",async(req,res) => {
+    try{
+        res.render("home");
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+    
 });
 
 /** Required Controllers */

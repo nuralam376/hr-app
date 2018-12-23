@@ -37,12 +37,14 @@
         <label for="permanent_address">Permanent Address</label>
         <textarea name="permanent_address" id="permanent_address" cols="30" rows="5" class = "form-control"disabled><%= newUser.permanent_address %></textarea>
     </div>
+    <% if(newUser.supplier) { %>
     <div class="form-group">
         <label for="supplier">Assigned Supplier</label>
         <select name="supplier" id="supplier" class = "form-control" disabled>
             <option value=""><%= newUser.supplier.name %></option>
         </select>
     </div>
+    <% } %>
     <div class="form-group">
         <label for="profile_photo">Profile Photo</label>
         <img src = "/uploads/<%= newUser.profile_photo %>" height = "100px" width = "100px">
