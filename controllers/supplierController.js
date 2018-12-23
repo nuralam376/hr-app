@@ -14,7 +14,7 @@ let SupplierModel = require("../models/supplierModel");
 
 
 
-/** Receives supplier input data for registration */
+/** Renders All Suppliers */
 router.get("/",ensureAuthenticated,async(req,res) => {
     try 
     {
@@ -30,6 +30,21 @@ router.get("/",ensureAuthenticated,async(req,res) => {
     }    
 
 });
+
+/** Shows Supplier Registration Page */
+
+router.get("/register",ensureAuthenticated,async(req,res) => {
+    try 
+    {
+        res.render("supplier/register");
+    }
+    catch(err)
+    {
+        console.log(err);
+    }    
+
+});
+
 
 /** Checks Whether the user is logged in or not*/
 function ensureAuthenticated(req,res,next)
