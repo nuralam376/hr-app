@@ -1,0 +1,37 @@
+<% include ../layouts/header %>
+    <h1 class = "text-center">Supplier Home</h1>
+    <div class="card">
+        <div class="card-body">
+            <h2>All Suppliers</h2>     
+            <div class="float-right">
+                <a href="/supplier/register" class = "btn btn-primary">Create New Supplier</a>
+            </div>   
+            <br><br>
+
+            <table class = "table" id = "myTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Passport ID</th>
+                        <th>Photo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(suppliers) { %>
+                        <% suppliers.forEach((supplier) => { %>
+                            <tr>
+                                <td><a href = "/user/<%= user._id %>"><%= user._id %></a></td>
+                                <td><%= user.name %></td>
+                                <td><%= user.email %></td>
+                                <td><%= user.passport %></td>
+                                <td><img src = "uploads\<%= user.profile_photo %>" height = "100px" width = "100px"></td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                 </tbody>   
+            </table>
+        </div>
+    </div>
+<% include ../layouts/footer %>
