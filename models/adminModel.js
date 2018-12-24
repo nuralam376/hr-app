@@ -1,9 +1,9 @@
 /** Mongoose Module .*/
 const mongoose = require("mongoose");
 
-/** User Table Field .*/
+/** Supplier Table Field .*/
 
-const UserSchema = mongoose.Schema({
+const AdminSchema = mongoose.Schema({
     name : 
     {
         type : String,
@@ -54,25 +54,17 @@ const UserSchema = mongoose.Schema({
         type : String,
         required : true
     },
-    isAdmin : 
-    {
-        type : Boolean,
-        required : true,
-        default : 0
-    },
-
     password : 
     {
         type : String,
         required : true
     },
-    
-    supplier : 
+    company : 
     {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Supplier',
+        ref: 'Company',
         required : false
     }
 });
 
-const User = module.exports = mongoose.model("User",UserSchema);
+const Admin = module.exports = mongoose.model("Admin",AdminSchema);
