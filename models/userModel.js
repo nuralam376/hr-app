@@ -54,23 +54,24 @@ const UserSchema = mongoose.Schema({
         type : String,
         required : true
     },
-    isAdmin : 
-    {
-        type : Boolean,
-        required : true,
-        default : 0
-    },
 
     password : 
     {
         type : String,
         required : true
     },
-    
+
     supplier : 
     {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Supplier',
+        required : false
+    },
+    
+    company : 
+    {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Company',
         required : false
     }
 });

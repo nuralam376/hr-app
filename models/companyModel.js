@@ -19,22 +19,29 @@ const CompanySchema = mongoose.Schema({
         type : String,
         required : true
     },
+    contact : 
+    {
+        type : String,
+        required : true
+    },
     logo : 
     {
         type : String,
         required : true
     },
-    password : 
+    superadmin : 
     {
-        type : String,
-        required : true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Admin',
+        required : false
     },
-    isSuperAdmin : 
+
+    package : 
     {
-        type : Boolean,
-        required : true,
-        default : 0
-    },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Package',
+        required : false
+    }
 });
 
 const Company = module.exports = mongoose.model("Company",CompanySchema);

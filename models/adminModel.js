@@ -1,7 +1,7 @@
 /** Mongoose Module .*/
 const mongoose = require("mongoose");
 
-/** Supplier Table Field .*/
+/** Admin Table Field .*/
 
 const AdminSchema = mongoose.Schema({
     name : 
@@ -58,6 +58,12 @@ const AdminSchema = mongoose.Schema({
     {
         type : String,
         required : true
+    },
+    isSuperAdmin : 
+    {
+        type : Boolean,
+        required : true,
+        default : 0
     },
     company : 
     {

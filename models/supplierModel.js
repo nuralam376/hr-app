@@ -59,10 +59,10 @@ const SupplierSchema = mongoose.Schema({
         type : String,
         required : true
     },
-    admin : 
+    company : 
     {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Admin',
+        ref: 'Company',
         required : false
     }
 });
