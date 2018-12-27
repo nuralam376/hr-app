@@ -34,8 +34,8 @@ passport.use(new LocalStrategy(
 			if (err) throw err;
 			if (!user) {
 				return done(null, false, { message: 'No User Found' });
-			}
-
+            }
+            
 			bcrypt.compare(password, user.password, function (err, isMatch) {
 				if (err) throw err;
 				if (isMatch) {
@@ -63,7 +63,7 @@ passport.deserializeUser(function (id, done) {
  * 
  */
 
-router.post("/data",[
+router.post("/",[
     check("username").not().isEmpty().withMessage("Email is required"),
     check("password").not().isEmpty().withMessage("Password is required")
 ],function(req,res,next){
