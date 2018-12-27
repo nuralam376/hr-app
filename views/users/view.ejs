@@ -1,4 +1,4 @@
-<% include ../layouts/header %>
+<% include ../layouts/admin/header %>
     <h1><%= newUser.name %>
         <%if(user.isAdmin) { %>
             <a href = "/user/edit/<%= newUser._id %>" class = "btn btn-info">Edit</a>
@@ -53,4 +53,4 @@
         <label for="passport_photo">Passport Photo</label>
         <img src = "/uploads/<%= newUser.passport_photo %>" height = "100px" width = "100px">
     </div>
-<% include ../layouts/footer %>
+<% include ../layouts/admin/footer %>

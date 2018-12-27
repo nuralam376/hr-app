@@ -1,4 +1,4 @@
-<% include ../layouts/header %>
+<% include ../layouts/admin/header %>
     <h1><%= supplier.name %></h1>    
     <form action = "/supplier/update/<%= supplier._id %>" method = "POST" enctype = "multipart/form-data">
         <div class="form-group">
@@ -53,4 +53,4 @@
                 <input type="submit" name = "submit" value = "Update" class = "btn btn-success">
             </div>
     </form>   
-<% include ../layouts/footer %>
+<% include ../layouts/admin/footer %>

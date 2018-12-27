@@ -136,7 +136,7 @@ router.post("/register",upload.any(),[
 
         if(!errors.isEmpty())
         {
-            res.render("register",{
+            res.render("supplier/register",{
                 errors : errors.array(),
                 form : forms,
                 fileError : req.fileValidationError
