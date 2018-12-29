@@ -1,7 +1,8 @@
 <% include ../layouts/frontpage/header %>
     <h1>Register</h1>
 
-    <form action="/register" method = "POST" enctype = "multipart/form-data">
+    <form action="/register/<%= superAdmin %>/company" method = "POST">
+        <input type="hidden" name = "superAdmin" value = "<%= superAdmin %>">
         <div class="form-group">
             <label for="name">Name</label>
             <input type="text" name = "name" id = "name" class = "form-control" value = "<%= typeof form != 'undefined' ? form.name : '' %>">
@@ -11,8 +12,12 @@
             <input type="text" name = "email" id = "email" class = "form-control" value = "<%= typeof form != 'undefined' ? form.email : '' %>"> 
         </div>
         <div class="form-group">
-            <label for="present_address">Present Address</label>
-            <textarea name="present_address" id="present_address" cols="30" rows="5" class = "form-control"><%= typeof form != 'undefined' ? form.present_address : '' %></textarea>
+            <label for="address">Address</label>
+            <textarea name="address" id="address" cols="30" rows="5" class = "form-control"><%= typeof form != 'undefined' ? form.address : '' %></textarea>
+        </div>
+        <div class="form-group">
+            <label for="contact">Contact No.</label>
+            <input type="text" name = "contact" id = "contact" class = "form-control" value = "<%= typeof form != 'undefined' ? form.contact : '' %>"> 
         </div>
         <div class="form-group">
             <input type="submit" name = "submit" value = "Register" class = "btn btn-success">

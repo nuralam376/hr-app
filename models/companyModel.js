@@ -24,11 +24,6 @@ const CompanySchema = mongoose.Schema({
         type : String,
         required : true
     },
-    logo : 
-    {
-        type : String,
-        required : true
-    },
     superadmin : 
     {
         type: mongoose.Schema.Types.ObjectId,

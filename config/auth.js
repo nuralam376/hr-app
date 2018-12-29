@@ -9,6 +9,7 @@ function ensureAuthenticated(req,res,next)
         }
         else
         {
+            req.flash("info","Please fill up the company details first");
             res.redirect("/register/" + req.user._id + "/company");
         }
     }

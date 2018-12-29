@@ -68,6 +68,7 @@ app.get("/",async(req,res) => {
 
 /** Required Controllers */
 const register = require("./controllers/registerController");
+const dashboard = require("./controllers/dashboardController");
 const login = require("./controllers/loginController");
 const user = require("./controllers/userController");
 const supplier = require("./controllers/supplierController");
@@ -75,6 +76,7 @@ const supplier = require("./controllers/supplierController");
 
 /** Other Routes */
 app.use("/register",register);
+app.use("/dashboard",dashboard);
 app.use("/login",login);
 app.use("/user",user);
 app.use("/supplier",supplier);

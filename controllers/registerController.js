@@ -12,6 +12,9 @@ const multer = require("multer");
 /** Admin Model Schema */
 let AdminModel = require("../models/adminModel");
 
+/** Admin Model Schema */
+let CompanyModel = require("../models/companyModel");
+
 /** Initialize Multer storage Variable for file upload */
 const storage = multer.diskStorage({
     destination : "./public/uploads/superadmin",
@@ -220,7 +223,9 @@ router.get("/:id/company",async(req,res) => {
         let superAdmin = await AdminModel.findOne({_id : req.params.id});
         if(superAdmin)
         {
-            res.render("company/register");
+            res.render("company/register",{
+                superAdmin : superAdmin._id
+            });
         }
     }
     catch(error)    
@@ -229,6 +234,82 @@ router.get("/:id/company",async(req,res) => {
         req.flash("danger","Unknown SuperAdmin. Please register");
         res.redirect("/register");
     }
+});
+
+/** Receives Company input data for registration */
+router.post("/:id/company",[
+    check("name").not().isEmpty().withMessage("Name is required"),
+    check("email").not().isEmpty().withMessage("Email is required").isEmail().withMessage("Email must be valid"),
+    check("address").not().isEmpty().withMessage("Address is required"),
+    check("contact").not().isEmpty().withMessage("Contact No. is required"),
+    sanitizeBody("name").trim().unescape(),
+    sanitizeBody("email").trim().unescape(),
+    sanitizeBody("address").trim().unescape()
+],async(req,res) => {
+    try
+    {
+        let forms = {
+            name : req.body.name,
+            email : req.body.email,
+            address : req.body.address,
+            contact : req.body.contact
+        };
+
+            
+        let errors = validationResult(req);
+
+        if(!errors.isEmpty())
+        {
+            res.render("company/register",{
+                errors : errors.array(),
+                superAdmin : req.params.id,
+                form : forms
+            });
+        }
+        
+        else
+        {
+            /** Save Form data in Company Model */
+            let company = new CompanyModel();
+            company.name = forms.name;
+            company.email = forms.email;
+            company.address = forms.address;
+            company.contact = forms.contact;
+            company.superadmin = req.body.superAdmin;
+
+            company.save(function(err,newCompany){
+                if(err)
+                {
+                    console.log(err);
+                }
+                else
+                {
+                    let query = {_id : req.params.id};
+                    let admin = {};
+                    admin.company = newCompany._id;
+                    /** Assigend Company to Admin */
+                    AdminModel.updateOne(query,admin,(err) => {
+                        if(err)
+                        {
+                            console.log(err);
+                        }
+                        else
+                        {
+                            res.redirect("/dashboard");
+                        }
+                    });
+                }
+            });
+                               
+        }   
+        
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+        
+    
 });
 
 module.exports = router;
