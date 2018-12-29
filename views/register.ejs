@@ -1,4 +1,4 @@
-<% include layouts/admin/header %>
+<% include layouts/frontpage/header %>
     <h1>Register</h1>
 
     <form action="/register" method = "POST" enctype = "multipart/form-data">
@@ -35,17 +35,6 @@
             <textarea name="permanent_address" id="permanent_address" cols="30" rows="5" class = "form-control"><%= typeof form != 'undefined' ? form.permanent_address : '' %></textarea>
         </div>
         <div class="form-group">
-            <label for="supplier">Assign Supplier</label>
-            <select name="supplier" id="supplier" class = "form-control">
-                <option value="">No Supplier</option>
-                <% if(suppliers.length) { %>
-                    <% suppliers.forEach(supplier =>  { %>
-                        <option value="<%= supplier._id %>"><%= supplier.name %></option>
-                    <% }) %>
-                <% } %>
-            </select>
-            </div>
-        <div class="form-group">
             <label for="profile_photo">Profile Photo</label>
             <input type="file" name = "profile_photo" id = "profile_photo">
         </div>
@@ -61,4 +50,4 @@
             <input type="submit" name = "submit" value = "Register" class = "btn btn-success">
         </div>
     </form>
-<% include layouts/admin/footer %>
+<% include layouts/frontpage/footer %>

@@ -1,4 +1,4 @@
-/** This is the register controller page. User Registration related functions are here. */
+/** This is the SuperAdmin register controller page. SuperAdmin Registration related functions are here. */
 
 /** Required modules */
 const express = require("express");
@@ -9,13 +9,12 @@ const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody } = require("express-validator/filter");
 const multer = require("multer");
 
-/** User Model Schema */
-let UserModel = require("../models/userModel");
-let SupplierModel = require("../models/supplierModel");
+/** Admin Model Schema */
+let AdminModel = require("../models/adminModel");
 
 /** Initialize Multer storage Variable for file upload */
 const storage = multer.diskStorage({
-    destination : "./public/uploads",
+    destination : "./public/uploads/superadmin",
     filename : function(req,file,cb)
     {
         cb(null,file.fieldname + "-" + Date.now() + path.extname(file.originalname));
@@ -50,16 +49,13 @@ function checkFileType(req,file,cb)
 
 
 
-/** Shows Registration page */
+/** Shows Registration page for SuperAdmin*/
 router.get("/",async(req,res) => {
     try
     {
-        if(req.isAuthenticated())
+        if(!req.isAuthenticated())
         {
-            let suppliers = await SupplierModel.find({}).exec();
-            res.render("register",{
-                suppliers : suppliers
-            });
+            res.render("register");
         }
         else
         {
@@ -73,7 +69,7 @@ router.get("/",async(req,res) => {
 });
 
 
-/** Receives user input data for registration */
+/** Receives SuperAdmin input data for registration */
 router.post("/",upload.any(),[
     check("name").not().isEmpty().withMessage("Name is required"),
     check("email").not().isEmpty().withMessage("Email is required"),
@@ -113,7 +109,7 @@ router.post("/",upload.any(),[
             passport_photo : "dummy.jpeg",
         };
 
-        /** Checks if the user uploads any file */
+        /** Checks if the SuperAdmin uploads any file */
         if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
         {
             if(req.files[0].fieldname == "profile_photo")
@@ -126,8 +122,6 @@ router.post("/",upload.any(),[
         {
             forms.passport_photo = req.files[1].filename;
         }
-
-            let suppliers = await SupplierModel.find({}).exec();
             
             let errors = validationResult(req);
 
@@ -136,7 +130,6 @@ router.post("/",upload.any(),[
                 res.render("register",{
                     errors : errors.array(),
                     form : forms,
-                    suppliers : suppliers,
                     fileError : req.fileValidationError
                 });
             }
@@ -145,31 +138,31 @@ router.post("/",upload.any(),[
                 res.render("register",{
                     errors : errors.array(),
                     form : forms,
-                    suppliers : suppliers,
                     fileError : req.fileValidationError
                 });
             }
         
         else
         {
-            let user = new UserModel();
-            user.name = forms.name;
-            user.email = forms.email;
-            user.birth_date = forms.birth_date;
-            user.blood_group = forms.blood;
-            user.nid = forms.nid;
-            user.passport = forms.passport;
-            user.present_address = forms.present_address;
-            user.permanent_address = forms.permanent_address;
-            user.profile_photo = forms.profile_photo;
-            user.passport_photo = forms.passport_photo;
-            user.password = forms.password;
+            let superAdmin = new AdminModel();
+            superAdmin.name = forms.name;
+            superAdmin.email = forms.email;
+            superAdmin.birth_date = forms.birth_date;
+            superAdmin.blood_group = forms.blood;
+            superAdmin.nid = forms.nid;
+            superAdmin.passport = forms.passport;
+            superAdmin.present_address = forms.present_address;
+            superAdmin.permanent_address = forms.permanent_address;
+            superAdmin.profile_photo = forms.profile_photo;
+            superAdmin.passport_photo = forms.passport_photo;
+            superAdmin.password = forms.password;
+            superAdmin.isSuperAdmin = true;
 
-              // Checks If the user has any supplier and assigned supplier to user
+              // Checks If the superAdmin has any supplier and assigned supplier to superAdmin
               if(req.body.supplier !== "")
               {
                   forms.supplier = req.body.supplier;
-                  user.supplier = forms.supplier;
+                  superAdmin.supplier = forms.supplier;
               }
 
             bcrypt.genSalt(10,function(err,salt){
@@ -179,24 +172,24 @@ router.post("/",upload.any(),[
                 }
                 else
                 {
-                    bcrypt.hash(user.password, salt, function(err,hash){
+                    bcrypt.hash(superAdmin.password, salt, function(err,hash){
                         if(err)
                         {
                             console.log(err);
                         }
                         else
                         {
-                            user.password = hash;
+                            superAdmin.password = hash;
 
-                            user.save(function(err){
+                            superAdmin.save(function(err,admin){
                                 if(err)
                                 {
                                     console.log(err);
                                 }
                                 else
                                 {
-                                    req.flash("success","You are now registered and can log in");
-                                    res.redirect("/user");
+                                    req.flash("success","Your account has been created. Please fill up company details to log in");
+                                    res.redirect("/register/" + admin._id + "/company");
                                 }
                             });
                         }
@@ -212,6 +205,18 @@ router.post("/",upload.any(),[
     }
         
     
+});
+
+router.get("/:id/company",async(req,res) => {
+    try
+    {
+        console.log(req.params.id);
+        res.render("company/register");
+    }
+    catch(error)    
+    {
+        console.log(error);
+    }
 });
 
 module.exports = router;

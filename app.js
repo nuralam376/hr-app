@@ -72,11 +72,13 @@ const login = require("./controllers/loginController");
 const user = require("./controllers/userController");
 const supplier = require("./controllers/supplierController");
 
+
 /** Other Routes */
 app.use("/register",register);
 app.use("/login",login);
 app.use("/user",user);
 app.use("/supplier",supplier);
+
 
 // Start the server
 app.listen(port,function(){
