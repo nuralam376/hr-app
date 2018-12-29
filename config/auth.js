@@ -1,9 +1,16 @@
-/** Checks Whether the user is logged in or not*/
+/** Checks Whether the Admin is logged in or not*/
 function ensureAuthenticated(req,res,next)
 {
     if(req.isAuthenticated())
     {
-        next();
+        if(req.user.company)    // Checks Whether the superadmin has any company
+        {
+            next();   
+        }
+        else
+        {
+            res.redirect("/register/" + req.user._id + "/company");
+        }
     }
     else
     {

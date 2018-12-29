@@ -46,7 +46,7 @@ app.use(function(req,res,next){
     res.locals.errors = null;
     res.locals.msg = null;
     res.locals.messages = require('express-messages')(req, res);
-    res.locals.user = req.user || null;
+    res.locals.admin = req.user || null;
     res.locals.fileError = null;
     next();
 });

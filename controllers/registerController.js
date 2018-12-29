@@ -188,7 +188,7 @@ router.post("/",upload.any(),[
                                 }
                                 else
                                 {
-                                    req.flash("success","Your account has been created. Please fill up company details to log in");
+                                    req.flash("success","Your account has been created. Please fill up the company details to log in");
                                     res.redirect("/register/" + admin._id + "/company");
                                 }
                             });
@@ -207,10 +207,16 @@ router.post("/",upload.any(),[
     
 });
 
+/**
+ * Represents Company Registration Information.
+ * 
+ * @param {string} id - The Object Id of the SuperAdmin for the Company.
+ *
+ */
+
 router.get("/:id/company",async(req,res) => {
     try
     {
-        console.log(req.params.id);
         res.render("company/register");
     }
     catch(error)    

@@ -8,8 +8,8 @@ const {check, validationResult} = require("express-validator/check");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
-/** User Model Schema */
-let UserModel = require("../models/userModel");
+/** Admin Model Schema */
+let AdminModel = require("../models/adminModel");
 
 /**
  * Shows Login Page
@@ -30,16 +30,16 @@ router.get("/",function(req,res){
 passport.use(new LocalStrategy(
 	function (username, password, done) {
         let query = {email : username};
-		UserModel.findOne(query, function (err, user) {
+		AdminModel.findOne(query, function (err, admin) {
 			if (err) throw err;
-			if (!user) {
+			if (!admin) {
 				return done(null, false, { message: 'No User Found' });
             }
             
-			bcrypt.compare(password, user.password, function (err, isMatch) {
+			bcrypt.compare(password, admin.password, function (err, isMatch) {
 				if (err) throw err;
 				if (isMatch) {
-					return done(null, user);
+					return done(null, admin);
 				} else {
 					return done(null, false, { message: 'Wrong password' });
 				}
@@ -47,19 +47,19 @@ passport.use(new LocalStrategy(
 		});
 	}));
 
-passport.serializeUser(function (user, done) {
-	done(null, user.id);
+passport.serializeUser(function (admin, done) {
+	done(null, admin.id);
 });
 
 passport.deserializeUser(function (id, done) {
-	UserModel.findById(id, function (err, user) {
-		done(err, user);
+	AdminModel.findById(id, function (err, admin) {
+		done(err, admin);
 	});
 });
 
 
 /**
- * Receives User's email and passport and authenticate
+ * Receives Admin's email and passport and authenticate
  * 
  */
 
