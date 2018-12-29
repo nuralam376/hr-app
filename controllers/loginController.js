@@ -19,7 +19,7 @@ let AdminModel = require("../models/adminModel");
 router.get("/",function(req,res){
     if(req.isAuthenticated())
     {
-        res.redirect("/user");
+        res.redirect("/dashboard");
     }
     else
         res.render("login");

@@ -28,7 +28,7 @@ const CompanySchema = mongoose.Schema({
     {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Admin',
-        required : false
+        required : true
     },
 
     package : 

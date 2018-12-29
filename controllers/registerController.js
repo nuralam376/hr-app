@@ -15,9 +15,12 @@ let AdminModel = require("../models/adminModel");
 /** Admin Model Schema */
 let CompanyModel = require("../models/companyModel");
 
+/** Package Model Schema */
+let PackageModel = require("../models/packageModel");
+
 /** Initialize Multer storage Variable for file upload */
 const storage = multer.diskStorage({
-    destination : "./public/uploads/superadmin",
+    destination : "./public/uploads/admin",
     filename : function(req,file,cb)
     {
         cb(null,file.fieldname + "-" + Date.now() + path.extname(file.originalname));
@@ -62,7 +65,7 @@ router.get("/",async(req,res) => {
         }
         else
         {
-            res.redirect("/user");
+            res.redirect("/dashboard");
         }    
     }
     catch(error)    
@@ -220,17 +223,27 @@ router.post("/",upload.any(),[
 router.get("/:id/company",async(req,res) => {
     try
     {
+    
         let superAdmin = await AdminModel.findOne({_id : req.params.id});
+        
         if(superAdmin)
         {
-            res.render("company/register",{
-                superAdmin : superAdmin._id
-            });
+            /** Checks If the SuperAdmin has already a company id */
+            if(typeof superAdmin.company === "undefined")
+            {
+                res.render("company/register",{
+                    superAdmin : superAdmin._id
+                });
+            }
+            else
+            {
+                
+                res.redirect("/dashboard");
+            }    
         }
     }
     catch(error)    
     {
-        console.log(error);
         req.flash("danger","Unknown SuperAdmin. Please register");
         res.redirect("/register");
     }
@@ -277,7 +290,26 @@ router.post("/:id/company",[
             company.contact = forms.contact;
             company.superadmin = req.body.superAdmin;
 
-            company.save(function(err,newCompany){
+            /** Assigned Package to Company */
+            let package = await PackageModel.findOne({name : "Free"});
+
+            // If Package exits then assigned to company
+            if(package)
+            {
+                company.package = package._id; 
+            }
+            // Otherwise Created new Package
+            else
+            {
+                let package = new PackageModel();
+                package.name = "Free";
+                package.save((err,newPackage) => {
+                    company.package = newPackage._id;
+                });
+            }  
+            
+            
+            company.save((err,newCompany) => {
                 if(err)
                 {
                     console.log(err);
@@ -287,6 +319,7 @@ router.post("/:id/company",[
                     let query = {_id : req.params.id};
                     let admin = {};
                     admin.company = newCompany._id;
+
                     /** Assigend Company to Admin */
                     AdminModel.updateOne(query,admin,(err) => {
                         if(err)
@@ -295,12 +328,12 @@ router.post("/:id/company",[
                         }
                         else
                         {
-                            res.redirect("/dashboard");
+                            req.flash("success","Company Created Successfully");
+                            res.redirect("/login");
                         }
                     });
                 }
             });
-                               
         }   
         
     }
