@@ -8,16 +8,13 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const passport = require("passport");
 const app = express();
-// const port = 3000;
-
-/** Mongodb Database Connection Setup for local Server*/
-// mongoose.connect("mongodb://localhost/hr-app", {useNewUrlParser : true});
-
-/** Mongodb Database Connection Setup for Heroku */
-
 const port = process.env.PORT || 8000;
-mongoose.connect("mongodb://hr-app:hr123456@ds117509.mlab.com:17509/hr-app", {useNewUrlParser : true});
 
+/** Database Configuration File */
+const config = require("./config/database");
+
+/** Database Configuration Settings */
+mongoose.connect(config.database, {useNewUrlParser : true});
 
 const db = mongoose.connection;
 
