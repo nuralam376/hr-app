@@ -217,11 +217,17 @@ router.post("/",upload.any(),[
 router.get("/:id/company",async(req,res) => {
     try
     {
-        res.render("company/register");
+        let superAdmin = await AdminModel.findOne({_id : req.params.id});
+        if(superAdmin)
+        {
+            res.render("company/register");
+        }
     }
     catch(error)    
     {
         console.log(error);
+        req.flash("danger","Unknown SuperAdmin. Please register");
+        res.redirect("/register");
     }
 });
 
