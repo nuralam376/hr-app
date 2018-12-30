@@ -251,6 +251,11 @@ router.get("/:id/company",async(req,res) => {
                 res.redirect("/dashboard");
             }    
         }
+        else
+        {
+            req.flash("danger","Unknown SuperAdmin. Please register");
+            res.redirect("/register");
+        }
     }
     catch(error)    
     {
@@ -302,23 +307,21 @@ router.post("/:id/company",[
             company.superadmin = req.body.superAdmin;
 
             /** Assigned Package to Company */
-            let package = await PackageModel.findOne({name : "Free"});
+            let packageCheck = await PackageModel.findOne({name : "Free"});
 
             // If Package exits then assigned to company
-            if(package)
+            if(packageCheck)
             {
-                company.package = package._id; 
+                company.package = packageCheck._id; 
             }
             // Otherwise Created new Package
             else
             {
-                let package = new PackageModel();
-                package.name = "Free";
-                package.save((err,newPackage) => {
-                    company.package = newPackage._id;
-                });
+                let packageCreate = new PackageModel();
+                packageCreate.name = "Free";
+                let newPackage = await packageCreate.save();
+                company.package = newPackage._id;
             }  
-            
             
             company.save((err,newCompany) => {
                 if(err)
