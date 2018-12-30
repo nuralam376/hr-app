@@ -11,6 +11,11 @@ const auth = require("../config/auth");
 let AdminModel = require("../models/adminModel");
 
 
+/**
+ * Shows All Admins Information
+ * 
+ */
+
 router.get("/",auth,async(req,res) => {
     try
     {
