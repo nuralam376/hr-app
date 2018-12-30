@@ -12,7 +12,7 @@ const multer = require("multer");
 /** Admin Model Schema */
 let AdminModel = require("../models/adminModel");
 
-/** Admin Model Schema */
+/** Company Model Schema */
 let CompanyModel = require("../models/companyModel");
 
 /** Package Model Schema */

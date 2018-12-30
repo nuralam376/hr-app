@@ -72,6 +72,7 @@ const dashboard = require("./controllers/dashboardController");
 const login = require("./controllers/loginController");
 const user = require("./controllers/userController");
 const supplier = require("./controllers/supplierController");
+const admin = require("./controllers/adminController");
 
 
 /** Other Routes */
@@ -80,6 +81,7 @@ app.use("/dashboard",dashboard);
 app.use("/login",login);
 app.use("/user",user);
 app.use("/supplier",supplier);
+app.use("/admin",admin);
 
 
 // Start the server

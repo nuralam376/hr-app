@@ -1,0 +1,38 @@
+<% include ../layouts/admin/header %>
+
+    <h1 class = "text-center">User Home</h1>
+    <div class="card">
+        <div class="card-body">
+            <h2>All Admins</h2>     
+            <div class="pull-right">
+                <a href="/admin/register" class = "btn btn-primary">Create New Admin</a>
+            </div>   
+            <br><br>
+
+            <table id="myTable" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Passport ID</th>
+                        <th>Photo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(admins) { %>
+                        <% admins.forEach(function(admin) { %>
+                            <tr>
+                                <td><a href = "/admin/<%= admin._id %>"><%= admin._id %></a></td>
+                                <td><%= admin.name %></td>
+                                <td><%= admin.email %></td>
+                                <td><%= admin.passport %></td>
+                                <td><img src = "uploads\admin/<%= admin.profile_photo %>" height = "100px" width = "100px"></td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                 </tbody>   
+            </table>
+        </div>
+    </div>
+<% include ../layouts/admin/footer %>
