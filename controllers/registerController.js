@@ -101,6 +101,17 @@ router.post("/",upload.any(),[
 ],async(req,res) => {
     try
     {
+        /** Cheks Wheteher the email is already exist */
+        let superAdminCheck = await AdminModel.findOne({email : req.body.email});
+
+        if(superAdminCheck)
+        {
+            req.flash("danger","Email Already exists");
+            res.statusCode = 302;
+            res.redirect("/register");
+            return res.end();
+        }
+
         let forms = {
             name : req.body.name,
             email : req.body.email,
@@ -224,7 +235,7 @@ router.get("/:id/company",async(req,res) => {
     try
     {
     
-        let superAdmin = await AdminModel.findOne({_id : req.params.id});
+        let superAdmin = await AdminModel.findById(req.params.id);
         
         if(superAdmin)
         {
@@ -237,13 +248,13 @@ router.get("/:id/company",async(req,res) => {
             }
             else
             {
-                
                 res.redirect("/dashboard");
             }    
         }
     }
     catch(error)    
     {
+        console.log(error);
         req.flash("danger","Unknown SuperAdmin. Please register");
         res.redirect("/register");
     }
