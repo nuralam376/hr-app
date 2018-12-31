@@ -175,13 +175,6 @@ router.post("/",upload.any(),[
             superAdmin.password = forms.password;
             superAdmin.isSuperAdmin = true;
 
-              // Checks If the superAdmin has any supplier and assigned supplier to superAdmin
-              if(req.body.supplier !== "")
-              {
-                  forms.supplier = req.body.supplier;
-                  superAdmin.supplier = forms.supplier;
-              }
-
             bcrypt.genSalt(10,function(err,salt){
                 if(err)
                 {
