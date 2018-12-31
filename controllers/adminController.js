@@ -60,18 +60,17 @@ function checkFileType(req,file,cb)
 router.get("/",auth,isSuperAdmin,async(req,res) => {
     try
     {
-        if(req.user.isSuperAdmin)
-        {
-            let admins = await AdminModel.find({company : req.user.company}); // Find All Admins of the logged in admin's company 
+        
+        let admins = await AdminModel.find({company : req.user.company, isSuperAdmin : false}); // Find All Admins of the logged in admin's company 
 
-            //If Admin found
-            if(admins)
-            {
-                res.render("admins/index",{
-                    admins : admins
-                });
-            }
+        //If Admin found
+        if(admins)
+        {
+            res.render("admins/index",{
+                admins : admins
+            });
         }
+        
     }
     catch(err)
     {
@@ -217,6 +216,70 @@ router.post("/register",auth,isSuperAdmin,upload.any(),[
     }       
     
 });
+
+/**
+ * Shows Individual Admin
+ * @param {string} id - The Object Id of the Admin.
+*/
+
+router.get("/profile",auth,async(req,res) => {
+    try{
+
+        let query = {_id : req.user._id}; // Admin Object Id 
+
+        let adminInfo = await AdminModel.findOne(query); // Finds Admin 
+
+        // If Admin exists
+        if(adminInfo)
+        {
+            res.render("admins/view",{
+                adminInfo : adminInfo
+            });
+        }
+        else
+        {
+            req.flash("danger","Not Found");
+            res.redirect("/dashboard");
+        }    
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+
+}); 
+
+/**
+ * Shows Individual Admin
+ * @param {string} id - The Object Id of the Admin.
+*/
+
+router.get("/:id",auth,async(req,res) => {
+    try{
+
+        let query = {_id : req.params.id, company : req.user.company, isSuperAdmin : false}; // Admin Object Id and Company
+
+        let adminInfo = await AdminModel.findOne(query); // Finds Admin 
+
+        // If Admin exists
+        if(adminInfo)
+        {
+            res.render("admins/view",{
+                adminInfo : adminInfo
+            });
+        }
+        else
+        {
+            req.flash("danger","Not Found");
+            res.redirect("/dashboard");
+        }    
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+
+}); 
 
 /** Cheks Whether the logged in admin is Super Admin */
 function isSuperAdmin(req,res,next)
