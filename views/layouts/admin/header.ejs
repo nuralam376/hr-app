@@ -116,6 +116,7 @@
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>
         </li>
+        <% if(admin.isSuperAdmin) { %>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-users"></i> <span>Admins</span>
@@ -128,6 +129,7 @@
             <li><a href="/admin/register"><i class="fa fa-circle-o"></i>Add New Admin</a></li>
           </ul>
         </li>
+        <% } %>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-users"></i> <span>Users</span>

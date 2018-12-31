@@ -57,18 +57,20 @@ function checkFileType(req,file,cb)
  * 
  */
 
-router.get("/",auth,async(req,res) => {
+router.get("/",auth,isSuperAdmin,async(req,res) => {
     try
     {
-
-        let admins = await AdminModel.find({company : req.user.company}); // Find All Admins of the logged in admin's company 
-
-        //If Admin found
-        if(admins)
+        if(req.user.isSuperAdmin)
         {
-            res.render("admins/index",{
-                admins : admins
-            });
+            let admins = await AdminModel.find({company : req.user.company}); // Find All Admins of the logged in admin's company 
+
+            //If Admin found
+            if(admins)
+            {
+                res.render("admins/index",{
+                    admins : admins
+                });
+            }
         }
     }
     catch(err)
@@ -78,7 +80,7 @@ router.get("/",auth,async(req,res) => {
 });
 
 /** Shows Registration page for Admin Account Creation*/
-router.get("/register",auth,async(req,res) => {
+router.get("/register",auth,isSuperAdmin,async(req,res) => {
     try
     {
         res.render("admins/register");
@@ -91,7 +93,7 @@ router.get("/register",auth,async(req,res) => {
 
 
 /** Receives Admin input data for registration */
-router.post("/register",auth,upload.any(),[
+router.post("/register",auth,isSuperAdmin,upload.any(),[
     check("name").not().isEmpty().withMessage("Name is required"),
     check("email").not().isEmpty().withMessage("Email is required"),
     check("email").isEmail().withMessage("Email must be valid"),
@@ -167,7 +169,7 @@ router.post("/register",auth,upload.any(),[
                 fileError : req.fileValidationError
             });
         }
-        /** Cheks File Validation Error */
+        /** Checks File Validation Error */
         else if(typeof req.fileValidationError != undefined && req.fileValidationError != null)
         {
             res.render("admins/register",{
@@ -216,5 +218,18 @@ router.post("/register",auth,upload.any(),[
     
 });
 
+/** Cheks Whether the logged in admin is Super Admin */
+function isSuperAdmin(req,res,next)
+{
+    if(req.user.isSuperAdmin)
+    {
+        next(); // If the Admin is SuperAdmin, then proceed
+    }
+    else
+    {
+        req.flash("danger","Unauthorized Access");
+        res.redirect("/dashboard");
+    }
+}
 
 module.exports = router;
