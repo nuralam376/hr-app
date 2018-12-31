@@ -282,6 +282,153 @@ router.get("/edit/:id",auth,isSuperAdmin,async(req,res) => {
 });
 
 /**
+ * Receives Admin input data for updating the admin
+ * @param {string} id - The Object Id of the Admin.
+*/
+
+router.post("/update/:id",auth,isSuperAdmin,upload.any(),[
+    check("name").not().isEmpty().withMessage("Name is required"),
+    check("email").not().isEmpty().withMessage("Email is required"),
+    check("email").isEmail().withMessage("Email must be valid"),
+    check("birth_date").not().isEmpty().withMessage("Birth Date is required"),
+    check("blood").not().isEmpty().withMessage("Blood Group is required"),
+    check("nid").not().isEmpty().withMessage("National ID is required"),
+    check("passport").not().isEmpty().withMessage("Passport Id is required"),
+    check("present_address").not().isEmpty().withMessage("Present Addres is required"),
+    check("permanent_address").not().isEmpty().withMessage("Permanent Address is required"),
+    sanitizeBody("name").trim().unescape(),
+    sanitizeBody("email").trim().unescape(),
+    sanitizeBody("birth_date").trim().unescape(),
+    sanitizeBody("blood").trim().unescape(),
+    sanitizeBody("passport").trim().unescape(),
+    sanitizeBody("present_address").trim().unescape(),
+    sanitizeBody("permanent_address").trim().unescape(),
+    sanitizeBody("nid").trim().toInt(),
+],async(req,res) => {
+       try
+       {        
+            let query = {_id : req.params.id, company : req.user.company}; 
+
+            let adminInfo = await AdminModel.findOne(query); // Finds the Admin
+            
+            // If Admin exists
+            if(adminInfo)
+            {
+                 /** Stores Admin input data in forms Object*/
+                let forms = {
+                    name : req.body.name,
+                    email : req.body.email,
+                    blood : req.body.blood,
+                    present_address : req.body.present_address,
+                    permanent_address : req.body.permanent_address,
+                    birth_date : req.body.birth_date,
+                    nid : req.body.nid,
+                    passport : req.body.passport,
+                };
+                forms.profile_photo = adminInfo.profile_photo;
+                forms.passport_photo = adminInfo.passport_photo;
+
+                /** Checks If The Email Exists */
+                let emailCheck = await AdminModel.findOne({email : forms.email});
+
+                if(emailCheck._id != req.params.id)
+                {
+                    req.flash("danger","Email Already exists");
+                    return res.redirect("/admin");
+                }
+
+                let errors = validationResult(req); 
+               
+                
+                /** If File exists, then update */
+                if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+                {
+                    if(req.files[0].fieldname == "profile_photo")
+                        forms.profile_photo = req.files[0].filename;
+                    else
+                        forms.passport_photo = req.files[0].filename;
+                }
+                
+                if(typeof req.files[1] !== "undefined" && req.files[1].fieldname == "passport_photo" && req.fileValidationError == null)
+                {
+                    forms.passport_photo = req.files[1].filename;
+                }
+
+                if(!errors.isEmpty())
+                {
+                
+                    res.render("admins/edit",{
+                        errors : errors.array(),
+                        adminInfo : adminInfo,
+                        fileError : req.fileValidationError
+                    });
+                
+                }
+                else
+                {
+                    if(adminInfo.profile_photo !== forms.profile_photo && adminInfo.profile_photo !== "dummy.jpeg")
+                    {
+                        /** Removes the previous file */
+                        fs.unlink("./public/uploads/admin/" + adminInfo.profile_photo, (err) => {
+                            if(err)
+                            {
+                                console.log(err);
+                            }
+                        });
+                    }
+                    if(adminInfo.passport_photo !== forms.passport_photo && adminInfo.passport_photo !== "dummy.jpeg")
+                    {
+                        fs.unlink("./public/uploads/admin/"+adminInfo.passport_photo, (err) => {
+                            if(err)
+                            {
+                                console.log(err);
+                            }
+                        });
+                    }
+
+                    /** Stores Forms data in newAdmin Object */
+                    let newAdmin = {};
+                    newAdmin.name = forms.name;
+                    newAdmin.email = forms.email;
+                    newAdmin.birth_date = forms.birth_date;
+                    newAdmin.blood_group = forms.blood;
+                    newAdmin.nid = forms.nid;
+                    newAdmin.passport = forms.passport;
+                    newAdmin.present_address = forms.present_address;
+                    newAdmin.permanent_address = forms.permanent_address;
+                    newAdmin.profile_photo = forms.profile_photo;
+                    newAdmin.passport_photo = forms.passport_photo;
+                    newAdmin.company = req.user.company;
+
+                    
+                    let adminUpdate = await AdminModel.updateOne(query,newAdmin); // Update the Admin's Info
+                    
+                    if(adminUpdate)
+                    {
+                        req.flash("success","Admin Details Updated");
+                        res.redirect("/admin");
+                    }
+                    else
+                    {
+                        req.flash("danger","Something went wrong");
+                        res.redirect("/admin");
+                    }
+                }
+            }
+            else
+            {
+                req.flash("danger","Admin Not Found");
+                res.redirect("/admin");
+            }
+       }
+       catch(error)
+       {
+           console.log(error);
+       }
+                    
+});
+
+/**
  * Shows Individual Admin
  * @param {string} id - The Object Id of the Admin.
 */
