@@ -229,7 +229,7 @@ router.get("/profile",auth,async(req,res) => {
         // If Admin exists
         if(adminInfo)
         {
-            res.render("admins/view",{
+            res.render("admins/profile",{
                 adminInfo : adminInfo
             });
         }
@@ -245,6 +245,37 @@ router.get("/profile",auth,async(req,res) => {
     }
 
 }); 
+
+
+/** Represents Admin Profile Edit Options. */
+
+router.get("/profile/edit",auth,async(req,res) => {
+    try
+    {    
+        let query = {_id : req.user._id, company : req.user.company}; 
+
+        let adminInfo = await AdminModel.findOne(query); // Finds Admin 
+
+        // If Admin exists
+        if(adminInfo)
+        {
+            res.render("admins/profile_edit",{
+                adminInfo : adminInfo
+            });
+        }
+        else
+        {
+            req.flash("danger","Not Found");
+            res.redirect("/dashboard");
+        }    
+        
+    }
+    catch(error)
+    {
+        console.log(error);
+    }   
+
+});
 
 /**
  * Represents Admin Edit Options.
