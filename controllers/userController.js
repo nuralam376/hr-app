@@ -20,7 +20,7 @@ let SupplierModel = require("../models/supplierModel");
 
 /** Initialize Multer storage Variable for file upload */
 const storage = multer.diskStorage({
-    destination : "./public/uploads",
+    destination : "./public/uploads/user",
     filename : function(req,file,cb)
     {
         cb(null,file.fieldname + "-" + Date.now() + path.extname(file.originalname));
@@ -57,36 +57,37 @@ function checkFileType(req,file,cb)
  * 
  */
 
-router.get("/",auth,function(req,res){
-    UserModel.find({},function(err,users){
-        if(err)
-        {
-            console.log(err);
-        }
-        else
+router.get("/",auth,async(req,res) => {
+    try 
+    {
+        let users = await UserModel.find({company : req.user.company}); // Finds the Users of the Logged in Admin's Company
+        
+        if(users)
         {
             res.render("users/index",{
                 users : users
             });
         }
-    });
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+   
+
 });
 
 /** Shows Registration page */
 router.get("/register",auth,async(req,res) => {
     try
     {
-        if(req.isAuthenticated())
-        {
-            let suppliers = await SupplierModel.find({}).exec();
-            res.render("users/register",{
-                suppliers : suppliers
-            });
-        }
-        else
-        {
-            res.redirect("/user");
-        }    
+    
+        let suppliers = await SupplierModel.find({company : req.user.company}).exec(); // Selects All the Suppliers
+
+        res.render("users/register",{
+            suppliers : suppliers
+        });
+       
     }
     catch(error)    
     {
@@ -117,6 +118,7 @@ router.post("/register",auth,upload.any(),[
 ],async(req,res) => {
     try
     {
+        /** Stores The Users Input Field in forms Object */
         let forms = {
             name : req.body.name,
             email : req.body.email,
@@ -144,7 +146,7 @@ router.post("/register",auth,upload.any(),[
             forms.passport_photo = req.files[1].filename;
         }
 
-            let suppliers = await SupplierModel.find({}).exec();
+            let suppliers = await SupplierModel.find({company : req.user.company}).exec();
             
             let errors = validationResult(req);
 
@@ -169,6 +171,7 @@ router.post("/register",auth,upload.any(),[
         
         else
         {
+            /** Stores the users data in User Object */
             let user = new UserModel();
             user.name = forms.name;
             user.email = forms.email;
@@ -180,6 +183,7 @@ router.post("/register",auth,upload.any(),[
             user.permanent_address = forms.permanent_address;
             user.profile_photo = forms.profile_photo;
             user.passport_photo = forms.passport_photo;
+            user.company = req.user.company;
 
             // Checks If the user has any supplier and assigned supplier to user
             if(req.body.supplier !== "")
@@ -188,17 +192,14 @@ router.post("/register",auth,upload.any(),[
                 user.supplier = forms.supplier;
             }
 
-            user.save(function(err){
-                if(err)
-                {
-                    console.log(err);
-                }
-                else
-                {
-                    req.flash("success","New User has been created");
-                    res.redirect("/user");
-                }
-            });         
+            let userSave = await user.save(); // Saves the new User
+
+            if(userSave)
+            {
+                req.flash("success","New User has been created");
+                res.redirect("/user");
+            }
+            
            
         }
     }
@@ -220,15 +221,24 @@ router.get("/edit/:id",auth,async(req,res) => {
     try
     {
        
-          let query = {_id : req.params.id};
-      
+          let query = {_id : req.params.id, company : req.user.company}; // Finds the User
+
           let user = await UserModel.findOne(query);
-          let suppliers = await SupplierModel.find({});
+
+          let suppliers = await SupplierModel.find({company : req.user.company});
           
-          res.render("users/edit",{
-              newUser : user,
-              suppliers : suppliers
-          });
+          if(user)
+          {
+            res.render("users/edit",{
+                newUser : user,
+                suppliers : suppliers
+            });
+        }
+        else
+        {
+            req.flash("danger","No User Found");
+            res.redirect("/user");
+        }   
         
     }
     catch(error)
@@ -262,7 +272,11 @@ router.post("/update/:id",auth,upload.any(),[
     sanitizeBody("present_address").trim().unescape(),
     sanitizeBody("permanent_address").trim().unescape(),
     sanitizeBody("nid").trim().toInt(),
-],function(req,res){
+],async(req,res) => {
+
+    try
+    {
+        /** Stores the forms data */
         let forms = {
             name : req.body.name,
             email : req.body.email,
@@ -275,92 +289,103 @@ router.post("/update/:id",auth,upload.any(),[
         };
 
        
-        let query = {_id : req.params.id};
+        let query = {_id : req.params.id, company : req.user.company};
 
-        UserModel.findOne(query,function(err,newUser){
-            let errors = validationResult(req);
-            forms.profile_photo = newUser.profile_photo;
-            forms.passport_photo = newUser.passport_photo;
+        let newUser = await UserModel.findOne(query);
 
-            if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
-            {
-                if(req.files[0].fieldname == "profile_photo")
-                    forms.profile_photo = req.files[0].filename;
-                else
-                    forms.passport_photo = req.files[0].filename;
-            }
-            
-            if(typeof req.files[1] !== "undefined" && req.files[1].fieldname == "passport_photo" && req.fileValidationError == null)
-            {
-                forms.passport_photo = req.files[1].filename;
-            }
+        let errors = validationResult(req);
+        forms.profile_photo = newUser.profile_photo;
+        forms.passport_photo = newUser.passport_photo;
 
-            if(!errors.isEmpty())
-            {
-               
-                res.render("users/edit",{
-                    errors : errors.array(),
-                    newUser : newUser,
-                    fileError : req.fileValidationError
-                });
-              
-            }
+        /** Checks whether the user updates the picture */
+        if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+        {
+            if(req.files[0].fieldname == "profile_photo")
+                forms.profile_photo = req.files[0].filename;
             else
+                forms.passport_photo = req.files[0].filename;
+        }
+        
+        if(typeof req.files[1] !== "undefined" && req.files[1].fieldname == "passport_photo" && req.fileValidationError == null)
+        {
+            forms.passport_photo = req.files[1].filename;
+        }
+
+        if(!errors.isEmpty())
+        {
+            
+            res.render("users/edit",{
+                errors : errors.array(),
+                newUser : newUser,
+                fileError : req.fileValidationError
+            });
+            
+        }
+        else
+        {
+            /** Removes the old files */
+            if(newUser.profile_photo !== forms.profile_photo && newUser.profile_photo != "dummy.jpeg")
             {
-                if(newUser.profile_photo !== forms.profile_photo)
-                {
-                    fs.unlink("./public/uploads/"+newUser.profile_photo, function(err){
-                         if(err)
-                         {
-                             console.log(err);
-                         }
-                     });
-                }
-                if(newUser.passport_photo !== forms.passport_photo)
-                {
-                    fs.unlink("./public/uploads/"+newUser.passport_photo, function(err){
-                        if(err)
-                         {
-                             console.log(err);
-                         }
-                     });
-                }
-
-                let user = {};
-                user.name = forms.name;
-                user.email = forms.email;
-                user.birth_date = forms.birth_date;
-                user.blood_group = forms.blood;
-                user.nid = forms.nid;
-                user.passport = forms.passport;
-                user.present_address = forms.present_address;
-                user.permanent_address = forms.permanent_address;
-                user.profile_photo = newUser.profile_photo;
-                user.passport_photo = newUser.passport_photo;
-                user.profile_photo = forms.profile_photo;
-                user.passport_photo = forms.passport_photo;
-
-                // Checks If the user has any supplier and assigned supplier to user
-                if(req.body.supplier !== "")
-                {
-                    forms.supplier = req.body.supplier;
-                    user.supplier = forms.supplier;
-                }
-              
-  
-                UserModel.updateOne(query,user,function(err){
+                fs.unlink("./public/uploads/user/"+newUser.profile_photo, (err) => {
                     if(err)
                     {
                         console.log(err);
                     }
-                    else
-                    {
-                        req.flash("success","User Details Updated");
-                        res.redirect("/user");
-                    }
                 });
             }
-        });
+            if(newUser.passport_photo !== forms.passport_photo && newUser.profile_photo != "dummy.jpeg")
+            {
+                fs.unlink("./public/uploads/user/"+newUser.passport_photo, (err) => {
+                    if(err)
+                        {
+                            console.log(err);
+                        }
+                    });
+            }
+
+            /** Saves the User Input Data */
+            let user = {};
+            user.name = forms.name;
+            user.email = forms.email;
+            user.birth_date = forms.birth_date;
+            user.blood_group = forms.blood;
+            user.nid = forms.nid;
+            user.passport = forms.passport;
+            user.present_address = forms.present_address;
+            user.permanent_address = forms.permanent_address;
+            user.profile_photo = newUser.profile_photo;
+            user.passport_photo = newUser.passport_photo;
+            user.profile_photo = forms.profile_photo;
+            user.passport_photo = forms.passport_photo;
+            user.company = req.user.company;
+
+            // Checks If the user has any supplier and assigned supplier to user
+            if(req.body.supplier !== "")
+            {
+                forms.supplier = req.body.supplier;
+                user.supplier = forms.supplier;
+            }
+            
+
+            let userUpdate = await UserModel.updateOne(query,user);
+            if(userUpdate)
+            {
+                req.flash("success","User Details Updated");
+                res.redirect("/user");
+            }
+            else
+            {
+                req.flash("danger","Something weny wrong");
+                res.redirect("/user");
+            }
+          
+        }
+        
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
                     
 });
                
@@ -370,15 +395,56 @@ router.post("/update/:id",auth,upload.any(),[
  * @param {string} id - The Object Id of the User.
 */
 
-router.delete("/delete/:id",auth,function(req,res){
+router.delete("/delete/:id",auth,async(req,res) => {
 
-    let query = {_id : req.params.id};
+    try
+    {
+        let query = {_id : req.params.id, company : req.user.company}; // Deletes the User
 
-    UserModel.deleteOne(query,function(err){
-        req.flash("danger","User Deleted");
-        res.redirect("/user");
-    });
-    
+        let user = await UserModel.findOne(query);
+
+        if(user)
+        {
+                /** Removes the old files */
+            if(user.profile_photo != "dummy.jpeg")
+            {
+                fs.unlink("./public/uploads/user/"+user.profile_photo, (err) => {
+                    if(err)
+                    {
+                        console.log(err);
+                    }
+                });
+            }
+            if(user.profile_photo != "dummy.jpeg")
+            {
+                fs.unlink("./public/uploads/user/"+user.passport_photo, (err) => {
+                    if(err)
+                        {
+                            console.log(err);
+                        }
+                    });
+            }
+
+            let userDelete = await UserModel.deleteOne(query);
+
+            if(userDelete)
+            {
+                req.flash("danger","User Deleted");
+                res.redirect("/user");
+            }
+            else
+            {
+                req.flash("danger","Something Went Wrong");
+                res.redirect("/user");
+            }  
+        }
+      
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+
   
 });
 
@@ -389,7 +455,7 @@ router.delete("/delete/:id",auth,function(req,res){
 
 router.get("/:id",auth,async(req,res) => {
     try{
-        let query = {_id : req.params.id};
+        let query = {_id : req.params.id, company : req.user.company};
 
         let user = await UserModel.findOne(query).populate("supplier").exec();
         res.render("users/view",{

@@ -55,12 +55,6 @@ const UserSchema = mongoose.Schema({
         required : true
     },
 
-    password : 
-    {
-        type : String,
-        required : false
-    },
-
     supplier : 
     {
         type: mongoose.Schema.Types.ObjectId,
