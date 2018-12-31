@@ -37,5 +37,28 @@ $(document).ready(function(){
         });
     });
 
-    $('#myTable').DataTable();
+    $(".delete-admin").on("click",function(e){
+        e.preventDefault();
+
+        if(confirm("Are you Sure?"))
+        {
+            $target = $(e.target);
+            const id = $target.attr("data-id");
+    
+            $.ajax({
+                type : "Delete",
+                url : "/admin/delete/" + id,
+                success : function(response)
+                {
+                    window.location.href = "/admin";
+                },
+    
+                error : function(err)
+                {
+                    window.location.href = "/admin";
+                }
+            });      
+        }
+      
+    });
 });

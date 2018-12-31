@@ -2,7 +2,7 @@
     <h1>Admin <%= adminInfo._id %>
         <div class="pull-right">
             <a href="/admin/edit/<%= adminInfo._id %>" class = "btn btn-info">Edit</a>
-            <a href="#" class = "btn btn-danger">Delete</a>
+            <a href = "#" class = "btn btn-danger delete-admin" data-id = "<%= adminInfo._id %>">Delete</a>
         </div>
     </h1>
     <div class="form-group">

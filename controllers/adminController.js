@@ -429,6 +429,39 @@ router.post("/update/:id",auth,isSuperAdmin,upload.any(),[
 });
 
 /**
+ * Represents Admin Delete option
+ * @param {string} id - The Object Id of the Admin.
+*/
+
+router.delete("/delete/:id",auth,isSuperAdmin,async(req,res) => {
+
+    try
+    {
+        let query = {_id : req.params.id, company : req.user.company};
+
+        let adminDelete = await AdminModel.deleteOne(query); // Deletes the Admin
+    
+        if(adminDelete)
+        {
+            req.flash("danger","Admin Deleted");
+            res.redirect("/admin");
+        }
+        
+        else
+        {
+            req.flash("danger","Something went wrong");
+            res.redirect("/admin");
+        }
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+});
+    
+  
+
+/**
  * Shows Individual Admin
  * @param {string} id - The Object Id of the Admin.
 */
