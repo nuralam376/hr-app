@@ -1,0 +1,51 @@
+<% include ../layouts/admin/header %>
+    <h1>Edit Admin <%= adminInfo._id %></h1>
+    <form action = "/admin/update/<%= adminInfo._id %>" method = "POST" enctype = "multipart/form-data">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" name = "name" id = "name" class = "form-control" value = "<%= adminInfo.name %>"> 
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" name = "email" id = "email" class = "form-control"  value = "<%= adminInfo.email %>"> 
+        </div>
+        <div class="form-group">
+            <label for="birth_date">Birth Date</label>
+            <input type="text" name = "birth_date" id = "name" class = "form-control" placeholder = "dd/mm/yy"  value = "<%= adminInfo.birth_date %>">
+        </div>
+        <div class="form-group">
+            <label for="blood">Blood Group</label>
+            <input type="text" name = "blood" id = "name" class = "form-control"  value = "<%= adminInfo.blood_group %>">
+        </div>
+        <div class="form-group">
+            <label for="nid">National ID</label>
+            <input type="text" name = "nid" id = "nid" class = "form-control"  value = "<%= adminInfo.nid %>">
+        </div>
+        <div class="form-group">
+            <label for="passport">Passport ID</label>
+            <input type="text" name = "passport" id = "passport" class = "form-control"  value = "<%= adminInfo.passport %>">
+        </div>
+        <div class="form-group">
+            <label for="present_address">Present Address</label>
+            <textarea name="present_address" id="present_address" cols="30" rows="5" class = "form-control"><%= adminInfo.present_address %></textarea>
+        </div>
+        <div class="form-group">
+            <label for="permanent_address">Permanent Address</label>
+            <textarea name="permanent_address" id="permanent_address" cols="30" rows="5" class = "form-control"><%= adminInfo.permanent_address %></textarea>
+        </div>
+        <div class="form-group">
+            <label for="profile_photo">Profile Photo</label>
+             <input type = "file" name = "profile_photo" id = "profile_photo">
+             <img src = "/uploads/admin/<%= adminInfo.profile_photo %>" height = "100px" width = "100px">
+        </div>
+        <div class="form-group">
+            <label for="passport_photo">Passport Photo</label>
+            <input type = "file" name = "passport_photo" id = "passport_photo">
+            <img src = "/uploads/admin/<%= adminInfo.passport_photo %>" height = "100px" width = "100px">
+        </div>
+        <div class="form-group">
+            <input type="submit" class = "btn btn-success" value = "Update">
+        </div>
+    </form>
+    
+<% include ../layouts/admin/footer %>

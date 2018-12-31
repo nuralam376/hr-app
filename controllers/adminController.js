@@ -217,10 +217,7 @@ router.post("/register",auth,isSuperAdmin,upload.any(),[
     
 });
 
-/**
- * Shows Individual Admin
- * @param {string} id - The Object Id of the Admin.
-*/
+/** Logged in Admin's Profile */
 
 router.get("/profile",auth,async(req,res) => {
     try{
@@ -250,14 +247,49 @@ router.get("/profile",auth,async(req,res) => {
 }); 
 
 /**
+ * Represents Admin Edit Options.
+ * 
+ * @param {string} id - The Object Id of the Admin.
+ *
+ */
+
+router.get("/edit/:id",auth,isSuperAdmin,async(req,res) => {
+    try
+    {    
+        let query = {_id : req.params.id, company : req.user.company, isSuperAdmin : false}; // Admin Object Id, Company and Normal Admin
+
+        let adminInfo = await AdminModel.findOne(query); // Finds Admin 
+
+        // If Admin exists
+        if(adminInfo)
+        {
+            res.render("admins/edit",{
+                adminInfo : adminInfo
+            });
+        }
+        else
+        {
+            req.flash("danger","Not Found");
+            res.redirect("/dashboard");
+        }    
+        
+    }
+    catch(error)
+    {
+        console.log(error);
+    }   
+
+});
+
+/**
  * Shows Individual Admin
  * @param {string} id - The Object Id of the Admin.
 */
 
-router.get("/:id",auth,async(req,res) => {
+router.get("/:id",auth,isSuperAdmin,async(req,res) => {
     try{
 
-        let query = {_id : req.params.id, company : req.user.company, isSuperAdmin : false}; // Admin Object Id and Company
+        let query = {_id : req.params.id, company : req.user.company, isSuperAdmin : false}; // Admin Object Id, Company and Normal Admin
 
         let adminInfo = await AdminModel.findOne(query); // Finds Admin 
 
