@@ -1,7 +1,13 @@
 <% include layouts/admin/header %>
     <h1 class = "text-center">Dashboard</h1>    
     <br><br>
-    <h3>Your Company Details</h3>
+    <h3>Your Company Details
+    <% if(admin.isSuperAdmin) { %>
+    <div class="pull-right">
+        <a href="/company/edit" class = "btn btn-info">Edit</a>
+    </div>
+    <% } %>
+    </h3>
     <br>
     <div class="form-group">
         <label for="name">Company Name</label>

@@ -73,6 +73,7 @@ const login = require("./controllers/loginController");
 const user = require("./controllers/userController");
 const supplier = require("./controllers/supplierController");
 const admin = require("./controllers/adminController");
+const company = require("./controllers/companyController");
 
 
 /** Other Routes */
@@ -82,6 +83,7 @@ app.use("/login",login);
 app.use("/user",user);
 app.use("/supplier",supplier);
 app.use("/admin",admin);
+app.use("/company",company);
 
 
 // Start the server

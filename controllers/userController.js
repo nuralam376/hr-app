@@ -377,7 +377,7 @@ router.post("/update/:id",auth,upload.any(),[
             }
             else
             {
-                req.flash("danger","Something weny wrong");
+                req.flash("danger","Something went wrong");
                 res.redirect("/user");
             }
           
