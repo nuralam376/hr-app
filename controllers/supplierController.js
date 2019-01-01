@@ -3,11 +3,15 @@
 /** Required modules */
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody } = require("express-validator/filter");
 const multer = require("multer");
+
+/** Authentication Check File */
+const auth = require("../config/auth");
 
 /** Supplier Model Schema */
 const SupplierModel = require("../models/supplierModel");
@@ -49,10 +53,10 @@ function checkFileType(req,file,cb)
 
 
 /** Renders All Suppliers */
-router.get("/",ensureAuthenticated,async(req,res) => {
+router.get("/",auth,async(req,res) => {
     try 
     {
-        let suppliers = await SupplierModel.find({});
+        let suppliers = await SupplierModel.find({company : req.user.company});
 
         res.render("supplier/index",{
             suppliers : suppliers
@@ -67,7 +71,7 @@ router.get("/",ensureAuthenticated,async(req,res) => {
 
 /** Shows Supplier Registration Page */
 
-router.get("/register",ensureAuthenticated,async(req,res) => {
+router.get("/register",auth,async(req,res) => {
     try 
     {
         res.render("supplier/register");
@@ -80,23 +84,21 @@ router.get("/register",ensureAuthenticated,async(req,res) => {
 });
 
 /** Receives Supplier input data for registration */
-router.post("/register",upload.any(),[
+router.post("/register",auth,upload.any(),[
     check("name").not().isEmpty().withMessage("Name is required"),
     check("email").not().isEmpty().withMessage("Email is required"),
     check("email").isEmail().withMessage("Email must be valid"),
     check("birth_date").not().isEmpty().withMessage("Birth Date is required"),
     check("blood").not().isEmpty().withMessage("Blood Group is required"),
-    check("nid").not().isEmpty().withMessage("National ID is required"),
+    check("nid").not().isEmpty().withMessage("National ID is required").isNumeric().withMessage("National Id must be numeric"),
     check("passport").not().isEmpty().withMessage("Passport Id is required"),
     check("present_address").not().isEmpty().withMessage("Present Addres is required"),
     check("permanent_address").not().isEmpty().withMessage("Permanent Address is required"),
 
-    check("password").not().isEmpty().withMessage("Password is required"),
-    check("password").isLength({min:6}).withMessage("Password must be 6 characters"),
     sanitizeBody("name").trim().unescape(),
     sanitizeBody("email").trim().unescape(),
     sanitizeBody("password").trim().unescape(),
-    sanitizeBody("birth_date").trim().unescape(),
+    sanitizeBody("birth_date").trim().unescape().toDate(),
     sanitizeBody("blood").trim().unescape(),
     sanitizeBody("passport").trim().unescape(),
     sanitizeBody("present_address").trim().unescape(),
@@ -113,7 +115,6 @@ router.post("/register",upload.any(),[
             birth_date : req.body.birth_date,
             nid : req.body.nid,
             passport : req.body.passport,
-            password : req.body.password,
             profile_photo : "dummy.jpeg",
             passport_photo : "dummy.jpeg",
         };
@@ -152,6 +153,7 @@ router.post("/register",upload.any(),[
         }
         else
         {
+            /** Stores Forms data in supplier object */
             let supplier = new SupplierModel();
             supplier.name = forms.name;
             supplier.email = forms.email;
@@ -163,41 +165,19 @@ router.post("/register",upload.any(),[
             supplier.permanent_address = forms.permanent_address;
             supplier.profile_photo = forms.profile_photo;
             supplier.passport_photo = forms.passport_photo;
-            supplier.password = forms.password;
+            supplier.company = req.user.company;         
 
-            
-            bcrypt.genSalt(10,function(err,salt){
-                if(err)
-                {
-                    console.log(err);
-                }
-                else
-                {
-                    bcrypt.hash(supplier.password, salt, (err,hash) => {
-                        if(err)
-                        {
-                            console.log(err);
-                        }
-                        else
-                        {
-                            supplier.password = hash;
-
-                            let newSupplier = supplier.save(function(err){
-                                if(err)
-                                {
-                                    console.log(err);
-                                }
-                                else
-                                {
-                                    req.flash("success","New Supplier has been created");
-                                    res.redirect("/supplier");
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-           
+            let newSupplier = await supplier.save(); // Saves New Supplier
+            if(newSupplier)
+            {
+                req.flash("success","New Supplier has been created");
+                res.redirect("/supplier");
+            }
+            else
+            {
+                req.flash("danger","Something went wrong");
+                res.redirect("/supplier");
+            }
         }
         
     } 
@@ -215,24 +195,26 @@ router.post("/register",upload.any(),[
  *
  */
 
-router.get("/edit/:id",ensureAuthenticated,async(req,res) => {
+router.get("/edit/:id",auth,async(req,res) => {
     try
     {
-        if(req.user.isAdmin)
+        
+        let query = {_id : req.params.id, company : req.user.company}; 
+    
+        let supplier = await SupplierModel.findOne(query); // Find the logged in Admin's Company Supplier
+        
+        if(supplier)
         {
-          let query = {_id : req.params.id};
-      
-          let supplier = await SupplierModel.findOne(query);
-          
-          res.render("supplier/edit",{
-              supplier : supplier,
-          });
+            res.render("supplier/edit",{
+                supplier : supplier,
+            });
         }
         else
         {
-            req.flash("danger","Unauthorize Access");
-            res.redirect("/user");
-        }
+            req.flash("danger","Not Found");
+            res.redirect("/supplier");
+        }    
+    
     }
     catch(error)
     {
@@ -247,20 +229,20 @@ router.get("/edit/:id",ensureAuthenticated,async(req,res) => {
  * @param {string} id - The Object Id of the Supplier.
 */
 
-router.post("/update/:id",upload.any(),[
+router.post("/update/:id",auth,upload.any(),[
     check("name").not().isEmpty().withMessage("Name is required"),
     check("email").not().isEmpty().withMessage("Email is required"),
     check("email").isEmail().withMessage("Email must be valid"),
     check("birth_date").not().isEmpty().withMessage("Birth Date is required"),
     check("blood").not().isEmpty().withMessage("Blood Group is required"),
-    check("nid").not().isEmpty().withMessage("National ID is required"),
+    check("nid").not().isEmpty().withMessage("National ID is required").isNumeric().withMessage("National Id must be numeric"),
     check("passport").not().isEmpty().withMessage("Passport Id is required"),
     check("present_address").not().isEmpty().withMessage("Present Addres is required"),
     check("permanent_address").not().isEmpty().withMessage("Permanent Address is required"),
     sanitizeBody("name").trim().unescape(),
     sanitizeBody("email").trim().unescape(),
     sanitizeBody("password").trim().unescape(),
-    sanitizeBody("birth_date").trim().unescape(),
+    sanitizeBody("birth_date").trim().unescape().toDate(),
     sanitizeBody("blood").trim().unescape(),
     sanitizeBody("passport").trim().unescape(),
     sanitizeBody("present_address").trim().unescape(),
@@ -281,7 +263,7 @@ router.post("/update/:id",upload.any(),[
         };
 
        
-            let query = {_id : req.params.id};
+            let query = {_id : req.params.id, company : req.user.company};
 
             let newSupplier = await SupplierModel.findOne(query);
 
@@ -316,18 +298,18 @@ router.post("/update/:id",upload.any(),[
                 }
                 else
                 {
-                    if(newSupplier.profile_photo !== forms.profile_photo)
+                    if(newSupplier.profile_photo !== forms.profile_photo && newSupplier.profile_photo != "dummy.jpeg")
                     {
-                        fs.unlink("./public/uploads/supplier"+newSupplier.profile_photo, (err) => {
+                        fs.unlink("./public/uploads/supplier/"+newSupplier.profile_photo, (err) => {
                              if(err)
                              {
                                  console.log(err);
                              }
                          });
                     }
-                    if(newSupplier.passport_photo !== forms.passport_photo)
+                    if(newSupplier.passport_photo !== forms.passport_photo && newSupplier.passport_photo != "dummy.jpeg")
                     {
-                        fs.unlink("./public/uploads/supplier"+newSupplier.passport_photo, (err) => {
+                        fs.unlink("./public/uploads/supplier/"+newSupplier.passport_photo, (err) => {
                             if(err)
                              {
                                  console.log(err);
@@ -346,22 +328,24 @@ router.post("/update/:id",upload.any(),[
                     supplier.permanent_address = forms.permanent_address;
                     supplier.profile_photo = newSupplier.profile_photo;
                     supplier.passport_photo = newSupplier.passport_photo;
-                    supplier.password = newSupplier.password;
                     supplier.profile_photo = forms.profile_photo;
                     supplier.passport_photo = forms.passport_photo;
+                    supplier.company = req.user.company;
     
       
-                    SupplierModel.updateOne(query,supplier,(err) => {
-                        if(err)
-                        {
-                            console.log(err);
-                        }
-                        else
-                        {
-                            req.flash("success","Supplier Details Updated");
-                            res.redirect("/supplier");
-                        }
-                    });
+                    let supplierUpdate = await SupplierModel.updateOne(query,supplier);
+
+                    if(supplierUpdate)
+                    {
+                        req.flash("success","Supplier Details Updated");
+                        res.redirect("/supplier");
+                    }
+                    else
+                    {
+                        req.flash("danger","Something went wrong");
+                        res.redirect("/supplier");
+                    }
+                   
                 }
             }  
     }
@@ -369,9 +353,7 @@ router.post("/update/:id",upload.any(),[
     {
         console.log(err);
     }
-       
-        
-                    
+
 });
 
 /**
@@ -379,22 +361,47 @@ router.post("/update/:id",upload.any(),[
  * @param {string} id - The Object Id of the Supplier.
 */
 
-router.delete("/delete/:id",ensureAuthenticated,async(req,res) => {
+router.delete("/delete/:id",auth,async(req,res) => {
     try
     {
-        if(req.user.isAdmin)
-        {
-            let query = {_id : req.params.id};
+        let query = {_id : req.params.id, company : req.user.company}; // Deletes the Supplier
 
-            SupplierModel.deleteOne(query,function(err){
+        let supplier = await SupplierModel.findOne(query);
+
+        if(supplier)
+        {
+                /** Removes the old files */
+            if(supplier.profile_photo != "dummy.jpeg")
+            {
+                fs.unlink("./public/uploads/supplier/"+supplier.profile_photo, (err) => {
+                    if(err)
+                    {
+                        console.log(err);
+                    }
+                });
+            }
+            if(supplier.passport_photo != "dummy.jpeg")
+            {
+                fs.unlink("./public/uploads/supplier/"+supplier.passport_photo, (err) => {
+                    if(err)
+                        {
+                            console.log(err);
+                        }
+                    });
+            }
+
+            let supplierDelete = await SupplierModel.deleteOne(query);
+
+            if(supplierDelete)
+            {
                 req.flash("danger","Supplier Deleted");
                 res.redirect("/supplier");
-            });
-        }
-        else
-        {
-            req.flash("danger","Unauthorize Access");
-            res.redirect("/supplier");
+            }
+            else
+            {
+                req.flash("danger","Something Went Wrong");
+                res.redirect("/supplier");
+            }  
         }
     }
     catch(err)
@@ -410,9 +417,9 @@ router.delete("/delete/:id",ensureAuthenticated,async(req,res) => {
  * @param {string} id - The Object Id of the Supplier.
 */
 
-router.get("/:id",ensureAuthenticated,async(req,res) => {
+router.get("/:id",auth,async(req,res) => {
     try{
-        let query = {_id : req.params.id};
+        let query = {_id : req.params.id,company : req.user.company};
         let supplier = await SupplierModel.findOne(query).exec();
         if(supplier)
         {
@@ -420,6 +427,11 @@ router.get("/:id",ensureAuthenticated,async(req,res) => {
                 supplier : supplier
             });
         }    
+        else
+        {
+            req.flash("danger","Not Found");
+            res.redirect("/supplier");
+        }
     }
     catch(error)
     {
@@ -427,21 +439,5 @@ router.get("/:id",ensureAuthenticated,async(req,res) => {
     }
 
 }); 
-
-
-
-/** Checks Whether the user is logged in or not*/
-function ensureAuthenticated(req,res,next)
-{
-    if(req.isAuthenticated())
-    {
-        next();
-    }
-    else
-    {
-        req.flash("danger","Please login first");
-        res.redirect("/login");
-    }
-}
 
 module.exports = router;

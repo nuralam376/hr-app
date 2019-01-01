@@ -54,11 +54,7 @@ const SupplierSchema = mongoose.Schema({
         type : String,
         required : true
     },
-    password : 
-    {
-        type : String,
-        required : true
-    },
+
     company : 
     {
         type: mongoose.Schema.Types.ObjectId,

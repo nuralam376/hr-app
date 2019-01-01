@@ -43,10 +43,12 @@
         <% } %>
         <div class="form-group">
             <label for="profile_photo">Profile Photo</label>
+            <input type="file" name = "profile_photo">
             <img src = "/uploads/supplier/<%= supplier.profile_photo %>" height = "100px" width = "100px">
         </div>
         <div class="form-group">
             <label for="passport_photo">Passport Photo</label>
+            <input type="file" name = "passport_photo">
             <img src = "/uploads/supplier/<%= supplier.passport_photo %>" height = "100px" width = "100px">
         </div>
         <div class="form-group">

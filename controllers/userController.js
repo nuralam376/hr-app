@@ -11,6 +11,8 @@ const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody} = require("express-validator/filter");
 const multer = require("multer");
 
+
+/** Authentication Check File */
 const auth = require("../config/auth");
 
 /** User Model Schema */
@@ -333,7 +335,7 @@ router.post("/update/:id",auth,upload.any(),[
                     }
                 });
             }
-            if(newUser.passport_photo !== forms.passport_photo && newUser.profile_photo != "dummy.jpeg")
+            if(newUser.passport_photo !== forms.passport_photo && newUser.passport_photo != "dummy.jpeg")
             {
                 fs.unlink("./public/uploads/user/"+newUser.passport_photo, (err) => {
                     if(err)
@@ -415,7 +417,7 @@ router.delete("/delete/:id",auth,async(req,res) => {
                     }
                 });
             }
-            if(user.profile_photo != "dummy.jpeg")
+            if(user.passport_photo != "dummy.jpeg")
             {
                 fs.unlink("./public/uploads/user/"+user.passport_photo, (err) => {
                     if(err)
