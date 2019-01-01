@@ -14,51 +14,30 @@ const AdminSchema = mongoose.Schema({
         type : String,
         required : true
     },
-    birth_date :
-    {
-        type : String,
-        required : true
-    },
-    blood_group : 
-    {
-        type : String,
-        required : true
-    },
-    nid : 
+    contact : 
     {
         type : Number,
         required : true
     },
-    passport :
+
+    address : 
     {
         type : String,
         required : true
     },
-    present_address : 
-    {
-        type : String,
-        required : true
-    },
-    permanent_address : 
-    {
-        type : String,
-        required : true
-    },
+    
     profile_photo : 
     {
         type : String,
         required : true
     },
-    passport_photo : 
-    {
-        type : String,
-        required : true
-    },
+
     password : 
     {
         type : String,
         required : true
     },
+
     isSuperAdmin : 
     {
         type : Boolean,

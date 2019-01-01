@@ -5,6 +5,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const {check, validationResult} = require("express-validator/check");
+const {sanitizeBody } = require("express-validator/filter");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
@@ -65,7 +66,9 @@ passport.deserializeUser(function (id, done) {
 
 router.post("/",[
     check("username").not().isEmpty().withMessage("Email is required"),
-    check("password").not().isEmpty().withMessage("Password is required")
+    check("password").not().isEmpty().withMessage("Password is required"),
+    sanitizeBody("username").trim().unescape(),
+    sanitizeBody("password").trim().unescape(),
 ],function(req,res,next){
    
     let errors = validationResult(req);
