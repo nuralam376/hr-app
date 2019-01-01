@@ -57,7 +57,14 @@ app.set("view engine","ejs");
 /** Home Route */
 app.get("/",async(req,res) => {
     try{
-        res.render("home");
+        if(req.isAuthenticated())
+        {
+            res.redirect("/dashboard");
+        }
+        else
+        {
+            res.render("home");
+        }
     }
     catch(error)
     {
