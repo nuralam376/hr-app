@@ -47,10 +47,10 @@
     <% } %>
     <div class="form-group">
         <label for="profile_photo">Profile Photo</label>
-        <img src = "/uploads/user/<%= newUser.profile_photo %>" height = "100px" width = "100px">
+        <img src = "/uploads/user/<%= newUser.profile_photo %>" style = "height:auto;max-width:500px;" id = "photo">
     </div>
     <div class="form-group">
         <label for="passport_photo">Passport Photo</label>
-        <img src = "/uploads/user/<%= newUser.passport_photo %>" height = "100px" width = "100px">
+        <img src = "/uploads/user/<%= newUser.passport_photo %>" style = "height:auto;max-width:500px;" id = "photo1">
     </div>
 <% include ../layouts/admin/footer %>

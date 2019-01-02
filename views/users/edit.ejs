@@ -48,13 +48,13 @@
         <div class="form-group">
             <label for="profile_photo">Profile Photo</label>
             <input type = "file" name = "profile_photo" id = "profile_photo">
-            <img src = "/uploads/user/<%= newUser.profile_photo %>" height = "100px" width = "100px">
+            <img src = "/uploads/user/<%= newUser.profile_photo %>" style = "height:auto;max-width:500px;" id = "photo">
         </div>
        
         <div class="form-group">
             <label for="passport_photo">Passport Photo</label>
             <input type = "file" name = "passport_photo" id = "passport_photo">
-            <img src = "/uploads/user/<%= newUser.passport_photo %>" height = "100px" width = "100px">
+            <img src = "/uploads/user/<%= newUser.passport_photo %>" style = "height:auto;max-width:500px;" style = "height:auto;max-width:100%;" id = "photo1">
         </div>
         <div class="form-group">
             <input type="submit" name = "submit" value = "Update" class = "btn btn-success">

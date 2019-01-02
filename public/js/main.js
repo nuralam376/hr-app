@@ -73,13 +73,13 @@ $(document).ready(function(){
       
     });
 
-    function readURL(input) {
+    function readURL(input,id) {
 
         if (input.files && input.files[0]) {
           var reader = new FileReader();
       
           reader.onload = function(e) {
-            $('#photo').attr('src', e.target.result);
+            $(id).attr('src', e.target.result);
           }
       
           reader.readAsDataURL(input.files[0]);
@@ -87,6 +87,10 @@ $(document).ready(function(){
       }
       
       $("#profile_photo").change(function() {
-        readURL(this);
+        readURL(this,"#photo");
+      });
+
+      $("#passport_photo").change(function() {
+        readURL(this,"#photo1");
       });
 });
