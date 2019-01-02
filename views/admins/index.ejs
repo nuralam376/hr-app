@@ -15,7 +15,6 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Passport ID</th>
                         <th>Photo</th>
                     </tr>
                 </thead>
@@ -26,8 +25,7 @@
                                 <td><a href = "/admin/<%= admin._id %>"><%= admin._id %></a></td>
                                 <td><%= admin.name %></td>
                                 <td><%= admin.email %></td>
-                                <td><%= admin.passport %></td>
-                                <td><img src = "uploads\admin/<%= admin.profile_photo %>" height = "100px" width = "100px"></td>
+                                <td><img src = "uploads\admin/<%= admin.profile_photo %>" height = "50px" width = "50px"></td>
                             </tr>
                         <% }) %>
                     <% } %>

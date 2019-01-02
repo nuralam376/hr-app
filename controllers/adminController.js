@@ -92,28 +92,27 @@ router.get("/register",auth,isSuperAdmin,async(req,res) => {
 
 
 /** Receives Admin input data for registration */
-router.post("/register",auth,isSuperAdmin,upload.any(),[
+router.post("/register",auth,isSuperAdmin,[
     check("name").not().isEmpty().withMessage("Name is required"),
-    check("email").not().isEmpty().withMessage("Email is required"),
-    check("email").isEmail().withMessage("Email must be valid"),
-    check("birth_date").not().isEmpty().withMessage("Birth Date is required"),
-    check("blood").not().isEmpty().withMessage("Blood Group is required"),
-    check("nid").not().isEmpty().withMessage("National ID is required"),
-    check("passport").not().isEmpty().withMessage("Passport Id is required"),
-    check("present_address").not().isEmpty().withMessage("Present Addres is required"),
-    check("permanent_address").not().isEmpty().withMessage("Permanent Address is required"),
-
-    check("password").not().isEmpty().withMessage("Password is required"),
-    check("password").isLength({min:6}).withMessage("Password must be 6 characters"),
+    check("email").not().isEmpty().withMessage("Email is required").isEmail().withMessage("Email must be valid"),
+    check("contact").not().isEmpty().withMessage("Contact is required").isNumeric().withMessage("Contact No. must be numeric"),
+    check("address").not().isEmpty().withMessage("Address is required"),
+    check("pass").not().isEmpty().withMessage("Password is required").isLength({min:6}).withMessage("Password must be 6 characters"),
+    check("confirm_pass").custom((value,{req,loc,path}) => {
+        if(value != req.body.pass)
+        {
+            throw new Error("Passwords don't match")
+        }
+        else
+        {
+            return typeof value == undefined ? "" : value;
+        }
+    }),
     sanitizeBody("name").trim().unescape(),
     sanitizeBody("email").trim().unescape(),
-    sanitizeBody("password").trim().unescape(),
-    sanitizeBody("birth_date").trim().unescape(),
-    sanitizeBody("blood").trim().unescape(),
-    sanitizeBody("passport").trim().unescape(),
-    sanitizeBody("present_address").trim().unescape(),
-    sanitizeBody("permanent_address").trim().unescape(),
-    sanitizeBody("nid").trim().toInt(),
+    sanitizeBody("contact").trim().unescape(),
+    sanitizeBody("address").trim().unescape(),
+    sanitizeBody("pass").trim().unescape(),
 ],async(req,res) => {
     try
     {
@@ -132,30 +131,12 @@ router.post("/register",auth,isSuperAdmin,upload.any(),[
         let forms = {
             name : req.body.name,
             email : req.body.email,
-            blood : req.body.blood,
-            present_address : req.body.present_address,
-            permanent_address : req.body.permanent_address,
-            birth_date : req.body.birth_date,
-            nid : req.body.nid,
-            passport : req.body.passport,
-            password : req.body.password,
+            contact : req.body.contact,
+            address : req.body.address,
+            pass : req.body.pass,
             profile_photo : "dummy.jpeg",
-            passport_photo : "dummy.jpeg",
         };
 
-        /** Checks if the Admin uploads any file */
-        if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
-        {
-            if(req.files[0].fieldname == "profile_photo")
-                forms.profile_photo = req.files[0].filename;
-            else
-                forms.passport_photo = req.files[0].filename;
-        }
-        
-        if(typeof req.files[1] !== "undefined" && req.files[1].fieldname == "passport_photo" && req.fileValidationError == null)
-        {
-            forms.passport_photo = req.files[1].filename;
-        }
             
         let errors = validationResult(req);
 
@@ -165,16 +146,6 @@ router.post("/register",auth,isSuperAdmin,upload.any(),[
             res.render("admins/register",{
                 errors : errors.array(),
                 form : forms,
-                fileError : req.fileValidationError
-            });
-        }
-        /** Checks File Validation Error */
-        else if(typeof req.fileValidationError != undefined && req.fileValidationError != null)
-        {
-            res.render("admins/register",{
-                errors : errors.array(),
-                form : forms,
-                fileError : req.fileValidationError
             });
         }
         
@@ -184,15 +155,10 @@ router.post("/register",auth,isSuperAdmin,upload.any(),[
             let admin = new AdminModel();
             admin.name = forms.name;
             admin.email = forms.email;
-            admin.birth_date = forms.birth_date;
-            admin.blood_group = forms.blood;
-            admin.nid = forms.nid;
-            admin.passport = forms.passport;
-            admin.present_address = forms.present_address;
-            admin.permanent_address = forms.permanent_address;
+            admin.contact = forms.contact;
+            admin.address = forms.address;
             admin.profile_photo = forms.profile_photo;
-            admin.passport_photo = forms.passport_photo;
-            admin.password = forms.password;
+            admin.password = forms.pass;
             admin.company = req.user.company;
 
             /** Encrypted the Admin Password */
@@ -437,24 +403,16 @@ router.post("/profile/update",auth,upload.any(),[
  * @param {string} id - The Object Id of the Admin.
 */
 
-router.post("/update/:id",auth,isSuperAdmin,upload.any(),[
+router.post("/update/:id",auth,isSuperAdmin,[
     check("name").not().isEmpty().withMessage("Name is required"),
-    check("email").not().isEmpty().withMessage("Email is required"),
-    check("email").isEmail().withMessage("Email must be valid"),
-    check("birth_date").not().isEmpty().withMessage("Birth Date is required"),
-    check("blood").not().isEmpty().withMessage("Blood Group is required"),
-    check("nid").not().isEmpty().withMessage("National ID is required"),
-    check("passport").not().isEmpty().withMessage("Passport Id is required"),
-    check("present_address").not().isEmpty().withMessage("Present Addres is required"),
-    check("permanent_address").not().isEmpty().withMessage("Permanent Address is required"),
+    check("email").not().isEmpty().withMessage("Email is required").isEmail().withMessage("Email must be valid"),
+    check("contact").not().isEmpty().withMessage("Contact is required").isNumeric().withMessage("Contact No. must be numeric"),
+    check("address").not().isEmpty().withMessage("Address is required"),
     sanitizeBody("name").trim().unescape(),
     sanitizeBody("email").trim().unescape(),
-    sanitizeBody("birth_date").trim().unescape(),
-    sanitizeBody("blood").trim().unescape(),
-    sanitizeBody("passport").trim().unescape(),
-    sanitizeBody("present_address").trim().unescape(),
-    sanitizeBody("permanent_address").trim().unescape(),
-    sanitizeBody("nid").trim().toInt(),
+    sanitizeBody("contact").trim().unescape(),
+    sanitizeBody("address").trim().unescape(),
+    sanitizeBody("pass").trim().unescape(),
 ],async(req,res) => {
        try
        {        
@@ -466,23 +424,18 @@ router.post("/update/:id",auth,isSuperAdmin,upload.any(),[
             if(adminInfo)
             {
                  /** Stores Admin input data in forms Object*/
-                let forms = {
+                 let forms = {
                     name : req.body.name,
                     email : req.body.email,
-                    blood : req.body.blood,
-                    present_address : req.body.present_address,
-                    permanent_address : req.body.permanent_address,
-                    birth_date : req.body.birth_date,
-                    nid : req.body.nid,
-                    passport : req.body.passport,
+                    contact : req.body.contact,
+                    address : req.body.address,
                 };
                 forms.profile_photo = adminInfo.profile_photo;
-                forms.passport_photo = adminInfo.passport_photo;
 
                 /** Cheks Wheteher the email is already exist */
                 let adminEmailCheck = await AdminModel.findOne({email : req.body.email});
                 
-                if(adminEmailCheck && adminEmailCheck.email != req.user.email)
+                if(adminEmailCheck && adminEmailCheck.email != adminInfo.email)
                 {
                     req.flash("danger","Email Already exists");
                     res.statusCode = 302;
@@ -493,20 +446,6 @@ router.post("/update/:id",auth,isSuperAdmin,upload.any(),[
                 let errors = validationResult(req); 
                
                 
-                /** If File exists, then update */
-                if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
-                {
-                    if(req.files[0].fieldname == "profile_photo")
-                        forms.profile_photo = req.files[0].filename;
-                    else
-                        forms.passport_photo = req.files[0].filename;
-                }
-                
-                if(typeof req.files[1] !== "undefined" && req.files[1].fieldname == "passport_photo" && req.fileValidationError == null)
-                {
-                    forms.passport_photo = req.files[1].filename;
-                }
-
                 if(!errors.isEmpty())
                 {
                 
@@ -519,38 +458,14 @@ router.post("/update/:id",auth,isSuperAdmin,upload.any(),[
                 }
                 else
                 {
-                    if(adminInfo.profile_photo !== forms.profile_photo && adminInfo.profile_photo !== "dummy.jpeg")
-                    {
-                        /** Removes the previous file */
-                        fs.unlink("./public/uploads/admin/" + adminInfo.profile_photo, (err) => {
-                            if(err)
-                            {
-                                console.log(err);
-                            }
-                        });
-                    }
-                    if(adminInfo.passport_photo !== forms.passport_photo && adminInfo.passport_photo !== "dummy.jpeg")
-                    {
-                        fs.unlink("./public/uploads/admin/"+adminInfo.passport_photo, (err) => {
-                            if(err)
-                            {
-                                console.log(err);
-                            }
-                        });
-                    }
 
                     /** Stores Forms data in newAdmin Object */
                     let newAdmin = {};
                     newAdmin.name = forms.name;
                     newAdmin.email = forms.email;
-                    newAdmin.birth_date = forms.birth_date;
-                    newAdmin.blood_group = forms.blood;
-                    newAdmin.nid = forms.nid;
-                    newAdmin.passport = forms.passport;
-                    newAdmin.present_address = forms.present_address;
-                    newAdmin.permanent_address = forms.permanent_address;
+                    newAdmin.contact = forms.contact;
+                    newAdmin.address = forms.address;
                     newAdmin.profile_photo = forms.profile_photo;
-                    newAdmin.passport_photo = forms.passport_photo;
                     newAdmin.company = req.user.company;
 
                     
