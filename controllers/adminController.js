@@ -319,22 +319,13 @@ router.get("/edit/:id",auth,isSuperAdmin,async(req,res) => {
 
 router.post("/profile/update",auth,upload.any(),[
     check("name").not().isEmpty().withMessage("Name is required"),
-    check("email").not().isEmpty().withMessage("Email is required"),
-    check("email").isEmail().withMessage("Email must be valid"),
-    check("birth_date").not().isEmpty().withMessage("Birth Date is required"),
-    check("blood").not().isEmpty().withMessage("Blood Group is required"),
-    check("nid").not().isEmpty().withMessage("National ID is required"),
-    check("passport").not().isEmpty().withMessage("Passport Id is required"),
-    check("present_address").not().isEmpty().withMessage("Present Addres is required"),
-    check("permanent_address").not().isEmpty().withMessage("Permanent Address is required"),
+    check("email").not().isEmpty().withMessage("Email is required").isEmail().withMessage("Email must be valid"),
+    check("contact").not().isEmpty().withMessage("Contact No. is required").isNumeric().withMessage("Contact No. must be numeric"),
+    check("address").not().isEmpty().withMessage("Address is required"),
     sanitizeBody("name").trim().unescape(),
     sanitizeBody("email").trim().unescape(),
-    sanitizeBody("birth_date").trim().unescape(),
-    sanitizeBody("blood").trim().unescape(),
-    sanitizeBody("passport").trim().unescape(),
-    sanitizeBody("present_address").trim().unescape(),
-    sanitizeBody("permanent_address").trim().unescape(),
-    sanitizeBody("nid").trim().toInt(),
+    sanitizeBody("contact").trim().unescape(),
+    sanitizeBody("address").trim().unescape(),
 ],async(req,res) => {
        try
        {        
@@ -349,15 +340,10 @@ router.post("/profile/update",auth,upload.any(),[
                 let forms = {
                     name : req.body.name,
                     email : req.body.email,
-                    blood : req.body.blood,
-                    present_address : req.body.present_address,
-                    permanent_address : req.body.permanent_address,
-                    birth_date : req.body.birth_date,
-                    nid : req.body.nid,
-                    passport : req.body.passport,
+                    contact : req.body.contact,
+                    address : req.body.address,
                 };
                 forms.profile_photo = adminInfo.profile_photo;
-                forms.passport_photo = adminInfo.passport_photo;
 
                 /** Cheks Wheteher the email is already exist */
                 let adminEmailCheck = await AdminModel.findOne({email : req.body.email});
@@ -378,14 +364,8 @@ router.post("/profile/update",auth,upload.any(),[
                 {
                     if(req.files[0].fieldname == "profile_photo")
                         forms.profile_photo = req.files[0].filename;
-                    else
-                        forms.passport_photo = req.files[0].filename;
                 }
-                
-                if(typeof req.files[1] !== "undefined" && req.files[1].fieldname == "passport_photo" && req.fileValidationError == null)
-                {
-                    forms.passport_photo = req.files[1].filename;
-                }
+            
 
                 if(!errors.isEmpty())
                 {
@@ -409,28 +389,14 @@ router.post("/profile/update",auth,upload.any(),[
                             }
                         });
                     }
-                    if(adminInfo.passport_photo !== forms.passport_photo && adminInfo.passport_photo !== "dummy.jpeg")
-                    {
-                        fs.unlink("./public/uploads/admin/"+adminInfo.passport_photo, (err) => {
-                            if(err)
-                            {
-                                console.log(err);
-                            }
-                        });
-                    }
 
                     /** Stores Forms data in newAdmin Object */
                     let newAdmin = {};
                     newAdmin.name = forms.name;
                     newAdmin.email = forms.email;
-                    newAdmin.birth_date = forms.birth_date;
-                    newAdmin.blood_group = forms.blood;
-                    newAdmin.nid = forms.nid;
-                    newAdmin.passport = forms.passport;
-                    newAdmin.present_address = forms.present_address;
-                    newAdmin.permanent_address = forms.permanent_address;
+                    newAdmin.contact = forms.contact;
+                    newAdmin.address = forms.address;
                     newAdmin.profile_photo = forms.profile_photo;
-                    newAdmin.passport_photo = forms.passport_photo;
                     newAdmin.company = req.user.company;
 
                     if(req.user.isSuperAdmin)
