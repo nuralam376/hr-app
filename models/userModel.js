@@ -71,7 +71,7 @@ const UserSchema = mongoose.Schema({
 
     seq_id : 
     {
-        type : Number,
+        type : String,
         required: true,
         default : 0
     }

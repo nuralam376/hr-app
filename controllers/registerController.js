@@ -18,7 +18,8 @@ let CompanyModel = require("../models/companyModel");
 /** Package Model Schema */
 let PackageModel = require("../models/packageModel");
 
-
+/** Company Info Model Schema */
+let CompanyInfoModel = require("../models/companyInfoModel");
 
 
 /** Shows Registration page for SuperAdmin*/
@@ -239,31 +240,28 @@ router.post("/:id/company",[
                 company.package = newPackage._id;
             }  
             
-            company.save((err,newCompany) => {
-                if(err)
-                {
-                    console.log(err);
-                }
-                else
-                {
-                    let query = {_id : req.params.id};
-                    let admin = {};
-                    admin.company = newCompany._id;
+            let newCompany = await company.save();
 
-                    /** Assigend Company to Admin */
-                    AdminModel.updateOne(query,admin,(err) => {
-                        if(err)
-                        {
-                            console.log(err);
-                        }
-                        else
-                        {
-                            req.flash("success","Company Created Successfully");
-                            res.redirect("/login");
-                        }
-                    });
+            if(newCompany)
+            {
+                let query = {_id : req.params.id};
+                let admin = {};
+                admin.company = newCompany._id;
+                admin.seq_id = "superadmin-1";
+
+                let companyInfo = new CompanyInfoModel();
+                companyInfo.company = newCompany._id;
+
+                let newCompanyInfo = await companyInfo.save();
+
+                /** Assigend Company to Admin */
+                let adminUpdate = await AdminModel.updateOne(query,admin);
+                if(adminUpdate)
+                {
+                    req.flash("success","Company Created Successfully");
+                    res.redirect("/login");
                 }
-            });
+            }
         }   
         
     }

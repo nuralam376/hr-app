@@ -1,9 +1,9 @@
 /** Mongoose Module .*/
 const mongoose = require("mongoose");
 
-/** Company Table Field .*/
+/** Company Info Table Field .*/
 
-const CompanySchema = mongoose.Schema({
+const CompanyInfoSchema = mongoose.Schema({
     admin : 
     {
         type : Number,
@@ -13,12 +13,14 @@ const CompanySchema = mongoose.Schema({
     supplier : 
     {
         type : Number,
-        required : true
+        required : true,
+        default : 0
     },
     user : 
     {
         type : Number,
-        required : true
+        required : true,
+        default : 0
     },
 
     company : 
@@ -29,4 +31,4 @@ const CompanySchema = mongoose.Schema({
     }
 });
 
-const CompanyInfo = module.exports = mongoose.model("CompanyInfo",CompanySchema);
+const CompanyInfo = module.exports = mongoose.model("CompanyInfo",CompanyInfoSchema);
