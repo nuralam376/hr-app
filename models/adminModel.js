@@ -49,6 +49,13 @@ const AdminSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Company',
         required : false
+    },
+
+    seq_id : 
+    {
+        type : Number,
+        required: true,
+        default : 0
     }
 });
 
