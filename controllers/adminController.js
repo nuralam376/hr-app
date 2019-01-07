@@ -16,6 +16,9 @@ const auth = require("../config/auth");
 /** Admin Model Schema */
 let AdminModel = require("../models/adminModel");
 
+/** Company Info Model Schema */
+let CompanyInfoModel = require("../models/companyInfoModel");
+
 
 /** Initialize Multer storage Variable for file upload */
 const storage = multer.diskStorage({
@@ -165,13 +168,29 @@ router.post("/register",auth,isSuperAdmin,[
 
             let hashPwd = await bcrypt.hash(admin.password,10);    
             admin.password = hashPwd;
+
+            let company = await CompanyInfoModel.findOne({company : req.user.company}); // Finds the last Inserted Id of the Admins
+            let adminCount = company.admin + 1; 
+            
+            admin.seq_id = "admin_" + adminCount; // Adds 1 in the Admin Sequence Number
                 
 
             let adminCreate = await admin.save(); // Creates New Admin
 
+        
             if(adminCreate)
             {
+                let companyInfo = {};
+                companyInfo.admin = adminCount;
+                let query = {company: req.user.company};
+                let companyInfoUpdate = await CompanyInfoModel.findOneAndUpdate(query,companyInfo); // Updates the Number of Admins
+
                 req.flash("success","New Admin account has been created");
+                res.redirect("/admin");
+            }
+            else
+            {
+                req.flash("danger","Something went wrong");
                 res.redirect("/admin");
             }
         }
@@ -253,7 +272,7 @@ router.get("/profile/edit",auth,async(req,res) => {
 router.get("/edit/:id",auth,isSuperAdmin,async(req,res) => {
     try
     {    
-        let query = {_id : req.params.id, company : req.user.company, isSuperAdmin : false}; // Admin Object Id, Company and Normal Admin
+        let query = {seq_id : req.params.id, company : req.user.company, isSuperAdmin : false}; // Admin Object Id, Company and Normal Admin
 
         let adminInfo = await AdminModel.findOne(query); // Finds Admin 
 
@@ -539,7 +558,7 @@ router.delete("/delete/:id",auth,isSuperAdmin,async(req,res) => {
 router.get("/:id",auth,isSuperAdmin,async(req,res) => {
     try{
 
-        let query = {_id : req.params.id, company : req.user.company, isSuperAdmin : false}; // Admin Object Id, Company and Normal Admin
+        let query = {seq_id : req.params.id, company : req.user.company, isSuperAdmin : false}; // Admin Object Id, Company and Normal Admin
 
         let adminInfo = await AdminModel.findOne(query); // Finds Admin 
 

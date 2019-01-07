@@ -1,5 +1,5 @@
 <% include ../layouts/admin/header %>
-    <h1>Edit Admin <%= adminInfo._id %></h1>
+    <h1>ID -  <%= adminInfo.seq_id %></h1>
     <form action = "/admin/update/<%= adminInfo._id %>" method = "POST">
         <div class="form-group">
             <label for="name">Name</label>

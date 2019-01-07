@@ -187,7 +187,7 @@ router.post("/:id/company",[
     check("name").not().isEmpty().withMessage("Name is required"),
     check("email").not().isEmpty().withMessage("Email is required").isEmail().withMessage("Email must be valid"),
     check("address").not().isEmpty().withMessage("Address is required"),
-    check("contact").not().isEmpty().withMessage("Contact No. is required"),
+    check("contact").not().isEmpty().withMessage("Contact No. is required").isNumeric().withMessage("Contact No. must be numeric"),
     sanitizeBody("name").trim().unescape(),
     sanitizeBody("email").trim().unescape(),
     sanitizeBody("address").trim().unescape()
@@ -247,7 +247,7 @@ router.post("/:id/company",[
                 let query = {_id : req.params.id};
                 let admin = {};
                 admin.company = newCompany._id;
-                admin.seq_id = "superadmin-1";
+                admin.seq_id = "superadmin_1";
 
                 let companyInfo = new CompanyInfoModel();
                 companyInfo.company = newCompany._id;
