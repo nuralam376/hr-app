@@ -23,7 +23,7 @@
                     <% if(users) { %>
                         <% users.forEach(function(user) { %>
                             <tr>
-                                <td><a href = "/user/<%= user._id %>"><%= user._id %></a></td>
+                                <td><a href = "/user/<%= user.seq_id %>"><%= user.seq_id %></a></td>
                                 <td><%= user.name %></td>
                                 <td><%= user.email %></td>
                                 <td><%= user.passport %></td>

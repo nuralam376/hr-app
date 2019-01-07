@@ -20,6 +20,9 @@ let UserModel = require("../models/userModel");
 /** Supplier Model Schema */
 let SupplierModel = require("../models/supplierModel");
 
+/** Company Info Model Schema */
+let CompanyInfoModel = require("../models/companyInfoModel");
+
 /** Initialize Multer storage Variable for file upload */
 const storage = multer.diskStorage({
     destination : "./public/uploads/user",
@@ -194,11 +197,25 @@ router.post("/register",auth,upload.any(),[
                 user.supplier = forms.supplier;
             }
 
+            let company = await CompanyInfoModel.findOne({company : req.user.company}); // Finds the last Inserted Id of the User
+            let userCount = company.user + 1; 
+            
+            user.seq_id = "worker_" + userCount; // Adds 1 in the User Sequence Number
+
             let userSave = await user.save(); // Saves the new User
 
             if(userSave)
             {
+                let companyInfo = {};
+                companyInfo.user = userCount;
+                let query = {company: req.user.company};
+                let companyInfoUpdate = await CompanyInfoModel.findOneAndUpdate(query,companyInfo); // Updates the Number of the User
                 req.flash("success","New User has been created");
+                res.redirect("/user");
+            }
+            else
+            {
+                req.flash("danger","Something went wrong");
                 res.redirect("/user");
             }
             
@@ -223,7 +240,7 @@ router.get("/edit/:id",auth,async(req,res) => {
     try
     {
        
-          let query = {_id : req.params.id, company : req.user.company}; // Finds the User
+          let query = {seq_id : req.params.id, company : req.user.company}; // Finds the User
 
           let user = await UserModel.findOne(query);
 
@@ -457,7 +474,7 @@ router.delete("/delete/:id",auth,async(req,res) => {
 
 router.get("/:id",auth,async(req,res) => {
     try{
-        let query = {_id : req.params.id, company : req.user.company};
+        let query = {seq_id : req.params.id, company : req.user.company};
 
         let user = await UserModel.findOne(query).populate("supplier").exec();
         res.render("users/view",{
