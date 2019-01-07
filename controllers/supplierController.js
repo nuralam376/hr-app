@@ -16,6 +16,9 @@ const auth = require("../config/auth");
 /** Supplier Model Schema */
 const SupplierModel = require("../models/supplierModel");
 
+/** Company Info Model Schema */
+let CompanyInfoModel = require("../models/companyInfoModel");
+
 /** Initialize Multer storage Variable for file upload */
 const storage = multer.diskStorage({
     destination : "./public/uploads/supplier",
@@ -165,11 +168,21 @@ router.post("/register",auth,upload.any(),[
             supplier.permanent_address = forms.permanent_address;
             supplier.profile_photo = forms.profile_photo;
             supplier.passport_photo = forms.passport_photo;
-            supplier.company = req.user.company;         
+            supplier.company = req.user.company;      
+            
+            let company = await CompanyInfoModel.findOne({company : req.user.company}); // Finds the last Inserted Id of the Supplier
+            let supplierCount = company.supplier + 1; 
+            
+            supplier.seq_id = "supplier_" + supplierCount; // Adds 1 in the Supplier Sequence Number
 
             let newSupplier = await supplier.save(); // Saves New Supplier
+
             if(newSupplier)
             {
+                let companyInfo = {};
+                companyInfo.supplier = supplierCount;
+                let query = {company: req.user.company};
+                let companyInfoUpdate = await CompanyInfoModel.findOneAndUpdate(query,companyInfo); // Updates the Number of the Supplier
                 req.flash("success","New Supplier has been created");
                 res.redirect("/supplier");
             }
@@ -199,7 +212,7 @@ router.get("/edit/:id",auth,async(req,res) => {
     try
     {
         
-        let query = {_id : req.params.id, company : req.user.company}; 
+        let query = {seq_id : req.params.id, company : req.user.company}; 
     
         let supplier = await SupplierModel.findOne(query); // Find the logged in Admin's Company Supplier
         
@@ -419,7 +432,7 @@ router.delete("/delete/:id",auth,async(req,res) => {
 
 router.get("/:id",auth,async(req,res) => {
     try{
-        let query = {_id : req.params.id,company : req.user.company};
+        let query = {seq_id : req.params.id,company : req.user.company};
         let supplier = await SupplierModel.findOne(query).exec();
         if(supplier)
         {
