@@ -247,7 +247,7 @@ router.post("/:id/company",[
                 let query = {_id : req.params.id};
                 let admin = {};
                 admin.company = newCompany._id;
-                admin.seq_id = "superadmin_1";
+                admin.seq_id = "superadmin_" + newCompany._id.toString().substr(-2) + "_" + "1";
 
                 let companyInfo = new CompanyInfoModel();
                 companyInfo.company = newCompany._id;

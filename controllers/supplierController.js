@@ -173,7 +173,7 @@ router.post("/register",auth,upload.any(),[
             let company = await CompanyInfoModel.findOne({company : req.user.company}); // Finds the last Inserted Id of the Supplier
             let supplierCount = company.supplier + 1; 
             
-            supplier.seq_id = "supplier_" + supplierCount; // Adds 1 in the Supplier Sequence Number
+            supplier.seq_id =  company.company.toString().substr(-2) + "_supplier_" + supplierCount; // Adds 1 in the Supplier Sequence Number
 
             let newSupplier = await supplier.save(); // Saves New Supplier
 
