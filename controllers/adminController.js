@@ -172,7 +172,7 @@ router.post("/register",auth,isSuperAdmin,[
             let company = await CompanyInfoModel.findOne({company : req.user.company}); // Finds the last Inserted Id of the Admins
             let adminCount = company.admin + 1; 
             
-            admin.seq_id =  company.company.toString().substr(-2) + "_admin_"+ adminCount; // Adds 1 in the Admin Sequence Number
+            admin.seq_id = "a_"+ adminCount; // Adds 1 in the Admin Sequence Number
                 
 
             let adminCreate = await admin.save(); // Creates New Admin

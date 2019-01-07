@@ -200,7 +200,7 @@ router.post("/register",auth,upload.any(),[
             let company = await CompanyInfoModel.findOne({company : req.user.company}); // Finds the last Inserted Id of the User
             let userCount = company.user + 1; 
             
-            user.seq_id =  company.company.toString().substr(-2) + "_worker_" + userCount; // Adds 1 in the User Sequence Number
+            user.seq_id = "w_" + userCount; // Adds 1 in the User Sequence Number
 
             let userSave = await user.save(); // Saves the new User
 
