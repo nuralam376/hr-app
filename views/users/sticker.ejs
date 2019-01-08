@@ -1,58 +1,36 @@
 <% include ../layouts/admin/header %>
-    <div class="row">
-        <div class="col-md-4">
-            <h1>Worker ID : <%= newUser.seq_id %></h1>    
-        </div>
-        <div class="col-md-4">
-            <h2><%= newUser.company.name %></h2>
-        </div>
-        <div class="col-md-4">
-            <div class="pull-right">
-                    <h6><a href="/user/pdf/<%= newUser.seq_id %>" class = "btn btn-info">Download PDF</a></h6>
-            </div>
-        </div>
-    </div>
-  
-  
-   
-    <table class = "table table-bordered">
-            <tr>
-                <th>Name</th>
-                <td><%= newUser.name %></td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td><%= newUser.email %></td>
-            </tr>
-            <tr>
-                <th>Birth Date</th>
-                <td><%= newUser.birth_date %></td>
-            </tr>
-            <tr>
-                <th>Blood Group</th>
-                <td><%= newUser.blood_group %></td>
-            </tr>
-            <tr>
-                <th>National ID</th>
-                <td><%= newUser.nid %></td>
-            </tr>
-            <tr>
-                <th>Passport ID</th>
-                <td><%= newUser.passport %></td>
-            </tr>
-            <tr>
-                <th>Present Address</th>
-                <td><%= newUser.present_address %></td>
-            </tr>
-            <tr>
-                <th>Present Address</th>
-                <td><%= newUser.present_address %></td>
-            </tr>
-            <% if (newUser.supplier) { %>
+    
+   <div id="sticker-info">
+        
+        <h6><a href="/user/pdf/<%= newUser.seq_id %>" class = "btn btn-info">Download Sticker</a></h6>
+        
+        <table class = "table table-bordered" id = "sticker">
                 <tr>
-                    <th>Assigned Supplier</th>
-                    <td><%= newUser.supplier.name %></td>
+                    <th>Worker ID</th>
+                    <td><%= newUser.seq_id %></td>
                 </tr>
-             <% } %>   
-        </table>
+                <tr>
+                    <th>Name</th>
+                    <td><%= newUser.name %></td>
+                </tr>
+                <tr>
+                    <th>National ID</th>
+                    <td><%= newUser.nid %></td>
+                </tr>
+                <tr>
+                    <th>Passport ID</th>
+                    <td><%= newUser.passport %></td>
+                </tr>
+                <tr>
+                    <th>Supplier ID</th>
+                    <td><%= newUser.supplier.seq_id %></td>
+                </tr>
+                <% if (newUser.supplier) { %>
+                    <tr>
+                        <th>Supplier Name</th>
+                        <td><%= newUser.supplier.name %></td>
+                    </tr>
+                <% } %>   
+            </table>
+        </div>    
 <% include ../layouts/admin/footer %>

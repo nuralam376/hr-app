@@ -25,3 +25,25 @@
   .alert-success_msg .alert-link {
     color: #0b2e13;
   }
+
+  #sticker-info
+  {
+    background:#ECF0F5;
+    width: 50%;
+    text-align: center;
+    margin:100px auto;
+    padding:2px 15px;
+    border-radius:10px;
+  }
+
+  #sticker
+  {
+    background : white;
+    width:100%;
+    text-align:center;
+    margin: 100px auto;
+    border:2px solid #ECF0F5;
+    border-radius:15px;
+  }
+
+  
