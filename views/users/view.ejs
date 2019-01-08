@@ -1,56 +1,61 @@
 <% include ../layouts/admin/header %>
-    <h1><%= newUser.name %>
+    <h1>ID : <%= newUser.seq_id %>
         <div class="pull-right">
             <a href = "/user/edit/<%= newUser.seq_id %>" class = "btn btn-info">Edit</a>
             <a href = "#" class = "btn btn-danger delete-user" data-id = "<%= newUser._id %>">Delete</a>
         </div>
     </h1>    
-    <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" name = "name" id = "name" class = "form-control" value = "<%= newUser.name %>" disabled>
-    </div>
-    <div class="form-group">
-        <label for="email">Email</label>
-        <input type="text" name = "email" id = "email" class = "form-control" value = "<%= newUser.email %>" disabled> 
-    </div>
-    <div class="form-group">
-        <label for="birth_date">Birth Date</label>
-        <input type="text" name = "birth_date" id = "name" class = "form-control" placeholder = "dd/mm/yy" value = "<%= newUser.birth_date %>" disabled>
-    </div>
-    <div class="form-group">
-        <label for="blood">Blood Group</label>
-        <input type="text" name = "blood" id = "name" class = "form-control" value = "<%= newUser.blood_group %>" disabled>
-    </div>
-    <div class="form-group">
-        <label for="nid">National ID</label>
-        <input type="text" name = "nid" id = "nid" class = "form-control" value = "<%= newUser.nid %>" disabled>
-    </div>
-    <div class="form-group">
-        <label for="passport">Passport ID</label>
-        <input type="text" name = "passport" id = "passport" class = "form-control" value = "<%= newUser.passport %>" disabled>
-    </div>
-    <div class="form-group">
-        <label for="present_address">Present Address</label>
-        <textarea name="present_address" id="present_address" cols="30" rows="5" class = "form-control" disabled><%= newUser.present_address %></textarea>
-    </div>
-    <div class="form-group">
-        <label for="permanent_address">Permanent Address</label>
-        <textarea name="permanent_address" id="permanent_address" cols="30" rows="5" class = "form-control"disabled><%= newUser.permanent_address %></textarea>
-    </div>
-    <% if(newUser.supplier) { %>
-    <div class="form-group">
-        <label for="supplier">Assigned Supplier</label>
-        <select name="supplier" id="supplier" class = "form-control" disabled>
-            <option value=""><%= newUser.supplier.name %></option>
-        </select>
-    </div>
-    <% } %>
-    <div class="form-group">
-        <label for="profile_photo">Profile Photo</label>
-        <img src = "/uploads/user/<%= newUser.profile_photo %>" style = "height:auto;max-width:500px;" id = "photo">
-    </div>
-    <div class="form-group">
-        <label for="passport_photo">Passport Photo</label>
-        <img src = "/uploads/user/<%= newUser.passport_photo %>" style = "height:auto;max-width:500px;" id = "photo1">
-    </div>
+   
+    <table class = "table table-bordered">
+            <tr>
+                <th></th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td><%= newUser.name %></td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td><%= newUser.email %></td>
+            </tr>
+            <tr>
+                <th>Birth Date</th>
+                <td><%= newUser.birth_date %></td>
+            </tr>
+            <tr>
+                <th>Blood Group</th>
+                <td><%= newUser.blood_group %></td>
+            </tr>
+            <tr>
+                <th>National ID</th>
+                <td><%= newUser.nid %></td>
+            </tr>
+            <tr>
+                <th>Passport ID</th>
+                <td><%= newUser.passport %></td>
+            </tr>
+            <tr>
+                <th>Present Address</th>
+                <td><%= newUser.present_address %></td>
+            </tr>
+            <tr>
+                <th>Present Address</th>
+                <td><%= newUser.present_address %></td>
+            </tr>
+            <% if (newUser.supplier) { %>
+                <tr>
+                    <th>Assigned Supplier</th>
+                    <td><%= newUser.supplier.name %></td>
+                </tr>
+             <% } %>   
+            <tr>
+                <th>Profile Photo</th>
+                <td> <img src="/uploads/user/<%= newUser.profile_photo %>" alt="" style = "height : auto; max-width : 400px;"></td>
+            </tr>
+            <tr>
+                <th>Passport Photo</th>
+                <td> <img src="/uploads/user/<%= newUser.passport_photo %>" alt="" style = "height : auto; max-width : 400px;"></td>
+            </tr>
+        </table>
 <% include ../layouts/admin/footer %>

@@ -9,20 +9,22 @@
     <% } %>
     </h3>
     <br>
-    <div class="form-group">
-        <label for="name">Company Name</label>
-        <input type="text" name = "name" id = "name" class = "form-control" value = "<%= company.name %>" disabled readonly>
-    </div>
-    <div class="form-group">
-        <label for="email">Email</label>
-        <input type="text" name = "email" id = "email" class = "form-control" value = "<%= company.email %>" disabled readonly> 
-    </div>
-    <div class="form-group">
-        <label for="address">Address</label>
-        <textarea name="address" id="address" cols="30" rows="5" class = "form-control" disabled readonly><%= company.address %></textarea>
-    </div>
-    <div class="form-group">
-        <label for="contact">Contact No.</label>
-        <input type="text" name = "contact" id = "contact" class = "form-control" value = "<%= company.contact %>" disabled readonly> 
-    </div>
+    <table class = "table table-bordered">
+        <tr>
+            <th>Name</th>
+            <td><%= company.name %></td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td><%= company.email %></td>
+        </tr>
+        <tr>
+            <th>Contact</th>
+            <td><%= company.contact %></td>
+        </tr>
+        <tr>
+            <th>Address</th>
+            <td><%= company.address %></td>
+        </tr>
+    </table>
 <% include layouts/admin/footer %>

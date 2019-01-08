@@ -1,27 +1,32 @@
 <% include ../layouts/admin/header %>
     <h1>Edit Admin <%= adminInfo._id %></h1>
     <form action = "/admin/profile/update" method = "POST" enctype = "multipart/form-data">
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" name = "name" id = "name" class = "form-control" value = "<%= adminInfo.name %>"> 
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" name = "name" id = "name" class = "form-control" value = "<%= adminInfo.name %>"> 
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" name = "email" id = "email" class = "form-control"  value = "<%= adminInfo.email %>"> 
+                </div>
+                <div class="form-group">
+                    <label for="contact">Contact No.</label>
+                    <input type="text" name = "contact" id = "contact" class = "form-control" value = "<%= adminInfo.contact %>">
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea name="address" id="address" cols="30" rows="5" class = "form-control"><%= adminInfo.address %></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="profile_photo">Profile Photo</label>
+                        <input type = "file" name = "profile_photo" id = "profile_photo">
+                        <img src = "/uploads/admin/<%= adminInfo.profile_photo %>" style = "height:auto; max-width:100%;" id = "photo">
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="text" name = "email" id = "email" class = "form-control"  value = "<%= adminInfo.email %>"> 
-        </div>
-        <div class="form-group">
-            <label for="contact">Contact No.</label>
-            <input type="text" name = "contact" id = "contact" class = "form-control" value = "<%= adminInfo.contact %>">
-        </div>
-        <div class="form-group">
-            <label for="address">Address</label>
-            <textarea name="address" id="address" cols="30" rows="5" class = "form-control"><%= adminInfo.address %></textarea>
-        </div>
-        <div class="form-group">
-            <label for="profile_photo">Profile Photo</label>
-             <input type = "file" name = "profile_photo" id = "profile_photo">
-             <img src = "/uploads/admin/<%= adminInfo.profile_photo %>" style = "height:auto; max-width:100%;" id = "photo">
-        </div>
+      
         <div class="form-group">
             <input type="submit" class = "btn btn-success" value = "Update">
         </div>

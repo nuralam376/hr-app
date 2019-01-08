@@ -1,66 +1,90 @@
 <% include ../layouts/admin/header %>
-    <h1><%= newUser.name %></h1> 
+    <h1>ID : <%= newUser.seq_id %></h1> 
     
     <form action = "/user/update/<%= newUser._id %>" method = "POST" enctype = "multipart/form-data">
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" name = "name" id = "name" class = "form-control" value = "<%= newUser.name %>" >
-        </div>
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="text" name = "email" id = "email" class = "form-control" value = "<%= newUser.email %>" > 
-        </div>
-        <div class="form-group">
-            <label for="birth_date">Birth Date</label>
-            <input type="text" name = "birth_date" id = "name" class = "form-control" placeholder = "dd/mm/yy" value = "<%= newUser.birth_date %>" >
-        </div>
-        <div class="form-group">
-            <label for="blood">Blood Group</label>
-            <input type="text" name = "blood" id = "name" class = "form-control" value = "<%= newUser.blood_group %>" >
-        </div>
-        <div class="form-group">
-            <label for="nid">National ID</label>
-            <input type="text" name = "nid" id = "nid" class = "form-control" value = "<%= newUser.nid %>" >
-        </div>
-        <div class="form-group">
-            <label for="passport">Passport ID</label>
-            <input type="text" name = "passport" id = "passport" class = "form-control" value = "<%= newUser.passport %>" >
-        </div>
-        <div class="form-group">
-            <label for="present_address">Present Address</label>
-            <textarea name="present_address" id="present_address" cols="30" rows="5" class = "form-control" ><%= newUser.present_address %></textarea>
-        </div>
-        <div class="form-group">
-            <label for="permanent_address">Permanent Address</label>
-            <textarea name="permanent_address" id="permanent_address" cols="30" rows="5" class = "form-control"><%= newUser.permanent_address %></textarea>
-        </div>
-        <div class="form-group">
-            <label for="supplier">Assign Supplier</label>
-            <select name="supplier" id="supplier" class = "form-control">
-                <option value="" <%= newUser.supplier ? 'disabled' : '' %>>Choose Supplier</option>
-                <% if(suppliers.length) { %>
-                    <% suppliers.forEach(supplier =>  { %>
-                       
-                        <option value="<%= supplier._id %>" 
-                            <% if(newUser.supplier && newUser.supplier.equals(supplier._id)) { %> selected <% } %>
-                        ><%= supplier.name %>
-                        </option>
-                       
-                    <% }) %>
-                <% } %>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="profile_photo">Profile Photo</label>
-            <input type = "file" name = "profile_photo" id = "profile_photo">
-            <img src = "/uploads/user/<%= newUser.profile_photo %>" style = "height:auto;max-width:500px;" id = "photo">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" name = "name" id = "name" class = "form-control" value = "<%= newUser.name %>" >
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name = "email" id = "email" class = "form-control" value = "<%= newUser.email %>" > 
+                </div>
+                <div class="form-group">
+                    <label for="birth_date">Birth Date</label>
+                    <input type="date" name = "birth_date" id = "name" class = "form-control" value = "<%= newUser.birth_date %>" >
+                </div>
+                <div class="form-group">
+                    <label for="blood">Blood Group</label>
+                    <select name="blood" id="blood" class = "form-control">
+                        <option value="">Choose Blood Group</option>
+                        <option value="A+" <%= newUser.blood_group == 'A+' ? 'selected' : '' %>>A+</option>
+                        <option value="A-" <%= newUser.blood_group == 'A-' ? 'selected' : '' %>>A-</option>
+                        <option value="AB+" <%= newUser.blood_group == 'AB+' ? 'selected' : '' %>>AB+</option>
+                        <option value="AB-" <%= newUser.blood_group == 'AB-' ? 'selected' : '' %>>AB-</option>
+                        <option value="B+" <%= newUser.blood_group == 'B+' ? 'selected' : '' %>>B+</option>
+                        <option value="B-" <%= newUser.blood_group == 'B-' ? 'selected' : '' %>>B-</option>
+                        <option value="O+" <%= newUser.blood_group == 'O+' ? 'selected' : '' %>>O+</option>
+                        <option value="O-" <%= newUser.blood_group == 'O-' ? 'selected' : '' %>>O-</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="nid">National ID</label>
+                    <input type="text" name = "nid" id = "nid" class = "form-control" value = "<%= newUser.nid %>" >
+                </div>
+                <div class="form-group">
+                    <label for="passport">Passport ID</label>
+                    <input type="text" name = "passport" id = "passport" class = "form-control" value = "<%= newUser.passport %>" >
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="present_address">Present Address</label>
+                    <textarea name="present_address" id="present_address" cols="30" rows="5" class = "form-control" ><%= newUser.present_address %></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="permanent_address">Permanent Address</label>
+                    <textarea name="permanent_address" id="permanent_address" cols="30" rows="5" class = "form-control"><%= newUser.permanent_address %></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="supplier">Assign Supplier</label>
+                    <select name="supplier" id="supplier" class = "form-control">
+                        <option value="" <%= newUser.supplier ? 'disabled' : '' %>>Choose Supplier</option>
+                        <% if(suppliers.length) { %>
+                            <% suppliers.forEach(supplier =>  { %>
+                                
+                                <option value="<%= supplier._id %>" 
+                                    <% if(newUser.supplier && newUser.supplier.equals(supplier._id)) { %> selected <% } %>
+                                ><%= supplier.name %>
+                                </option>
+                                
+                            <% }) %>
+                        <% } %>
+                    </select>
+                </div>
+            </div>
         </div>
        
-        <div class="form-group">
-            <label for="passport_photo">Passport Photo</label>
-            <input type = "file" name = "passport_photo" id = "passport_photo">
-            <img src = "/uploads/user/<%= newUser.passport_photo %>" style = "height:auto;max-width:500px;" style = "height:auto;max-width:100%;" id = "photo1">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="profile_photo">Profile Photo</label>
+                    <input type = "file" name = "profile_photo" id = "profile_photo">
+                    <img src = "/uploads/user/<%= newUser.profile_photo %>" style = "height:auto;max-width:500px;" id = "photo">
+                </div>      
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="passport_photo">Passport Photo</label>
+                    <input type = "file" name = "passport_photo" id = "passport_photo">
+                    <img src = "/uploads/user/<%= newUser.passport_photo %>" style = "height:auto;max-width:500px;" style = "height:auto;max-width:100%;" id = "photo1">
+                </div>
+            </div>
         </div>
+       
+      
         <div class="form-group">
             <input type="submit" name = "submit" value = "Update" class = "btn btn-success">
         </div>

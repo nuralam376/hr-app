@@ -1,28 +1,30 @@
 <% include ../layouts/admin/header %>
-    <h1>Admin <%= adminInfo._id %>
+    <h1>Admin ID : <%= adminInfo.seq_id %>
         <div class="pull-right">
             <a href="/admin/profile/edit" class = "btn btn-info">Edit</a>
         </div>
     </h1>
-    <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" name = "name" id = "name" class = "form-control" value = "<%= adminInfo.name %>" disabled readonly> 
-    </div>
-    <div class="form-group">
-        <label for="email">Email</label>
-        <input type="text" name = "email" id = "email" class = "form-control"  value = "<%= adminInfo.email %>" disabled readonly> 
-    </div>
-    <div class="form-group">
-        <label for="contact">Contact No.</label>
-        <input type="text" name = "contact" id = "contact" class = "form-control"  value = "<%= adminInfo.contact %>" disabled readonly>
-    </div>
-    <div class="form-group">
-        <label for="address">Address</label>
-        <textarea name="address" id="address" cols="30" rows="5" class = "form-control" disabled readonly><%= adminInfo.address %></textarea>
-    </div>
-    <div class="form-group">
-        <label for="profile_photo">Profile Photo</label>
-         <img src = "/uploads/admin/<%= adminInfo.profile_photo %>" style = "height:auto; max-width:100%;">
-    </div>
+    <table class = "table table-bordered">
+            <tr>
+                <th>Name</th>
+                <td><%= adminInfo.name %></td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td><%= adminInfo.email %></td>
+            </tr>
+            <tr>
+                <th>Contact</th>
+                <td><%= adminInfo.contact %></td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td><%= adminInfo.address %></td>
+            </tr>
+            <tr>
+                <th>Profile Photo</th>
+                <td> <img src = "/uploads/admin/<%= adminInfo.profile_photo %>" style = "height:auto;max-width:500px;" id = "photo"></td>
+            </tr>
+        </table>
 
 <% include ../layouts/admin/footer %>

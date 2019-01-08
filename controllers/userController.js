@@ -108,18 +108,17 @@ router.post("/register",auth,upload.any(),[
     check("email").isEmail().withMessage("Email must be valid"),
     check("birth_date").not().isEmpty().withMessage("Birth Date is required"),
     check("blood").not().isEmpty().withMessage("Blood Group is required"),
-    check("nid").not().isEmpty().withMessage("National ID is required"),
+    check("nid").not().isEmpty().withMessage("National ID is required").isNumeric().withMessage("National Id must be numeric"),
     check("passport").not().isEmpty().withMessage("Passport Id is required"),
     check("present_address").not().isEmpty().withMessage("Present Addres is required"),
     check("permanent_address").not().isEmpty().withMessage("Permanent Address is required"),
-
     sanitizeBody("name").trim().unescape(),
     sanitizeBody("email").trim().unescape(),
     sanitizeBody("birth_date").trim().unescape(),
     sanitizeBody("blood").trim().unescape(),
     sanitizeBody("present_address").trim().unescape(),
     sanitizeBody("permanent_address").trim().unescape(),
-    sanitizeBody("nid").trim().toInt(),
+    sanitizeBody("nid").trim().toInt()
 ],async(req,res) => {
     try
     {
@@ -150,6 +149,12 @@ router.post("/register",auth,upload.any(),[
         {
             forms.passport_photo = req.files[1].filename;
         }
+
+          // Checks If the user has any supplier and assigned supplier to user
+          if(req.body.supplier !== "")
+          {
+              forms.supplier = req.body.supplier;
+          }
 
             let suppliers = await SupplierModel.find({company : req.user.company}).exec();
             
@@ -193,7 +198,6 @@ router.post("/register",auth,upload.any(),[
             // Checks If the user has any supplier and assigned supplier to user
             if(req.body.supplier !== "")
             {
-                forms.supplier = req.body.supplier;
                 user.supplier = forms.supplier;
             }
 
