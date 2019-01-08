@@ -472,6 +472,28 @@ router.delete("/delete/:id",auth,async(req,res) => {
 });
 
 /**
+ * Generates Users Sticker
+ * @param {string} id - The Object Id of the User.
+*/
+
+router.get("/sticker/:id",auth,async(req,res) => {
+    try{
+        let query = {seq_id : req.params.id, company : req.user.company};
+
+        let user = await UserModel.findOne(query).populate("supplier").populate("company").exec();
+
+        res.render("users/sticker",{
+            newUser : user
+        });
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+
+}); 
+
+/**
  * Shows Individual User
  * @param {string} id - The Object Id of the User.
 */
