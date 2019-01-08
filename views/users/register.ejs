@@ -37,7 +37,7 @@
         <div class="form-group">
             <label for="supplier">Assign Supplier</label>
             <select name="supplier" id="supplier" class = "form-control">
-                <option value="">No Supplier</option>
+                <option value="">Choose Supplier</option>
                 <% if(suppliers.length) { %>
                     <% suppliers.forEach(supplier =>  { %>
                         <option value="<%= supplier._id %>"><%= supplier.name %></option>

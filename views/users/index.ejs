@@ -16,6 +16,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Passport ID</th>
+                        <th>Assigned Supplier</th>
                         <th>Photo</th>
                     </tr>
                 </thead>
@@ -27,6 +28,11 @@
                                 <td><%= user.name %></td>
                                 <td><%= user.email %></td>
                                 <td><%= user.passport %></td>
+                                <% if(user.supplier) { %>
+                                    <td><a href="/supplier/<%= user.supplier.seq_id %>"><%= user.supplier.name %></a></td>
+                                <% } else { %>
+                                    <td>No Supplier</td>
+                                <% } %>
                                 <td><img src = "uploads/user/<%= user.profile_photo %>" height = "50px" width = "50px"></td>
                             </tr>
                         <% }) %>

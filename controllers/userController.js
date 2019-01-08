@@ -65,7 +65,7 @@ function checkFileType(req,file,cb)
 router.get("/",auth,async(req,res) => {
     try 
     {
-        let users = await UserModel.find({company : req.user.company}); // Finds the Users of the Logged in Admin's Company
+        let users = await UserModel.find({company : req.user.company}).populate("supplier"); // Finds the Users of the Logged in Admin's Company
         
         if(users)
         {
