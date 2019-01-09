@@ -6,6 +6,7 @@ const path = require("path");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const fs = require("fs");
+const pdf = require("pdfkit");
 
 const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody} = require("express-validator/filter");
@@ -498,15 +499,23 @@ router.get("/sticker/:id",auth,async(req,res) => {
  * @param {string} id - The Object Id of the User.
 */
 
-router.get("/sticker/:id",auth,async(req,res) => {
+router.get("/pdf/:id",auth,async(req,res) => {
     try{
         let query = {seq_id : req.params.id, company : req.user.company};
 
         let user = await UserModel.findOne(query).populate("supplier").populate("company").exec();
 
-        res.render("users/sticker",{
-            newUser : user
-        });
+        const doc = new pdf()
+        let filename = req.params.id;
+        filename = encodeURIComponent(filename) + '.pdf'
+        res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"')
+        res.setHeader('Content-type', 'application/pdf')
+        const content = "Worker ID: " + user.seq_id +
+        "Name: " + user.name;
+        doc.y = 300
+        doc.text(content, 50, 50)
+        doc.pipe(res)
+        doc.end()
     }
     catch(error)
     {
