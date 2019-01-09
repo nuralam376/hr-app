@@ -6,6 +6,9 @@
         
         <table class = "table table-bordered" id = "sticker">
                 <tr>
+                    <th colspan = "2" style = "text-align:center; vertical-align:middle"><%= newUser.company.name %></th>
+                </tr>
+                <tr>
                     <th>Worker ID</th>
                     <td><%= newUser.seq_id %></td>
                 </tr>
@@ -21,16 +24,21 @@
                     <th>Passport ID</th>
                     <td><%= newUser.passport %></td>
                 </tr>
-                <tr>
-                    <th>Supplier ID</th>
-                    <td><%= newUser.supplier.seq_id %></td>
-                </tr>
                 <% if (newUser.supplier) { %>
+                    <tr>
+                        <th>Supplier ID</th>
+                        <td><%= newUser.supplier.seq_id %></td>
+                    </tr>
                     <tr>
                         <th>Supplier Name</th>
                         <td><%= newUser.supplier.name %></td>
                     </tr>
-                <% } %>   
+                <% } else { %>   
+                    <tr>
+                        <th>Suppplier</th>
+                        <td>N/A</td>
+                    </tr>
+                <% } %>
             </table>
         </div>    
 <% include ../layouts/admin/footer %>
