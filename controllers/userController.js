@@ -505,17 +505,10 @@ router.get("/pdf/:id",auth,async(req,res) => {
 
         let user = await UserModel.findOne(query).populate("supplier").populate("company").exec();
 
-        const doc = new pdf()
-        let filename = req.params.id;
-        filename = encodeURIComponent(filename) + '.pdf'
-        res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"')
-        res.setHeader('Content-type', 'application/pdf')
-        const content = "Worker ID: " + user.seq_id +
-        "Name: " + user.name;
-        doc.y = 300
-        doc.text(content, 50, 50)
-        doc.pipe(res)
-        doc.end()
+        let stickerPdf = require("../util/pdfmake");
+
+        stickerPdf(res,user);
+       
     }
     catch(error)
     {
