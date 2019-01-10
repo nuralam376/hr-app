@@ -5,6 +5,18 @@ pdfMake.vfs = vfsFonts.pdfMake.vfs;
 
 const pdf = (res,user) => {
 
+    let supplier = {};
+    
+    if(typeof user.supplier !== "undefined")
+    {
+        supplier.seq_id = user.supplier.seq_id;    
+        supplier.name = user.supplier.name;    
+    }
+    else
+    {
+        supplier.seq_id = "N/A";    
+        supplier.name = "N/A";    
+    }
     var documentDefinition = {
         content: [
            {
@@ -19,8 +31,8 @@ const pdf = (res,user) => {
                     ['Name', user.name],
                     ['National ID: ', user.nid],
                     ['Passport ID: ', user.passport],
-                    ['Supplier ID: ', user.supplier.seq_id],
-                    ['Supplier Name: ', user.supplier.name],
+                    ['Supplier ID: ', supplier.seq_id],
+                    ['Supplier Name: ', supplier.name],
                  ]
               },
               layout: 'noBorders'
@@ -49,11 +61,11 @@ const pdf = (res,user) => {
     };
   
     const pdfDoc = pdfMake.createPdf(documentDefinition);
-    let filename = user.seq_id + "_" + user.supplier.seq_id;
+    let filename = user.seq_id + "_" + supplier.seq_id + ".pdf";
 
     pdfDoc.getBase64((data)=>{
-        res.setHeader('Content-type', "application/pdf");
         res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+        res.setHeader('Content-type', "application/pdf");
         const download = Buffer.from(data.toString('utf-8'), 'base64');
         res.end(download);
     });
