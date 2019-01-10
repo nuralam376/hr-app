@@ -49,7 +49,7 @@ const pdf = (res,user) => {
     };
   
     const pdfDoc = pdfMake.createPdf(documentDefinition);
-    let filename = user.company.name + "_" + user.seq_id;
+    let filename = user.seq_id + "_" + user.supplier.seq_id;
 
     pdfDoc.getBase64((data)=>{
         res.setHeader('Content-type', "application/pdf");
