@@ -10,6 +10,11 @@ const ForgetPasswordSchema = mongoose.Schema({
         ref: 'Admin',
         required : false
     },
+    token : 
+    {
+        type : String,
+        required : true
+    },
     start_time : 
     {
         type : Number,
