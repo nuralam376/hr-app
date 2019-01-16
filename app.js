@@ -63,6 +63,7 @@ app.get("/",async(req,res) => {
         }
         else
         {
+           
             res.render("home");
         }
     }
@@ -81,6 +82,7 @@ const user = require("./controllers/userController");
 const supplier = require("./controllers/supplierController");
 const admin = require("./controllers/adminController");
 const company = require("./controllers/companyController");
+const forgetPassword = require("./controllers/forgetPasswordController");
 
 
 /** Other Routes */
@@ -91,6 +93,7 @@ app.use("/user",user);
 app.use("/supplier",supplier);
 app.use("/admin",admin);
 app.use("/company",company);
+app.use("/forget-password",forgetPassword);
 
 
 // Start the server
