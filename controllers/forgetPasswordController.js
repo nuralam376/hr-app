@@ -103,36 +103,36 @@ router.post("/",[
                 }
                 else
                 {
-                    let token = admin._id + Date.now();
-                    let hashToken = await bcrypt.hash(token,10);    // Generates Token
+                    let token =  admin._id.toString().substr(5,5) + Date.now();
+                    let hashToken = await bcrypt.hash(token,1);    // Generates Token
                     /** Saves data in the Forget Password Schema */
-                    let fp = new forgetPasswordModel();
-                    fp.admin = admin._id;
-                    fp.token = hashToken;
-                    fp.start_time = Date.now();
-                    fp.end_time = fp.start_time + (1000 * 60 * 60 * 24); // Sets 24 hours time validity
+                     let fp = new forgetPasswordModel();
+                     fp.admin = admin._id;
+                     fp.token = hashToken;
+                     fp.start_time = Date.now();
+                     fp.end_time = fp.start_time + (1000 * 60 * 60 * 24);  // Sets 24 hours time validity
                     
 
-                    let fpSave = await fp.save();
+                     let fpSave = await fp.save();
 
-                    if(fpSave)
-                    {
-                        let fullUrl = req.protocol + '://' + req.get('host');
-                        req.flash("success","A mail has been sent to your email");
-                        res.redirect("/");
-                        await transporter.sendMail({
-                            to : req.body.email,
-                            from : "nuraalam939@gmail.com",
-                            subject : "Hr-App Password Change",
-                            html : 
-                            "<h2>You have requested to change your password. Please click the below link to proceed.</h2><p><a href = '"+fullUrl+"/change-password/ "+hashToken+"'>Change your password</a></p><p>This link is only valid for 24 hours.</p><h3>If you do not request for this, please contact us</h3>"
+                     if(fpSave)
+                     {
+                         let fullUrl = req.protocol + '://' + req.get('host');
+                         req.flash("success","A mail has been sent to your email");
+                         res.redirect("/");
+                         await transporter.sendMail({
+                             to : req.body.email,
+                             from : "nuraalam939@gmail.com",
+                             subject : "Hr-App Password Change",
+                             html : 
+                             "<h2>You have requested to change your password. Please click the below link to proceed.</h2><p><a href = '"+fullUrl+"/change-password/"+hashToken+"'>Change your password</a></p><p>This link is only valid for 24 hours.</p><h3>If you do not request for this, please contact us</h3>"
                         });
-                    }
-                    else
-                    {
-                        req.flash("danger","Something went wrong");
-                        res.redirect("/forget-password");
-                    }
+                     }
+                     else
+                     {
+                         req.flash("danger","Something went wrong");
+                         res.redirect("/forget-password");
+                     }
 
                 }
             }

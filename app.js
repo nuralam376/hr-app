@@ -83,6 +83,7 @@ const supplier = require("./controllers/supplierController");
 const admin = require("./controllers/adminController");
 const company = require("./controllers/companyController");
 const forgetPassword = require("./controllers/forgetPasswordController");
+const changePassword = require("./controllers/changePasswordController");
 
 
 /** Other Routes */
@@ -94,6 +95,7 @@ app.use("/supplier",supplier);
 app.use("/admin",admin);
 app.use("/company",company);
 app.use("/forget-password",forgetPassword);
+app.use("/change-password",changePassword);
 
 
 // Start the server
