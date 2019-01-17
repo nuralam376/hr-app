@@ -27,4 +27,4 @@ const ForgetPasswordSchema = mongoose.Schema({
     }
 });
 
-const ForgetPassword = module.exports = mongoose.model("ForgetPassword",ForgetPasswordSchema);
+const forgetPassword = module.exports = mongoose.model("ForgetPassword",ForgetPasswordSchema);

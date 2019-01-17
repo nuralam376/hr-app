@@ -23,12 +23,19 @@ let forgetPasswordModel = require("../models/forgetPassword");
 router.get("/:id",async(req,res,next) => {
     try 
     {
+        if(req.isAuthenticated())
+        {
+            req.flash("danger","Unauthorized Access");
+            return res.redirect("/");
+        }
        let tokenCheck  = await forgetPasswordModel.findOne({token : req.params.id}); // Finds the token
 
        /** Checks whether the token is valid */
        if(tokenCheck && Date.now() < tokenCheck.end_time)
        {
-           res.render("change-password");
+           res.render("change-password",{
+               token : req.params.id
+           });
        }
        else
        {
@@ -43,7 +50,7 @@ router.get("/:id",async(req,res,next) => {
 });
 
 /** Receives New Passwords from Admin */
-router.post("/",[
+router.post("/:id",[
     check("password").not().isEmpty().withMessage("Password is required").isLength({min:6}).withMessage("Password must be 6 characters"),
     check("confirm_password").custom((value,{req,loc,path}) => {
         if(value != req.body.password)
@@ -66,7 +73,7 @@ router.post("/",[
         else
         {
             let forms = {
-                email : req.body.email
+                token : req.body.token,
             };
 
             /** Shows Errors */
@@ -76,30 +83,41 @@ router.post("/",[
             {
                 res.render("change-password",{
                     errors : errors.array(),
-                    forms : forms
+                    forms : forms,
+                    token : req.params.id
                 });
             }
             else
             {
-                let admin = await forgetPasswordModel.findOne({token : req.params.id}).populate("admin"); // Finds the admin info
+                let admin = await forgetPasswordModel.findOne({token : req.body.token}).populate("admin"); // Finds the admin info
 
                 if(admin)
                 {
                     let hashPwd = await bcrypt.hash(req.body.password,10); // Encrypted the password
                     let adminData = {};
                     adminData.password = hashPwd;
-                    let adminPwdUpdate = await AdminModel.updateOne({_id : admin._id},adminData); // Updates the admin's password
+                    let adminPwdUpdate = await AdminModel.updateOne({_id : admin.admin._id},adminData); // Updates the admin's password
 
                     if(adminPwdUpdate)
                     {
-                        req.flash("success","Password Changed");
-                        res.redirect("/");
+                        let tokenDelete = await forgetPasswordModel.deleteMany({token : req.body.token}); // Deletes the token afte updating the password
+
+                        if(tokenDelete)
+                        {
+                            req.flash("success","Password Changed");
+                            res.redirect("/");
+                        }
                     }
                     else
                     {
-                        req.flash("success","Password Changed");
+                        req.flash("danger","Something went wrong");
                         res.redirect("/");
                     }
+                }
+                else
+                {
+                    req.flash("danger","Admin Not Found");
+                    res.redirect("/");
                 }
             }
         }
