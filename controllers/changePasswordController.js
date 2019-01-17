@@ -100,7 +100,7 @@ router.post("/:id",[
 
                     if(adminPwdUpdate)
                     {
-                        let tokenDelete = await forgetPasswordModel.deleteMany({token : req.body.token}); // Deletes the token afte updating the password
+                        let tokenDelete = await forgetPasswordModel.deleteMany({$or : [{admin : admin.admin._id}, {token : req.params._id}]}); // Deletes the token afte updating the password
 
                         if(tokenDelete)
                         {
