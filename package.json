@@ -33,5 +33,10 @@
     "pdfkit": "^0.8.3",
     "pdfmake": "^0.1.40",
     "wkhtmltopdf": "^0.3.4"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "supertest": "^3.4.1"
   }
 }
