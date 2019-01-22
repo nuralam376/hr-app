@@ -95,7 +95,6 @@ app.use("/login",login);
 app.use("/user",user);
 app.use("/supplier",supplier);
 app.use("/admin",admin);
-app.use("/company",company);
 app.use("/forget-password",forgetPassword);
 app.use("/change-password",changePassword);
 
