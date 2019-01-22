@@ -9,9 +9,28 @@ const {sanitizeBody} = require("express-validator/filter");
 /** Authetication File */
 const auth = require("../config/auth");
 
-/** Admin Model Schema */
+/** Company Model Schema */
 let CompanyModel = require("../models/companyModel");
 
+
+
+/** Shows Company Details */
+
+router.get("/",auth,async(req,res) => {
+    try{
+        let company = await CompanyModel.findOne({_id : req.user.company});
+        if(company)
+        {
+            res.render("company/index",{
+                company : company
+            });
+        }
+    }
+    catch(err){
+        console.log(err);
+    }
+    
+});
 
 /** Shows Company Details in Admin Dashboard */
 

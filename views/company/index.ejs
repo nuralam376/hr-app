@@ -1,0 +1,28 @@
+<% include ../layouts/admin/header %>
+    <h3>Your Company Details
+    <% if(admin.isSuperAdmin) { %>
+    <div class="pull-right">
+        <a href="/company/edit" class = "btn btn-info">Edit</a>
+    </div>
+    <% } %>
+    </h3>
+    <br>
+    <table class = "table table-bordered">
+        <tr>
+            <th>Name</th>
+            <td><%= company.name %></td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td><%= company.email %></td>
+        </tr>
+        <tr>
+            <th>Contact</th>
+            <td><%= company.contact %></td>
+        </tr>
+        <tr>
+            <th>Address</th>
+            <td><%= company.address %></td>
+        </tr>
+    </table>
+<% include ../layouts/admin/footer %>

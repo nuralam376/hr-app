@@ -90,6 +90,7 @@ const changePassword = require("./controllers/changePasswordController");
 /** Other Routes */
 app.use("/register",register);
 app.use("/dashboard",dashboard);
+app.use("/company",company);
 app.use("/login",login);
 app.use("/user",user);
 app.use("/supplier",supplier);
