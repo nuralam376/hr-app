@@ -36,7 +36,18 @@ const CompanySchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Package',
         required : false
-    }
+    },
+    created_at : 
+    {
+        type : Date,
+        required : true,
+        default : Date.now()
+    },
+    updated_at : 
+    {
+        type : Date,
+        required : true
+    },
 });
 
 const Company = module.exports = mongoose.model("Company",CompanySchema);

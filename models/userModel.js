@@ -74,6 +74,24 @@ const UserSchema = mongoose.Schema({
         type : String,
         required: true,
         default : 0
+    },
+    created_at : 
+    {
+        type : Date,
+        required : true,
+        default : Date.now()
+    },
+    updated_at : 
+    {
+        type : Date,
+        required : true,
+        default : Date.now()
+    },
+    status : 
+    {
+        type : String,
+        required : true,
+        default : "registered"
     }
 });
 

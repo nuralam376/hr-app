@@ -24,7 +24,7 @@ describe("Cheks Admin Model Data", () => {
 
     beforeEach(async() => {
         let admin = new AdminModel({
-            name : "Abc",
+            name : "Abcd",
             email : "abc@gmail.com",
             contact : 1986322,
             address : "Lorem Ipsum",
