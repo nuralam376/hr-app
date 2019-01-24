@@ -1,23 +1,22 @@
-/** This is the Admin Dashbard page.*/
 
-/** Required modules */
-const express = require("express");
-const router = express.Router();
+/** Supplier Model Schema */
+const SupplierModel = require("../models/supplierModel");
 
-/** Authetication File */
-const auth = require("../config/auth");
+/** Supplier Model Schema */
+const UserModel = require("../models/userModel");
 
-
-/** Shows Company Details in Admin Dashboard */
-
-router.get("/",auth,async(req,res) => {
+exports.getDashboard = async(req,res) => {
     try{
-        res.render("dashboard");
+        let totalSupplier = await SupplierModel.countDocuments();
+        let totalUser = await UserModel.countDocuments();
+        res.render("dashboard",{
+            totaluser : totalUser,
+            totalSupplier : totalSupplier
+        });
     }
     catch(err){
         console.log(err);
     }
     
-});
+}
 
-module.exports = router;

@@ -77,7 +77,7 @@ app.get("/",async(req,res) => {
 
 /** Required Controllers */
 const register = require("./controllers/registerController");
-const dashboard = require("./controllers/dashboardController");
+const dashboard = require("./routes/dashboard");
 const login = require("./controllers/loginController");
 const user = require("./controllers/userController");
 const supplier = require("./controllers/supplierController");
