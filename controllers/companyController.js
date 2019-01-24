@@ -111,6 +111,7 @@ router.post("/update",auth,isSuperAdmin,[
                     newCompany.contact = forms.contact;
                     newCompany.address = forms.address;
                     newCompany.superadmin = req.user._id;
+                    newCompany.updated_at = Date.now();
 
                     
                     let companyUpdate = await CompanyModel.updateOne(query,newCompany); // Update the Company Info

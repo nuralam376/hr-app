@@ -382,6 +382,7 @@ router.post("/update/:id",auth,upload.any(),[
             user.profile_photo = forms.profile_photo;
             user.passport_photo = forms.passport_photo;
             user.company = req.user.company;
+            user.updated_at = Date.now();
 
             // Checks If the user has any supplier and assigned supplier to user
             if(req.body.supplier !== "")

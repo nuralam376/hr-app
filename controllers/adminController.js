@@ -383,6 +383,7 @@ router.post("/profile/update",auth,upload.any(),[
                     newAdmin.address = forms.address;
                     newAdmin.profile_photo = forms.profile_photo;
                     newAdmin.company = req.user.company;
+                    newAdmin.updated_at = Date.now();
 
                     if(req.user.isSuperAdmin)
                     {
@@ -486,6 +487,7 @@ router.post("/update/:id",auth,isSuperAdmin,[
                     newAdmin.address = forms.address;
                     newAdmin.profile_photo = forms.profile_photo;
                     newAdmin.company = req.user.company;
+                    newAdmin.updated_at = Date.now();
 
                     
                     let adminUpdate = await AdminModel.updateOne(query,newAdmin); // Update the Admin's Info

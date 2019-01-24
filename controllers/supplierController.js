@@ -344,6 +344,7 @@ router.post("/update/:id",auth,upload.any(),[
                     supplier.profile_photo = forms.profile_photo;
                     supplier.passport_photo = forms.passport_photo;
                     supplier.company = req.user.company;
+                    supplier.updated_at = Date.now();
     
       
                     let supplierUpdate = await SupplierModel.updateOne(query,supplier);

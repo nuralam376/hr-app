@@ -29,7 +29,9 @@ describe("Cheks Admin Model Data", () => {
             contact : 1986322,
             address : "Lorem Ipsum",
             profile_photo : "dummy.jpeg",
-            password : "1233456"
+            password : "1233456",
+            created_at : Date.now(),
+            updated_at : Date.now(),
         });
 
         await admin.save();
