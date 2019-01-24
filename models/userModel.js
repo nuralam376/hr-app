@@ -1,6 +1,28 @@
 /** Mongoose Module .*/
 const mongoose = require("mongoose");
 
+
+/** User's Status Schema*/
+
+const UserStatusSchema = mongoose.Schema({
+    status : 
+    {
+        type : String,
+        required: true
+    },
+    created_at :
+    {
+        type : Date,
+        required : true,
+        default : Date.now()
+    },
+    updated_at :
+    {
+        type : Date,
+        required : true
+    }
+});
+
 /** User Table Field .*/
 
 const UserSchema = mongoose.Schema({
@@ -87,12 +109,7 @@ const UserSchema = mongoose.Schema({
         required : true,
         default : Date.now()
     },
-    status : 
-    {
-        type : String,
-        required : true,
-        default : "registered"
-    }
+    status : [UserStatusSchema]
 });
 
 const User = module.exports = mongoose.model("User",UserSchema);
