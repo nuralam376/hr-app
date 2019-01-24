@@ -10,13 +10,7 @@ const UserStatusSchema = mongoose.Schema({
         type : String,
         required: true
     },
-    created_at :
-    {
-        type : Date,
-        required : true,
-        default : Date.now()
-    },
-    updated_at :
+    time : 
     {
         type : Date,
         required : true,
@@ -110,7 +104,7 @@ const UserSchema = mongoose.Schema({
         required : true,
         default : Date.now()
     },
-    status : [UserStatusSchema]
+    events : [UserStatusSchema]
 });
 
 const User = module.exports = mongoose.model("User",UserSchema);

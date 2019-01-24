@@ -1,6 +1,22 @@
 /** Mongoose Module .*/
 const mongoose = require("mongoose");
 
+/** Companies Status Schema*/
+
+const AdminStatusSchema = mongoose.Schema({
+    status : 
+    {
+        type : String,
+        required: true
+    },
+    time : 
+    {
+        type : Date,
+        required : true,
+        default : Date.now()
+    }
+});
+
 /** Company Table Field .*/
 
 const CompanySchema = mongoose.Schema({
@@ -37,18 +53,7 @@ const CompanySchema = mongoose.Schema({
         ref: 'Package',
         required : false
     },
-    created_at : 
-    {
-        type : Date,
-        required : true,
-        default : Date.now()
-    },
-    updated_at : 
-    {
-        type : Date,
-        required : true,
-        default:Date.now()
-    },
+    events : [CompanyStatusSchema]
 });
 
 const Company = module.exports = mongoose.model("Company",CompanySchema);

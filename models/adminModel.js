@@ -1,6 +1,22 @@
 /** Mongoose Module .*/
 const mongoose = require("mongoose");
 
+/** Admin's Status Schema*/
+
+const AdminStatusSchema = mongoose.Schema({
+    status : 
+    {
+        type : String,
+        required: true
+    },
+    time : 
+    {
+        type : Date,
+        required : true,
+        default : Date.now()
+    }
+});
+
 /** Admin Table Field .*/
 
 const AdminSchema = mongoose.Schema({
@@ -69,6 +85,7 @@ const AdminSchema = mongoose.Schema({
         required : true,
         default : Date.now()
     },
+    events : [AdminStatusSchema]
 });
 
 const Admin = module.exports = mongoose.model("Admin",AdminSchema);
