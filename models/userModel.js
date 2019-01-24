@@ -2,21 +2,9 @@
 const mongoose = require("mongoose");
 
 
-/** User's Status Schema*/
+/** Status Schema*/
 
-const UserStatusSchema = mongoose.Schema({
-    status : 
-    {
-        type : String,
-        required: true
-    },
-    time : 
-    {
-        type : Date,
-        required : true,
-        default : Date.now()
-    }
-});
+const StatusSchema = require("./statusSchema");
 
 /** User Table Field .*/
 
@@ -104,7 +92,7 @@ const UserSchema = mongoose.Schema({
         required : true,
         default : Date.now()
     },
-    events : [UserStatusSchema]
+    events : [StatusSchema]
 });
 
 const User = module.exports = mongoose.model("User",UserSchema);

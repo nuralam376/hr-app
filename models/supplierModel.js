@@ -2,21 +2,9 @@
 const mongoose = require("mongoose");
 
 
-/** Supplier's Status Schema*/
+/** Status Schema*/
 
-const SupplierStatusSchema = mongoose.Schema({
-    status : 
-    {
-        type : String,
-        required: true
-    },
-    time : 
-    {
-        type : Date,
-        required : true,
-        default : Date.now()
-    }
-});
+const StatusSchema = require("./statusSchema");
 
 /** Supplier Table Field .*/
 
@@ -97,7 +85,7 @@ const SupplierSchema = mongoose.Schema({
         required : true,
         default : Date.now()
     },
-    events : [SupplierStatusSchema]
+    events : [StatusSchema]
 });
 
 const Supplier = module.exports = mongoose.model("Supplier",SupplierSchema);
