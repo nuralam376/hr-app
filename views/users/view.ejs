@@ -1,7 +1,8 @@
 <% include ../layouts/admin/header %>
     <h1>ID : <%= newUser.seq_id %>
         <div class="pull-right">
-            <a href = "/user/sticker/<%= newUser.seq_id %>" class = "btn btn-info">Generate Sticker</a>
+            <a href = "/user/timeline/<%= newUser.seq_id %>" class = "btn btn-primary">Show Timeline</a>
+            <a href = "/user/sticker/<%= newUser.seq_id %>" class = "btn btn-warning">Generate Sticker</a>
             <a href = "/user/edit/<%= newUser.seq_id %>" class = "btn btn-info">Edit</a>
             <a href = "#" class = "btn btn-danger delete-user" data-id = "<%= newUser._id %>">Delete</a>
         </div>

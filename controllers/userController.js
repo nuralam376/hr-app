@@ -7,7 +7,7 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const fs = require("fs");
 const pdf = require("pdfkit");
-
+const moment = require("moment");
 const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody} = require("express-validator/filter");
 const multer = require("multer");
@@ -195,6 +195,15 @@ router.post("/register",auth,upload.any(),[
             user.profile_photo = forms.profile_photo;
             user.passport_photo = forms.passport_photo;
             user.company = req.user.company;
+
+            /** User Status */
+            let userStatus = {
+                type : "profile_created",
+                display_name : "Profile Created",
+                description : `${req.user.name} created ${user.name} profile`,
+            };
+
+            user.events.push(userStatus);
 
             // Checks If the user has any supplier and assigned supplier to user
             if(req.body.supplier !== "")
@@ -510,6 +519,28 @@ router.get("/pdf/:id",auth,async(req,res) => {
 
         stickerPdf(res,user);
        
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+
+}); 
+
+/**
+ * Shows Timeline of the user
+ * @param {string} id - The Object Id of the User.
+*/
+
+router.get("/timeline/:id",auth,async(req,res) => {
+    try{
+        let query = {seq_id : req.params.id};
+
+        let user = await UserModel.findOne(query);
+        res.render("users/timeline",{
+            newUser : user,
+            moment : moment
+        });
     }
     catch(error)
     {
