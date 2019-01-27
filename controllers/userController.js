@@ -399,7 +399,7 @@ router.post("/update/:id",auth,upload.any(),[
                 forms.supplier = req.body.supplier;
                 user.supplier = forms.supplier;
             }
-            
+            checkedDiff(req,user,req.params.id);
 
             let userUpdate = await UserModel.updateOne(query,user);
             if(userUpdate)
@@ -570,6 +570,29 @@ router.get("/:id",auth,async(req,res) => {
 
 }); 
 
+function checkedDiff(req,user,id)
+{
+    UserModel.findOne({_id : id},(err,olduser) => {
+        if(olduser)
+        {
+            let userStatus = {};
+            if(olduser.name != user.name)
+            {
+                 /** User Status */
+                userStatus = {
+                    type : "name_changed",
+                    display_name : "Name Changed",
+                    description : `${req.user.name} changed users's email from ${olduser.name} to ${user.name}`,
+                };
 
+            }
+            UserModel.findOneAndUpdate({_id : id},   { $push: { events: userStatus } }, (err) => {
+                console.log(err);
+            });
+        }
+    });
+
+ 
+}
 
 module.exports = router;
