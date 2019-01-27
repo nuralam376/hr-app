@@ -35,7 +35,7 @@ app.use(session({
     resave : true,
     saveUninitialized : true,
     rolling : true,
-    cookie  : { maxAge  : new Date(Date.now() + (1000 * 60 * 15)) }
+    cookie  : { maxAge  : 1000 * 60 * 30 }
 }));
 
 /** Passport and Session Middleware */

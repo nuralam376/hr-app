@@ -570,29 +570,40 @@ router.get("/:id",auth,async(req,res) => {
 
 }); 
 
+
+/** Changed Events Status of the User */
 function checkedDiff(req,user,id)
 {
     UserModel.findOne({_id : id},(err,olduser) => {
         if(olduser)
         {
-            let userStatus = {};
-            if(olduser.name != user.name)
-            {
-                 /** User Status */
-                userStatus = {
-                    type : "name_changed",
-                    display_name : "Name Changed",
-                    description : `${req.user.name} changed users's email from ${olduser.name} to ${user.name}`,
-                };
+            user.company = olduser.company;
+            user.updated_at = olduser.updated_at;
+            let changed_keys = new Set();
 
+            for(key in user){
+            if(user[key] != olduser[key])
+                changed_keys.add(key);
             }
-            UserModel.findOneAndUpdate({_id : id},   { $push: { events: userStatus } }, (err) => {
-                console.log(err);
-            });
+
+            let event = {};
+
+            for (var it = changed_keys.values(), val= null; val=it.next().value; ) {
+                event.type = val;
+                event.display_name = val + " Changed";
+                event.description  = `${req.user.name} changed value of  ${val} from ${olduser[val]} to ${user[val]}`;
+                UserModel.findOneAndUpdate({_id : id},   { $push: { events: event } }, err => {
+                    if(err)
+                    {
+                        console.log(err);
+                    }    
+                });
+            }
         }
-    });
+});
 
  
 }
+
 
 module.exports = router;
