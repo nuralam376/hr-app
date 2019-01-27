@@ -2,15 +2,15 @@
 <div class="container mt-xs-5 mb-xs-5">
 	<div class="row">
 		<div class="col-md-6 col-md-offset-3">
-            <h4>User TimeLine</h4>
-            <%if (newUser.events.length > 0){ %>
+            <h4>Supplier TimeLine</h4>
+            <%if (newSupplier.events.length > 0){ %>
                 
                 <ul class="timeline">
-                <% newUser.events.forEach(user => { %>
+                <% newSupplier.events.forEach(supplier => { %>
                     <li>
-                        <a target="_blank" href="https://www.totoprayogo.com/#"><%= user.display_name %></a>
-                        <a href="#" class="pull-right"><%= moment(user.time).format('llll'); %></a>
-                        <p><%= user.description %></p>
+                        <a target="_blank" href="https://www.totoprayogo.com/#"><%= supplier.display_name %></a>
+                        <a href="#" class="pull-right"><%= moment(supplier.time).format('llll'); %></a>
+                        <p><%= supplier.description %></p>
                     </li>
                 <% }); %>    
                 </ul>

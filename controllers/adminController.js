@@ -9,6 +9,7 @@ const bcrypt = require("bcryptjs");
 const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody} = require("express-validator/filter");
 const multer = require("multer");
+const moment = require("moment");
 
 /** Authetication Check File */
 const auth = require("../config/auth");
@@ -173,6 +174,15 @@ router.post("/register",auth,isSuperAdmin,[
             let adminCount = company.admin + 1; 
             
             admin.seq_id = "a_"+ adminCount; // Adds 1 in the Admin Sequence Number
+
+              /** Admin Status */
+              let adminStatus = {
+                type : "profile_created",
+                display_name : "Profile Created",
+                description : `${req.user.name} created profile of ${admin.name}`,
+            };
+
+            admin.events.push(adminStatus);
                 
 
             let adminCreate = await admin.save(); // Creates New Admin
@@ -549,6 +559,28 @@ router.delete("/delete/:id",auth,isSuperAdmin,async(req,res) => {
         console.log(error);
     }
 });
+
+/**
+ * Shows Timeline of the Admin
+ * @param {string} id - The Object Id of the Admin.
+*/
+
+router.get("/timeline/:id",auth,async(req,res) => {
+    try{
+        let query = {seq_id : req.params.id};
+
+        let admin = await AdminModel.findOne(query);
+        res.render("admins/timeline",{
+            newAdmin : admin,
+            moment : moment
+        });
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+
+}); 
     
   
 

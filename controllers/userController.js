@@ -200,7 +200,7 @@ router.post("/register",auth,upload.any(),[
             let userStatus = {
                 type : "profile_created",
                 display_name : "Profile Created",
-                description : `${req.user.name} created ${user.name} profile`,
+                description : `${req.user.name} created profile of ${user.name}`,
             };
 
             user.events.push(userStatus);

@@ -34,6 +34,7 @@ app.use(session({
     secret : "keyboard cat",
     resave : true,
     saveUninitialized : true,
+    rolling : true,
     cookie  : { maxAge  : new Date(Date.now() + (1000 * 60 * 15)) }
 }));
 

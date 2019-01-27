@@ -5,7 +5,7 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const router = express.Router();
-const bcrypt = require("bcryptjs");
+const moment = require("moment");
 const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody } = require("express-validator/filter");
 const multer = require("multer");
@@ -169,6 +169,16 @@ router.post("/register",auth,upload.any(),[
             supplier.profile_photo = forms.profile_photo;
             supplier.passport_photo = forms.passport_photo;
             supplier.company = req.user.company;      
+
+             /** Supplier Status */
+             let supplierStatus = {
+                type : "profile_created",
+                display_name : "Profile Created",
+                description : `${req.user.name} created profile of ${supplier.name}`,
+            };
+
+            supplier.events.push(supplierStatus);
+
             
             let company = await CompanyInfoModel.findOne({company : req.user.company}); // Finds the last Inserted Id of the Supplier
             let supplierCount = company.supplier + 1; 
@@ -424,6 +434,28 @@ router.delete("/delete/:id",auth,async(req,res) => {
     }
   
 });
+
+/**
+ * Shows Timeline of the supplier
+ * @param {string} id - The Object Id of the Supplier.
+*/
+
+router.get("/timeline/:id",auth,async(req,res) => {
+    try{
+        let query = {seq_id : req.params.id};
+
+        let supplier = await SupplierModel.findOne(query);
+        res.render("supplier/timeline",{
+            newSupplier : supplier,
+            moment : moment
+        });
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+
+}); 
 
 
 /**
