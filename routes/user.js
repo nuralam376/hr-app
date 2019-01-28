@@ -15,7 +15,7 @@ const auth = require("../config/auth");
 /** Multer Configuration */
 const multer = require("multer");
 /** User Controller Page */
-const UserController = require("../controllers/usercontroller");
+const UserController = require("../controllers/userController");
 
 /** Initialize Multer storage Variable for file upload */
 const storage = multer.diskStorage({
