@@ -1,17 +1,12 @@
 /** This is the Suuplier controller page. Supplier CRUD functions are here. */
 
 /** Required modules */
-const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const router = express.Router();
 const moment = require("moment");
 const {check,validationResult} = require("express-validator/check");
-const {sanitizeBody } = require("express-validator/filter");
-const multer = require("multer");
 
-/** Authentication Check File */
-const auth = require("../config/auth");
+
 
 /** Created Events Module */
 const createdEvents = require("../util/events");
@@ -22,44 +17,12 @@ const SupplierModel = require("../models/supplierModel");
 /** Company Info Model Schema */
 let CompanyInfoModel = require("../models/companyInfoModel");
 
-/** Initialize Multer storage Variable for file upload */
-const storage = multer.diskStorage({
-    destination : "./public/uploads/supplier",
-    filename : (req,file,cb) => 
-    {
-        cb(null,file.fieldname + "-" + Date.now() + path.extname(file.originalname));
-    }
-});
 
-/** Implements File upload validation */
-const upload = multer({
-    storage : storage,
-    fileFilter : (req,file,cb) => {
-        checkFileType(req,file,cb)
-    }
-});
-
-
-/**
- * Checks Whether the file is an image or not
- * 
- */
-
-function checkFileType(req,file,cb)
-{
-    let ext = path.extname(file.originalname);
-    let size = file.size;
-    if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
-         req.fileValidationError = "Forbidden extension";
-         return cb(null, false, req.fileValidationError);
-   }
-   cb(null, true);
-}
 
 
 
 /** Renders All Suppliers */
-router.get("/",auth,async(req,res) => {
+exports.getAllSuppliers = async(req,res) => {
     try 
     {
         let suppliers = await SupplierModel.find({company : req.user.company});
@@ -73,11 +36,11 @@ router.get("/",auth,async(req,res) => {
         console.log(err);
     }    
 
-});
+};
 
 /** Shows Supplier Registration Page */
 
-router.get("/register",auth,async(req,res) => {
+exports.getSupplierRegistration = async(req,res) => {
     try 
     {
         res.render("supplier/register");
@@ -87,30 +50,10 @@ router.get("/register",auth,async(req,res) => {
         console.log(err);
     }    
 
-});
+};
 
 /** Receives Supplier input data for registration */
-router.post("/register",auth,upload.any(),[
-    check("name").not().isEmpty().withMessage("Name is required"),
-    check("email").not().isEmpty().withMessage("Email is required"),
-    check("email").isEmail().withMessage("Email must be valid"),
-    check("birth_date").not().isEmpty().withMessage("Birth Date is required"),
-    check("blood").not().isEmpty().withMessage("Blood Group is required"),
-    check("nid").not().isEmpty().withMessage("National ID is required").isNumeric().withMessage("National Id must be numeric"),
-    check("passport").not().isEmpty().withMessage("Passport Id is required"),
-    check("present_address").not().isEmpty().withMessage("Present Addres is required"),
-    check("permanent_address").not().isEmpty().withMessage("Permanent Address is required"),
-
-    sanitizeBody("name").trim().unescape(),
-    sanitizeBody("email").trim().unescape(),
-    sanitizeBody("password").trim().unescape(),
-    sanitizeBody("birth_date").trim().unescape(),
-    sanitizeBody("blood").trim().unescape(),
-    sanitizeBody("passport").trim().unescape(),
-    sanitizeBody("present_address").trim().unescape(),
-    sanitizeBody("permanent_address").trim().unescape(),
-    sanitizeBody("nid").trim().toInt(),
-],async(req,res) => {
+exports.postSupplierRegistration = async(req,res) => {
     try {
         let forms = {
             name : req.body.name,
@@ -212,7 +155,7 @@ router.post("/register",auth,upload.any(),[
     }
         
     
-});
+};
 
 /**
  * Represents Supplier Edit Options.
@@ -221,7 +164,7 @@ router.post("/register",auth,upload.any(),[
  *
  */
 
-router.get("/edit/:id",auth,async(req,res) => {
+exports.editSupplier = async(req,res) => {
     try
     {
         
@@ -248,33 +191,14 @@ router.get("/edit/:id",auth,async(req,res) => {
     }   
  
 
-});
+};
 
 /**
  * Receives Supplier input data for updating the supplier
  * @param {string} id - The Object Id of the Supplier.
 */
 
-router.post("/update/:id",auth,upload.any(),[
-    check("name").not().isEmpty().withMessage("Name is required"),
-    check("email").not().isEmpty().withMessage("Email is required"),
-    check("email").isEmail().withMessage("Email must be valid"),
-    check("birth_date").not().isEmpty().withMessage("Birth Date is required"),
-    check("blood").not().isEmpty().withMessage("Blood Group is required"),
-    check("nid").not().isEmpty().withMessage("National ID is required").isNumeric().withMessage("National Id must be numeric"),
-    check("passport").not().isEmpty().withMessage("Passport Id is required"),
-    check("present_address").not().isEmpty().withMessage("Present Addres is required"),
-    check("permanent_address").not().isEmpty().withMessage("Permanent Address is required"),
-    sanitizeBody("name").trim().unescape(),
-    sanitizeBody("email").trim().unescape(),
-    sanitizeBody("password").trim().unescape(),
-    sanitizeBody("birth_date").trim().unescape(),
-    sanitizeBody("blood").trim().unescape(),
-    sanitizeBody("passport").trim().unescape(),
-    sanitizeBody("present_address").trim().unescape(),
-    sanitizeBody("permanent_address").trim().unescape(),
-    sanitizeBody("nid").trim().toInt(),
-],async(req,res) => {
+exports.updateSupplier = async(req,res) => {
 
     try{
         let forms = {
@@ -381,14 +305,14 @@ router.post("/update/:id",auth,upload.any(),[
         console.log(err);
     }
 
-});
+};
 
 /**
  * Represents Supplier Delete options
  * @param {string} id - The Object Id of the Supplier.
 */
 
-router.delete("/delete/:id",auth,async(req,res) => {
+exports.deleteSupplier = async(req,res) => {
     try
     {
         let query = {_id : req.params.id, company : req.user.company}; // Deletes the Supplier
@@ -436,14 +360,14 @@ router.delete("/delete/:id",auth,async(req,res) => {
         console.log(err);
     }
   
-});
+};
 
 /**
  * Shows Timeline of the supplier
  * @param {string} id - The Object Id of the Supplier.
 */
 
-router.get("/timeline/:id",auth,async(req,res) => {
+exports.suppliersTimeline = async(req,res) => {
     try{
         let query = {seq_id : req.params.id};
 
@@ -458,7 +382,7 @@ router.get("/timeline/:id",auth,async(req,res) => {
         console.log(error);
     }
 
-}); 
+}; 
 
 
 /**
@@ -466,7 +390,7 @@ router.get("/timeline/:id",auth,async(req,res) => {
  * @param {string} id - The Object Id of the Supplier.
 */
 
-router.get("/:id",auth,async(req,res) => {
+exports.getSupplier = async(req,res) => {
     try{
         let query = {seq_id : req.params.id,company : req.user.company};
         let supplier = await SupplierModel.findOne(query).exec();
@@ -487,6 +411,4 @@ router.get("/:id",auth,async(req,res) => {
         console.log(error);
     }
 
-}); 
-
-module.exports = router;
+}; 
