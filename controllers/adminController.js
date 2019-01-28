@@ -20,6 +20,8 @@ let AdminModel = require("../models/adminModel");
 /** Company Info Model Schema */
 let CompanyInfoModel = require("../models/companyInfoModel");
 
+/** Created Events Module */
+const createdEvents = require("../util/events");
 
 /** Initialize Multer storage Variable for file upload */
 const storage = multer.diskStorage({
@@ -499,7 +501,7 @@ router.post("/update/:id",auth,isSuperAdmin,[
                     newAdmin.company = req.user.company;
                     newAdmin.updated_at = Date.now();
 
-                    
+                    await createdEvents(req,newAdmin,req.params.id,"admin");
                     let adminUpdate = await AdminModel.updateOne(query,newAdmin); // Update the Admin's Info
                     
                     if(adminUpdate)

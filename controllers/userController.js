@@ -16,6 +16,9 @@ const multer = require("multer");
 /** Authentication Check File */
 const auth = require("../config/auth");
 
+/** Created Events Module */
+const createdEvents = require("../util/events");
+
 /** User Model Schema */
 let UserModel = require("../models/userModel");
 /** Supplier Model Schema */
@@ -399,8 +402,7 @@ router.post("/update/:id",auth,upload.any(),[
                 forms.supplier = req.body.supplier;
                 user.supplier = forms.supplier;
             }
-            checkedDiff(req,user,req.params.id);
-
+            await createdEvents(req,user,req.params.id,"user");
             let userUpdate = await UserModel.updateOne(query,user);
             if(userUpdate)
             {
@@ -571,39 +573,7 @@ router.get("/:id",auth,async(req,res) => {
 }); 
 
 
-/** Changed Events Status of the User */
-function checkedDiff(req,user,id)
-{
-    UserModel.findOne({_id : id},(err,olduser) => {
-        if(olduser)
-        {
-            user.company = olduser.company;
-            user.updated_at = olduser.updated_at;
-            let changed_keys = new Set();
 
-            for(key in user){
-            if(user[key] != olduser[key])
-                changed_keys.add(key);
-            }
-
-            let event = {};
-
-            for (var it = changed_keys.values(), val= null; val=it.next().value; ) {
-                event.type = val;
-                event.display_name = val + " Changed";
-                event.description  = `${req.user.name} changed value of  ${val} from ${olduser[val]} to ${user[val]}`;
-                UserModel.findOneAndUpdate({_id : id},   { $push: { events: event } }, err => {
-                    if(err)
-                    {
-                        console.log(err);
-                    }    
-                });
-            }
-        }
-});
 
  
-}
-
-
 module.exports = router;

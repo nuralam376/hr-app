@@ -13,6 +13,9 @@ const multer = require("multer");
 /** Authentication Check File */
 const auth = require("../config/auth");
 
+/** Created Events Module */
+const createdEvents = require("../util/events");
+
 /** Supplier Model Schema */
 const SupplierModel = require("../models/supplierModel");
 
@@ -355,8 +358,8 @@ router.post("/update/:id",auth,upload.any(),[
                     supplier.passport_photo = forms.passport_photo;
                     supplier.company = req.user.company;
                     supplier.updated_at = Date.now();
-    
-      
+                    
+                    await createdEvents(req,supplier,req.params.id,"supplier");
                     let supplierUpdate = await SupplierModel.updateOne(query,supplier);
 
                     if(supplierUpdate)
