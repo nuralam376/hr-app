@@ -178,8 +178,8 @@ exports.deleteZone = async(req,res) => {
 
 /** Get Zones Names */
 exports.getAllNames = async(req,res) => {
-    let zones = await ZoneModel.find({});
-    return zones;
+    let zones = await ZoneModel.find({company : req.user.company});
+    res.jsonp(zones);
 }
 
 /** Get Zone's Info */

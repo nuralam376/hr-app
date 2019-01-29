@@ -78,8 +78,15 @@ $(document).ready(function(){
             url : "/zone/names",
             success : function(response)
             {
+                let availableZones = [];
+                let zoneInfo;
+                response.forEach(zone => {
+                    zoneInfo = zone.name + ", " + zone.country;
+                    availableZones.push(zoneInfo);
+                });
+
                 $("#zone").autocomplete({
-                    source: response
+                    source: availableZones
                   });
             },
 
