@@ -1,77 +1,53 @@
 $(document).ready(function(){
     $(".delete-user").on("click",function(e){
-        e.preventDefault();
-
-        if(confirm("Are you Sure?"))
-        {
-            $target = $(e.target);
-            const id = $target.attr("data-id");
-
-            $.ajax({
-                type : "Delete",
-                url : "/user/delete/" + id,
-                success : function(response)
-                {
-                    window.location.href = "/user";
-                },
-
-                error : function(err)
-                {
-                    window.location.href = "/user";
-                }
-            });
-        }   
+       ajaxDelete(e,"pax");
     });
 
     $(".delete-supplier").on("click",function(e){
-
-        e.preventDefault();
-
-        if(confirm("Are you Sure?"))
-        {
-            $target = $(e.target);
-            const id = $target.attr("data-id");
-
-            $.ajax({
-                type : "Delete",
-                url : "/supplier/delete/" + id,
-                success : function(response)
-                {
-                    window.location.href = "/supplier";
-                },
-
-                error : function(err)
-                {
-                    window.location.href = "/supplier";
-                }
-            });
-        }   
+        ajaxDelete(e,"supplier");
     });
 
     $(".delete-admin").on("click",function(e){
+        ajaxDelete(e,"admin");
+      
+    });
+
+    $(".delete-zone").on("click",function(e){
+        ajaxDelete(e,"zone");
+      
+    });
+
+    $(".delete-group").on("click",function(e){
+        ajaxDelete(e,"group");
+      
+    });
+
+    function ajaxDelete(e,route)
+    {
         e.preventDefault();
 
         if(confirm("Are you Sure?"))
         {
             $target = $(e.target);
             const id = $target.attr("data-id");
-    
+            console.log();
+
+          
             $.ajax({
                 type : "Delete",
-                url : "/admin/delete/" + id,
+                url : "/"+route+"/delete/" + id,
                 success : function(response)
                 {
-                    window.location.href = "/admin";
+                    window.location.href = "/"+route+"";
                 },
     
                 error : function(err)
                 {
-                    window.location.href = "/admin";
+                    window.location.href =  "/"+route+"";
                 }
-            });      
-        }
-      
-    });
+            });
+        }   
+    }
 
     function readURL(input,id) {
 
@@ -93,4 +69,30 @@ $(document).ready(function(){
       $("#passport_photo").change(function() {
         readURL(this,"#photo1");
       });
+
+      
+      function getZones()
+      {
+        $.ajax({
+            type : "GET",
+            url : "/zone/names",
+            success : function(response)
+            {
+                $("#zone").autocomplete({
+                    source: response
+                  });
+            },
+
+            error : function(err)
+            {
+                availableTags = err;
+            }
+        });
+      
+        
+      }
+
+    $("#zone").keyup(function(){
+        getZones();
+    })
 });

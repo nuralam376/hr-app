@@ -1,0 +1,47 @@
+<% include ../layouts/admin/header %>
+    <h1>Register Group</h1>
+
+    <form action="/group/register" method = "POST">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-inline">
+                    <label for="group_sl">Group SL : </label>
+                    <input type="text" name = "group_sl" id = "name" class = "form-control" value = "<%= typeof form != 'undefined' ? form.name : '' %>">
+                    </h4>
+                </div>
+                <div class="form-group">
+                    <label for="visa">Visa Number</label>
+                    <input type="text" name = "visa" id = "visa" class = "form-control" value = "<%= typeof form != 'undefined' ? form.visa : '' %>">
+                </div>
+                <div class="form-group">
+                    <label for="id">ID Number</label>
+                    <input type="text" name = "id" id = "id" class = "form-control" value = "<%= typeof form != 'undefined' ? form.id : '' %>">
+                </div>
+                <div class="form-group">
+                        <label for="supplier">Visa Supplier</label>
+                        <select name="supplier" id="supplier" class = "form-control">
+                            <option value="">Choose Supplier</option>
+                            <% if(suppliers.length) { %>
+                                <% suppliers.forEach(supplier =>  { %>
+                                    <option value="<%= supplier._id %>" 
+                                            <% if(typeof form != 'undefined' && typeof form.supplier != 'undefined' && form.supplier == supplier._id) { %> selected <% } %>
+                                        ><%= supplier.name %></option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="fomr-group">
+                        <div class="ui-widget">
+                            <label for="zone">Zone: </label>
+                            <input id="zone" class = "form-control">
+                        </div>
+                    </div>
+            </div>
+           <br><br><br>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <input type="submit" name = "submit" value = "Register" class = "btn btn-success">
+                </div>
+            </div>
+    </form>
+<% include ../layouts/admin/footer %>

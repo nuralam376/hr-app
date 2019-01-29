@@ -1,11 +1,11 @@
 <% include ../layouts/admin/header %>
 
-    <h1 class = "text-center">User Home</h1>
+    <h1 class = "text-center">PAX Home</h1>
     <div class="card">
         <div class="card-body">
-            <h2>All Users</h2>     
+            <h2>All PAX</h2>     
             <div class="pull-right">
-                <a href="/user/register" class = "btn btn-primary">Create New User</a>
+                <a href="/pax/register" class = "btn btn-primary">Create New PAX</a>
             </div>   
             <br><br>
 
@@ -24,7 +24,7 @@
                     <% if(users) { %>
                         <% users.forEach(function(user) { %>
                             <tr>
-                                <td><a href = "/user/<%= user.seq_id %>"><%= user.seq_id %></a></td>
+                                <td><a href = "/pax/<%= user.seq_id %>"><%= user.seq_id %></a></td>
                                 <td><%= user.name %></td>
                                 <td><%= user.email %></td>
                                 <td><%= user.passport %></td>

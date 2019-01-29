@@ -1,0 +1,22 @@
+<% include ../layouts/admin/header %>
+    <h1>Register Zone</h1>
+
+    <form action="/zone/register" method = "POST">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" name = "name" id = "name" class = "form-control" value = "<%= typeof form != 'undefined' ? form.name : '' %>">
+                </div>
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <input type="text" name = "country" id = "country" class = "form-control" value = "<%= typeof form != 'undefined' ? form.country : '' %>">
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <input type="submit" name = "submit" value = "Register" class = "btn btn-success">
+                </div>
+            </div>
+    </form>
+<% include ../layouts/admin/footer %>

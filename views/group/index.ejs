@@ -1,0 +1,31 @@
+<% include ../layouts/admin/header %>
+    <h1 class = "text-center">Group</h1>
+    <div class="card">
+        <div class="card-body">
+            <h2>All Groups</h2>     
+            <div class="pull-right">
+                <a href="/group/register" class = "btn btn-primary">Create New group</a>
+            </div>   
+            <br><br>
+
+            <table class = "table" id = "myTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Country</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(groups) { %>
+                        <% groups.forEach((group) => { %>
+                            <tr>
+                                <td><a href = "/group/<%= group._id %>"><%= group.name %></a></td>
+                                <td><%= group.country %></td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                 </tbody>   
+            </table>
+        </div>
+    </div>
+<% include ../layouts/admin/footer %>
