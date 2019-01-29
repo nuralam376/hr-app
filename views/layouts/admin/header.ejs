@@ -19,6 +19,9 @@
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="/dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+ 
 
   <link rel="stylesheet" href="/css/style.css">
 
@@ -144,6 +147,18 @@
           </ul>
         </li>
         <li class="treeview">
+            <a href="#">
+              <i class="fa fa-users"></i> <span>Groups</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-right pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="/group"><i class="fa fa-circle-o"></i>All Groups</a></li>
+              <li><a href="/group/register"><i class="fa fa-circle-o"></i>Add New Group</a></li>
+            </ul>
+          </li>
+        <li class="treeview">
           <a href="#">
             <i class="fa fa-users"></i> <span>PAX</span>
             <span class="pull-right-container">
@@ -155,6 +170,7 @@
             <li><a href="/pax/register"><i class="fa fa-circle-o"></i>Add New PAX</a></li>
           </ul>
         </li>
+        
         <li class="treeview">
           <a href="#">
             <i class="fa fa-users"></i> <span>Suppliers</span>

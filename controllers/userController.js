@@ -463,7 +463,7 @@ exports.usersTimeline = async(req,res) => {
 
         let user = await UserModel.findOne(query);
         res.render("users/timeline",{
-            newUser : user,
+            events : user.events.reverse(),
             moment : moment
         });
     }

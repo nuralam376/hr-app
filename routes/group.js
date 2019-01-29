@@ -6,30 +6,29 @@ const router = express.Router();
 const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody} = require("express-validator/filter");
 
-/** Zone Controller */
-const ZoneController = require("../controllers/zoneController");
+/** Group Controller */
+const GroupController = require("../controllers/groupController");
 
 /** Auth Configuration */
 const auth = require("../config/auth");
 
-/** Zone Routes */
-router.get("/",auth,ZoneController.getAllZones);
-router.get("/register",auth,ZoneController.getZoneRegistration);
+/** Group Routes */
+router.get("/",auth,GroupController.getAllGroups);
+router.get("/register",auth,GroupController.getGroupRegistration);
 router.post("/register",auth,[
     check("name").not().isEmpty().withMessage("Zone Name is required"),
     check("country").not().isEmpty().withMessage("Country is required"),
     sanitizeBody("name").toString(),
     sanitizeBody("country").toString(),
-],ZoneController.postZoneRegistration);
-router.get("/edit/:id",auth,ZoneController.editZone);
+],GroupController.postGroupRegistration);
+router.get("/edit/:id",auth,GroupController.editGroup);
 router.post("/update/:id",auth,[
     check("name").not().isEmpty().withMessage("Zone Name is required"),
     check("country").not().isEmpty().withMessage("Country is required"),
     sanitizeBody("name").toString(),
     sanitizeBody("country").toString(),
-],ZoneController.updateZone);
-router.delete("/delete/:id",auth,ZoneController.deleteZone);
-router.get("/names",auth,ZoneController.getAllNames);
-router.get("/:id",auth,ZoneController.getZone);
+],GroupController.updateGroup);
+router.delete("/delete/:id",auth,GroupController.deleteGroup);
+router.get("/:id",auth,GroupController.getGroup);
 
 module.exports = router;

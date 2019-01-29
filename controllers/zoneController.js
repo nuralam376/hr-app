@@ -84,32 +84,7 @@ exports.postZoneRegistration = async(req,res) => {
     }
 }
 
-/** Get Zone's Info */
 
-exports.getZone = async(req,res) => {
-    try
-    {
-        let id = req.params.id;
-
-        let zone = await ZoneModel.findOne({_id : id, company : req.user.company});
-
-        if(zone)
-        {
-            res.render("zone/view",{
-                zone : zone
-            });
-        }
-        else
-        {
-            req.flash("danger","Zone Not found");
-            res.redirect("/zone/");
-        }
-    }
-    catch(err)
-    {
-        console.log(err);
-    }
-}
 
 /** Edits Zone Info */
 
@@ -193,6 +168,39 @@ exports.deleteZone = async(req,res) => {
         {
             req.flash("danger","Something went wrong");
             res.redirect("/zone");
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Get Zones Names */
+exports.getAllNames = async(req,res) => {
+    let zones = await ZoneModel.find({});
+    return zones;
+}
+
+/** Get Zone's Info */
+
+exports.getZone = async(req,res) => {
+    try
+    {
+        let id = req.params.id;
+
+        let zone = await ZoneModel.findOne({_id : id, company : req.user.company});
+
+        if(zone)
+        {
+            res.render("zone/view",{
+                zone : zone
+            });
+        }
+        else
+        {
+            req.flash("danger","Zone Not found");
+            res.redirect("/zone/");
         }
     }
     catch(err)

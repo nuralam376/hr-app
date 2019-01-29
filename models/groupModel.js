@@ -21,7 +21,7 @@ const GroupSchema = mongoose.Schema({
         type : Number,
         required : true
     },
-    visa_nid : 
+    visa_id : 
     {
         type : Number,
         required : true

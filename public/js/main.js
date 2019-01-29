@@ -17,6 +17,11 @@ $(document).ready(function(){
       
     });
 
+    $(".delete-group").on("click",function(e){
+        ajaxDelete(e,"group");
+      
+    });
+
     function ajaxDelete(e,route)
     {
         e.preventDefault();
@@ -64,4 +69,30 @@ $(document).ready(function(){
       $("#passport_photo").change(function() {
         readURL(this,"#photo1");
       });
+
+      
+      function getZones()
+      {
+        $.ajax({
+            type : "GET",
+            url : "/zone/names",
+            success : function(response)
+            {
+                $("#zone").autocomplete({
+                    source: response
+                  });
+            },
+
+            error : function(err)
+            {
+                availableTags = err;
+            }
+        });
+      
+        
+      }
+
+    $("#zone").keyup(function(){
+        getZones();
+    })
 });
