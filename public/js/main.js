@@ -9,15 +9,15 @@ $(document).ready(function(){
 
             $.ajax({
                 type : "Delete",
-                url : "/user/delete/" + id,
+                url : "/pax/delete/" + id,
                 success : function(response)
                 {
-                    window.location.href = "/user";
+                    window.location.href = "/pax";
                 },
 
                 error : function(err)
                 {
-                    window.location.href = "/user";
+                    window.location.href = "/pax";
                 }
             });
         }   

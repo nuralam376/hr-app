@@ -93,7 +93,7 @@ app.use("/register",register);
 app.use("/dashboard",dashboard);
 app.use("/company",company);
 app.use("/login",login);
-app.use("/user",user);
+app.use("/pax",user);
 app.use("/supplier",supplier);
 app.use("/admin",admin);
 app.use("/forget-password",forgetPassword);

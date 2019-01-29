@@ -169,12 +169,12 @@ exports.postRegistration  = async(req,res) => {
                 let query = {company: req.user.company};
                 let companyInfoUpdate = await CompanyInfoModel.findOneAndUpdate(query,companyInfo); // Updates the Number of the User
                 req.flash("success","New User has been created");
-                res.redirect("/user");
+                res.redirect("/pax");
             }
             else
             {
                 req.flash("danger","Something went wrong");
-                res.redirect("/user");
+                res.redirect("/pax");
             }
             
            
@@ -213,8 +213,8 @@ exports.editUser = async(req,res) => {
         }
         else
         {
-            req.flash("danger","No User Found");
-            res.redirect("/user");
+            req.flash("danger","No Pax Found");
+            res.redirect("/pax");
         }   
         
     }
@@ -329,13 +329,13 @@ exports.updateUser = async(req,res) => {
             let userUpdate = await UserModel.updateOne(query,user);
             if(userUpdate)
             {
-                req.flash("success","User Details Updated");
-                res.redirect("/user");
+                req.flash("success","PAX Details Updated");
+                res.redirect("/pax");
             }
             else
             {
                 req.flash("danger","Something went wrong");
-                res.redirect("/user");
+                res.redirect("/pax");
             }
           
         }
@@ -388,13 +388,13 @@ exports.deleteUser = async(req,res) => {
 
             if(userDelete)
             {
-                req.flash("danger","User Deleted");
-                res.redirect("/user");
+                req.flash("danger","PAX Deleted");
+                res.redirect("/pax");
             }
             else
             {
                 req.flash("danger","Something Went Wrong");
-                res.redirect("/user");
+                res.redirect("/pax");
             }  
         }
       
