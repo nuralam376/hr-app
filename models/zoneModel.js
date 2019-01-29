@@ -10,6 +10,17 @@ const ZoneSchema = mongoose.Schema({
         type : String,
         required : true
     },
+    country : 
+    {
+        type : String,
+        required : true
+    },
+    company : 
+    {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "Company",
+        required: false
+    },
     created_at : 
     {
         type : Date,

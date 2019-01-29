@@ -86,6 +86,7 @@ const admin = require("./controllers/adminController");
 const company = require("./controllers/companyController");
 const forgetPassword = require("./controllers/forgetPasswordController");
 const changePassword = require("./controllers/changePasswordController");
+const zone = require("./routes/zone");
 
 
 /** Other Routes */
@@ -98,7 +99,7 @@ app.use("/supplier",supplier);
 app.use("/admin",admin);
 app.use("/forget-password",forgetPassword);
 app.use("/change-password",changePassword);
-
+app.use("/zone",zone);
 
 // Start the server
 app.listen(port,function(){

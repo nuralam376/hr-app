@@ -1,0 +1,31 @@
+<% include ../layouts/admin/header %>
+    <h1 class = "text-center">Zone</h1>
+    <div class="card">
+        <div class="card-body">
+            <h2>All Zones</h2>     
+            <div class="pull-right">
+                <a href="/zone/register" class = "btn btn-primary">Create New Zone</a>
+            </div>   
+            <br><br>
+
+            <table class = "table" id = "myTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Country</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(zones) { %>
+                        <% zones.forEach((zone) => { %>
+                            <tr>
+                                <td><a href = "/zone/<%= zone._id %>"><%= zone.name %></a></td>
+                                <td><%= zone.country %></td>
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                 </tbody>   
+            </table>
+        </div>
+    </div>
+<% include ../layouts/admin/footer %>

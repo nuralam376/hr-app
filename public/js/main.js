@@ -1,77 +1,48 @@
 $(document).ready(function(){
     $(".delete-user").on("click",function(e){
-        e.preventDefault();
-
-        if(confirm("Are you Sure?"))
-        {
-            $target = $(e.target);
-            const id = $target.attr("data-id");
-
-            $.ajax({
-                type : "Delete",
-                url : "/pax/delete/" + id,
-                success : function(response)
-                {
-                    window.location.href = "/pax";
-                },
-
-                error : function(err)
-                {
-                    window.location.href = "/pax";
-                }
-            });
-        }   
+       ajaxDelete(e,"pax");
     });
 
     $(".delete-supplier").on("click",function(e){
-
-        e.preventDefault();
-
-        if(confirm("Are you Sure?"))
-        {
-            $target = $(e.target);
-            const id = $target.attr("data-id");
-
-            $.ajax({
-                type : "Delete",
-                url : "/supplier/delete/" + id,
-                success : function(response)
-                {
-                    window.location.href = "/supplier";
-                },
-
-                error : function(err)
-                {
-                    window.location.href = "/supplier";
-                }
-            });
-        }   
+        ajaxDelete(e,"supplier");
     });
 
     $(".delete-admin").on("click",function(e){
+        ajaxDelete(e,"admin");
+      
+    });
+
+    $(".delete-zone").on("click",function(e){
+        ajaxDelete(e,"zone");
+      
+    });
+
+    function ajaxDelete(e,route)
+    {
         e.preventDefault();
 
         if(confirm("Are you Sure?"))
         {
             $target = $(e.target);
             const id = $target.attr("data-id");
-    
+            console.log();
+
+          
             $.ajax({
                 type : "Delete",
-                url : "/admin/delete/" + id,
+                url : "/"+route+"/delete/" + id,
                 success : function(response)
                 {
-                    window.location.href = "/admin";
+                    window.location.href = "/"+route+"";
                 },
     
                 error : function(err)
                 {
-                    window.location.href = "/admin";
+                    window.location.href =  "/"+route+"";
                 }
-            });      
-        }
-      
-    });
+            });
+        }   
+    }
 
     function readURL(input,id) {
 
