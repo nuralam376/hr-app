@@ -2,7 +2,7 @@
 
 /** Required modules */
 const fs = require("fs");
-const moment = require("moment");
+var moment = require('moment-timezone');
 
 /** Validation Configuration */
 const {check,validationResult} = require("express-validator/check");

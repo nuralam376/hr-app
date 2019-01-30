@@ -81,13 +81,21 @@ $(document).ready(function(){
                 let availableZones = [];
                 let zoneInfo;
                 response.forEach(zone => {
-                    zoneInfo = zone.name + ", " + zone.country;
+                    zoneInfo = zone.name;
                     availableZones.push(zoneInfo);
                 });
 
                 $("#zone").autocomplete({
-                    source: availableZones
-                  });
+                    source: availableZones,
+                    selectFirst: true, 
+                    minLength: 0,
+                    focus : function(event,ui) {
+                        $(this).autocomplete("search", $(this).val());
+                    },
+                    select : function(event,ui){
+                        $(this).val(ui.item.label);
+                    }
+                })
             },
 
             error : function(err)
@@ -99,7 +107,7 @@ $(document).ready(function(){
         
       }
 
-    $("#zone").keyup(function(){
+    $("#zone").on("focus",function(){
         getZones();
     })
 });

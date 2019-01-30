@@ -16,7 +16,6 @@ function ensureAuthenticated(req,res,next)
     }
     else
     {
-        req.flash("danger","Please login first");
         res.redirect("/login");
     }
 }

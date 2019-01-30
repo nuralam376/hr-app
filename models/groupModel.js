@@ -26,10 +26,9 @@ const GroupSchema = mongoose.Schema({
         type : Number,
         required : true
     },
-    supplier : 
+    visa_supplier : 
     {
-        type : mongoose.Schema.Types.ObjectId,
-        ref: "Supplier",
+        type : String,
         required : true
     },
     zone : 

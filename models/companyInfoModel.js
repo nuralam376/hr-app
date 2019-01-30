@@ -22,6 +22,18 @@ const CompanyInfoSchema = mongoose.Schema({
         required : true,
         default : 0
     },
+    group : 
+    {
+        type : Number,
+        required : true,
+        default : 0
+    },
+    pax : 
+    {
+        type : Number,
+        required : true,
+        default : 0
+    },
 
     company : 
     {

@@ -3,10 +3,11 @@
 const GroupModel = require("../models/groupModel");
 
 /** Supplier Model */
-const SupplierModel = require("../models/supplierModel");
+const CompanyInfoModel = require("../models/companyInfoModel");
 
 /** Zone Model */
 const ZoneModel = require("../models/zoneModel");
+
 
 /** Validation Configuration */
 const {check,validationResult} = require("express-validator/check");
@@ -35,23 +36,12 @@ exports.getAllGroups = async(req,res) => {
 exports.getGroupRegistration = async(req,res) => {
     try
     {
-        let group = await GroupModel.findOne({company : req.user.company});
-        let suppliers = await SupplierModel.find({company : req.user.company});
+        let group = await CompanyInfoModel.findOne({company : req.user.company});
         let zone = await ZoneModel.find({company : req.user.company});
 
-        if(group)
-        {
-            group_seq = group.group_seq + 1;
-        }
-        else
-        {
-            group_seq = 328;
-        }    
-
         res.render("group/register",{
-            group : group_seq,
-            suppliers : suppliers,
-            zone : zone
+            zone : zone,
+            group : group
         });
     }
     catch(err)
@@ -64,10 +54,15 @@ exports.getGroupRegistration = async(req,res) => {
 
 exports.postGroupRegistration = async(req,res) => {
     try
-    {
+    {   
         let forms  = {
-            name : req.body.name,
-            country : req.body.country,
+            group_seq : req.body.group_seq,
+            group_sl : req.body.group_sl,
+            id : req.body.id,
+            supplier : req.body.supplier,
+            visa : req.body.visa,
+            zone : req.body.zone,
+            amount : req.body.amount
         };
 
         let errors = validationResult(req);
@@ -76,22 +71,48 @@ exports.postGroupRegistration = async(req,res) => {
         {
             res.render("group/register",{
                 errors : errors.array(),
-                form : forms
+                form : forms,
+                group : group
             });
         }
         else
         {
             /** Saves forms data in group object */
             let group = new GroupModel();
-            group.name = forms.name;
-            group.country = forms.country;
+            group.group_seq =  forms.group_seq;
+            group.group_sl = forms.group_sl;
+            group.visa_number = forms.visa;
+            group.visa_supplier = forms.supplier;
+            group.visa_id = forms.id;
+            group.amount = forms.amount;
             group.company = req.user.company;
+            group.enjazit_image = "null";
+         
+            let zone = await ZoneModel.find({company : req.user.company, name : forms.zone});
+
+            if(zone)
+            {
+                group.zone = zone._id;
+            }
+            else
+            {
+                let newZone = new ZoneModel();
+                newZone.name = forms.zone;
+                newZone.country = "--";
+                let newZoneSave = await newZone.save();
+                group.zone = newZoneSave._id;
+            }
+
+            let companyInfo = {};
+            companyInfo.group = forms.group_seq + 1;
+            await CompanyInfoModel.update({company : req.user.company}, companyInfo);
+            
 
             let groupSave = await group.save(); // Saves group data
 
             if(groupSave)
             {
-                req.flash("success","group created successfully");
+                req.flash("success","Group created successfully");
                 res.redirect("/group");
             }
             else

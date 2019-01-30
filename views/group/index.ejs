@@ -11,7 +11,7 @@
             <table class = "table" id = "myTable">
                 <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>Group Sl</th>
                         <th>Country</th>
                     </tr>
                 </thead>
@@ -19,7 +19,7 @@
                     <% if(groups) { %>
                         <% groups.forEach((group) => { %>
                             <tr>
-                                <td><a href = "/group/<%= group._id %>"><%= group.name %></a></td>
+                                <td><a href = "/group/<%= group._id %>"><%= group.group_seq %> / <%= group.group_sl%></a></td>
                                 <td><%= group.country %></td>
                             </tr>
                         <% }) %>
