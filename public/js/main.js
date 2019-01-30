@@ -84,18 +84,7 @@ $(document).ready(function(){
                     zoneInfo = zone.name;
                     availableZones.push(zoneInfo);
                 });
-
-                $("#zone").autocomplete({
-                    source: availableZones,
-                    selectFirst: true, 
-                    minLength: 0,
-                    focus : function(event,ui) {
-                        $(this).autocomplete("search", $(this).val());
-                    },
-                    select : function(event,ui){
-                        $(this).val(ui.item.label);
-                    }
-                })
+                showResult(availableZones);
             },
 
             error : function(err)
@@ -103,11 +92,24 @@ $(document).ready(function(){
                 availableTags = err;
             }
         });
-      
-        
       }
 
     $("#zone").on("focus",function(){
         getZones();
     })
+
+    function showResult(availableZones)
+    {
+        $("#zone").autocomplete({
+            source: availableZones,
+            selectFirst: true, 
+            minLength: 0,
+            focus : function(event,ui) {
+                $(this).autocomplete("search", $(this).val());
+            },
+            select : function(event,ui){
+                $(this).val(ui.item.label);
+            }
+        })
+    }
 });

@@ -12,7 +12,12 @@
                 <thead>
                     <tr>
                         <th>Group Sl</th>
-                        <th>Country</th>
+                        <th>Visa Number</th>
+                        <th>Visa ID Number</th>
+                        <th>Supplier Info</th>
+                        <th>Occupation</th>
+                        <th>Date</th>
+                        <th>Enjazit</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -20,7 +25,12 @@
                         <% groups.forEach((group) => { %>
                             <tr>
                                 <td><a href = "/group/<%= group._id %>"><%= group.group_seq %> / <%= group.group_sl%></a></td>
-                                <td><%= group.country %></td>
+                                <td><%= group.visa_number %></td>
+                                <td><%= group.visa_id %></td>
+                                <td><%= group.visa_supplier %>, <%= group.zone.name %>, <%= group.amount %></td>
+                                <td><%= group.occupation %></td>
+                                <td><%= moment(group.created_at).format("llll") %></td>
+                                <td><img src="/uploads/enjazit/<%= group.enjazit_image %>" alt="" style = "width:100px; height : 50px"></td>
                             </tr>
                         <% }) %>
                     <% } %>

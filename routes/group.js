@@ -1,7 +1,7 @@
 /** Required Modules */
 const express = require("express");
 const router = express.Router();
-
+const path = require("path");
 /** Validation Configuration */
 const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody} = require("express-validator/filter");
@@ -60,7 +60,7 @@ router.post("/register",auth,upload.any(),[
     check("supplier").not().isEmpty().withMessage("Visa Supplier is required"),
     check("zone").not().isEmpty().withMessage("Zone is required"),
     check("amount").not().isEmpty().withMessage("Amount is required"),
-    sanitizeBody("supplier").toString()
+    check("occupation").not().isEmpty().withMessage("Occupation is required"),
 ],GroupController.postGroupRegistration);
 router.get("/edit/:id",auth,GroupController.editGroup);
 router.post("/update/:id",auth,upload.any(),[

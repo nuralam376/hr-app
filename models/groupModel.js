@@ -42,6 +42,11 @@ const GroupSchema = mongoose.Schema({
         type : Number,
         required : true
     },
+    occupation : 
+    {
+        type : String,
+        required : true
+    },
     enjazit_image : 
     {
         type : String,
