@@ -327,7 +327,7 @@ exports.suppliersTimeline = async(req,res) => {
 
         let supplier = await SupplierModel.findOne(query);
         res.render("supplier/timeline",{
-            newSupplier : supplier.reverse(),
+            newSupplier : supplier,
             moment : moment
         });
     }

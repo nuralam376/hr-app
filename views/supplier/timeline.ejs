@@ -6,7 +6,7 @@
             <%if (newSupplier.events.length > 0){ %>
                 
                 <ul class="timeline">
-                <% newSupplier.events.forEach(supplier => { %>
+                <% newSupplier.events.reverse().forEach(supplier => { %>
                     <li>
                         <a target="_blank" href="https://www.totoprayogo.com/#"><%= supplier.display_name %></a>
                         <a href="#" class="pull-right"><%= moment(supplier.time).format('llll'); %></a>

@@ -17,7 +17,7 @@
                 </thead>
                 <tbody>
                     <% if(zones) { %>
-                        <% zones.forEach((zone) => { %>
+                        <% zones.reverse().forEach((zone) => { %>
                             <tr>
                                 <td><a href = "/zone/<%= zone._id %>"><%= zone.name %></a></td>
                                 <td><%= zone.country %></td>
