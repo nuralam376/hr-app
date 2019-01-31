@@ -11,7 +11,7 @@
             <table class = "table" id = "myTable">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Code</th>
                         <th>Name</th>
                         <th>NID / Passport</th>
                         <th>Introducer Name</th>
@@ -23,7 +23,7 @@
                     <% if(suppliers) { %>
                         <% suppliers.forEach((supplier) => { %>
                             <tr>
-                                <td><a href = "/supplier/<%= supplier.seq_id %>"><%= supplier.seq_id %></a></td>
+                                <td><a href = "/supplier/<%= supplier.seq_id %>"><%= supplier.code %></a></td>
                                 <td><%= supplier.name %></td>
                                 <td><%= supplier.nid %></td>
                                 <td><%= supplier.introducer_name %></td>

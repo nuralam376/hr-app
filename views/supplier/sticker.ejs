@@ -1,0 +1,18 @@
+<% include ../layouts/admin/header %>
+    
+   <div id="sticker-info">
+        
+        <h6><a href="/supplier/pdf/<%= newSupplier.seq_id %>" class = "btn btn-info">Download Sticker</a></h6>
+        
+        <table class = "table table-bordered" id = "sticker">
+                <tr>
+                    <th>Code</th>
+                    <td><%= newSupplier.code %></td>
+                </tr>
+                <tr>
+                    <th>Supplier Name</th>
+                    <td><%= newSupplier.name %></td>
+                </tr>
+            </table>
+        </div>    
+<% include ../layouts/admin/footer %>

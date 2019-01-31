@@ -327,7 +327,7 @@ exports.suppliersTimeline = async(req,res) => {
 
         let supplier = await SupplierModel.findOne(query);
         res.render("supplier/timeline",{
-            newSupplier : supplier,
+            newSupplier : supplier.reverse(),
             moment : moment
         });
     }
@@ -427,3 +427,49 @@ const supplierSave = async(req,res,forms) => {
         });
     }
 }
+
+
+/**
+ * Generates Suppliers Sticker
+ * @param {string} id - The Object Id of the Supplier.
+*/
+
+exports.getSuppliersSticker = async(req,res) => {
+    try{
+        let query = {seq_id : req.params.id, company : req.user.company};
+
+        let supplier = await SupplierModel.findOne(query);
+
+        res.render("supplier/sticker",{
+            newSupplier : supplier
+        });
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+
+}; 
+
+/**
+ * Generates Sticker PDF
+ * @param {string} id - The Object Id of the Supplier.
+*/
+
+exports.downloadSuppliersSticker = async(req,res) => {
+    try{
+        let query = {seq_id : req.params.id, company : req.user.company};
+
+        let supplier = await SupplierModel.findOne(query);
+
+        let stickerPdf = require("../util/supplierPdf");
+
+        stickerPdf(res,supplier);
+       
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+
+}; 

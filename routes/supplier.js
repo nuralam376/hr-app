@@ -95,6 +95,8 @@ router.post("/update/:id",auth,upload.any(),[
 
 router.delete("/delete/:id",auth,SupplierController.deleteSupplier);
 router.get("/timeline/:id",auth,SupplierController.suppliersTimeline);
+router.get("/sticker/:id",auth,SupplierController.getSuppliersSticker);
+router.get("/pdf/:id",auth,SupplierController.downloadSuppliersSticker);
 router.get("/:id",auth,SupplierController.getSupplier);
 
 module.exports = router;
