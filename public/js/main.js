@@ -69,6 +69,9 @@ $(document).ready(function(){
       $("#passport_photo").change(function() {
         readURL(this,"#photo1");
       });
+      $("#enjazit").change(function() {
+        readURL(this,"#photo");
+      });
 
       
       function getZones()

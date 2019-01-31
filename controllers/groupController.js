@@ -188,17 +188,35 @@ exports.updateGroup = async(req,res) => {
 exports.deleteGroup = async(req,res) => {
     try
     {   
-        let groupDelete = await GroupModel.deleteOne({_id : req.params.id,company : req.user.company});
+        let query = {_id : req.params.id, company : req.user.company}; // Deletes the group
 
-        if(groupDelete)
+        let group = await GroupModel.findOne(query);
+
+        if(group)
         {
-            req.flash("success","group Deleted Successfully");
-            res.redirect("/group");
-        }
-        else
-        {
-            req.flash("danger","Something went wrong");
-            res.redirect("/group");
+                /** Removes the old files */
+            if(group.enjazit_image != "dummy.jpeg")
+            {
+                fs.unlink("./public/uploads/enjazit/"+group.enjazit_image, (err) => {
+                    if(err)
+                    {
+                        console.log(err);
+                    }
+                });
+            }
+
+            let groupDelete = await GroupModel.deleteOne(query);
+
+            if(groupDelete)
+            {
+                req.flash("danger","Group Deleted");
+                res.redirect("/group");
+            }
+            else
+            {
+                req.flash("danger","Something Went Wrong");
+                res.redirect("/group");
+            }  
         }
     }
     catch(err)
