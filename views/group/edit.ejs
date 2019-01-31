@@ -1,21 +1,49 @@
 <% include ../layouts/admin/header %>
-    <h1>Register Group</h1>
+    <h1>Update Group</h1>
 
-    <form action="/group/update/<%= group._id %>" method = "POST">
+    <form action="/group/update/<%= group._id %>" method = "POST" enctype = "multipart/form-data">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" name = "name" id = "name" class = "form-control" value = "<%= typeof form != 'undefined' ? form.name : group.name %>">
+                    <label for="group_seq">Group SL</label>
+                    <b><%= group.group_seq%> / </b>
+                    <input type="text" name = "group_sl" id = "group_sl" value = "<%=  group.group_sl %>">
                 </div>
                 <div class="form-group">
-                    <label for="country">Country</label>
-                    <input type="text" name = "country" id = "country" class = "form-control" value = "<%= typeof form != 'undefined' ? form.country : group.country %>">
+                    <label for="visa_number">Visa Number</label>
+                    <input type="text" name = "visa_number" id = "visa_number" class = "form-control" value = "<%= group.visa_number %>">
+                </div>
+                <div class="form-group">
+                    <label for="id">Visa ID Number</label>
+                    <input type="text" name = "visa_id" id = "visa_id" class = "form-control" value = "<%= group.visa_id %>">
+                </div>
+                <div class="form-group">
+                    <label for="visa_supplier">Visa Supplier</label>
+                    <input type="text" name = "visa_supplier" id = "visa_supplier" class = "form-control" value = "<%= group.visa_supplier %>">
+                </div>
+                <div class="form-group">
+                    <div class="ui-widget">
+                        <label for="zone">Zone: </label>
+                        <input id="zone" name = "zone" class = "form-control" value = "<%= group.zone.name %>">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="amount">Amount</label>
+                    <input type="text" name = "amount" id = "amount" class = "form-control" value = "<%= group.amount %>">
+                </div>
+                <div class="form-group">
+                    <label for="occupation">Occupation</label>
+                    <input type="text" name = "occupation" id = "occupation" class = "form-control" value = "<%= group.occupation %>">
+                </div>
+                <div class="form-group">
+                    <label for="image">Enjazit Image</label>
+                    <input type="file" name = "enjazit_image" id = "enjazit">
+                    <img src="/uploads/enjazit/<%= group.enjazit_image %>" alt="Enjazit Image" style = "width:200px; height : 200px;">
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <input type="submit" name = "submit" value = "Register" class = "btn btn-success">
+                    <input type="submit" name = "submit" value = "Update" class = "btn btn-success">
                 </div>
             </div>
     </form>

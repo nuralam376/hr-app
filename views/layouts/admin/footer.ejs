@@ -34,7 +34,9 @@
 <script>
   $(document).ready(function () {
     $('.sidebar-menu').tree();
-    $('#myTable').DataTable();
+    $('#myTable').DataTable({
+      "ordering": false
+    });
   })
 </script>
 </body>

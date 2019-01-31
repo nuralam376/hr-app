@@ -64,10 +64,13 @@ router.post("/register",auth,upload.any(),[
 ],GroupController.postGroupRegistration);
 router.get("/edit/:id",auth,GroupController.editGroup);
 router.post("/update/:id",auth,upload.any(),[
-    check("name").not().isEmpty().withMessage("Zone Name is required"),
-    check("country").not().isEmpty().withMessage("Country is required"),
-    sanitizeBody("name").toString(),
-    sanitizeBody("country").toString(),
+    check("group_sl").not().isEmpty().withMessage("Group Sl is required").isNumeric().withMessage("Group SL must be numeric"),
+    check("visa_number").not().isEmpty().withMessage("Visa Number required").isNumeric().withMessage("Visa Number must be numeric"),
+    check("visa_id").not().isEmpty().withMessage("Visa ID is required").isNumeric().withMessage("Visa Id must be numeric"),
+    check("visa_supplier").not().isEmpty().withMessage("Visa Supplier is required"),
+    check("zone").not().isEmpty().withMessage("Zone is required"),
+    check("amount").not().isEmpty().withMessage("Amount is required"),
+    check("occupation").not().isEmpty().withMessage("Occupation is required"),
 ],GroupController.updateGroup);
 router.delete("/delete/:id",auth,GroupController.deleteGroup);
 router.get("/:id",auth,GroupController.getGroup);

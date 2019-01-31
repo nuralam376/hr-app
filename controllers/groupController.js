@@ -9,7 +9,7 @@ const CompanyInfoModel = require("../models/companyInfoModel");
 const ZoneModel = require("../models/zoneModel");
 
 const moment = require("moment-timezone");
-
+const fs = require("fs");
 
 /** Validation Configuration */
 const {check,validationResult} = require("express-validator/check");
@@ -24,7 +24,7 @@ exports.getAllGroups = async(req,res) => {
         if(groups)
         {
             res.render("group/index",{
-                groups : groups,
+                groups : groups.reverse(),
                 moment : moment
             });
         }
@@ -68,7 +68,7 @@ exports.postGroupRegistration = async(req,res) => {
             amount : req.body.amount,
             occupation : req.body.occupation
         };
-       /** Checks if the Supplier uploads any file */
+       /** Checks whetere any file is uploaded */
        if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
        {
            if(req.files[0].fieldname == "enjazit_image")
@@ -97,32 +97,6 @@ exports.postGroupRegistration = async(req,res) => {
     }
 }
 
-/** Get group's Info */
-
-exports.getGroup = async(req,res) => {
-    try
-    {
-        let id = req.params.id;
-
-        let group = await GroupModel.findOne({_id : id, company : req.user.company});
-
-        if(group)
-        {
-            res.render("group/view",{
-                group : group
-            });
-        }
-        else
-        {
-            req.flash("danger","group Not found");
-            res.redirect("/group/");
-        }
-    }
-    catch(err)
-    {
-        console.log(err);
-    }
-}
 
 /** Edits group Info */
 
@@ -130,7 +104,7 @@ exports.editGroup = async(req,res) => {
     try
     {
         let id = req.params.id;
-        let group = await GroupModel.findOne({_id : id, company : req.user.company});
+        let group = await GroupModel.findOne({_id : id, company : req.user.company}).populate("zone");
 
         if(group)
         {
@@ -150,40 +124,59 @@ exports.updateGroup = async(req,res) => {
     try
     {
         let forms = {
-            name : req.body.name,
-            country : req.body.country
+            group_sl : req.body.group_sl,
+            id : req.body.id,
+            visa_number : req.body.visa_number,
+            visa_supplier : req.body.visa_supplier,
+            visa_id : req.body.visa_id,
+            zone : req.body.zone,
+            amount : req.body.amount,
+            occupation : req.body.occupation
         };
 
         let errors = validationResult(req);
-        let group = await GroupModel.findOne({_id : req.params.id, company : req.user.company});
+        let group = await GroupModel.findOne({_id : req.params.id, company : req.user.company}).populate("zone");
 
-        if(!errors.isEmpty())
+        
+        if(group)
         {
-            res.render("group/edit",{
-                errors : errors.array(),
-                form : forms,
-                group : group
-            });
-        }
-        else
-        {
-            let newgroup = {};
-            newgroup.name = forms.name;
-            newgroup.country = forms.country;
+            forms.enjazit_image = group.enjazit_image;
             
-            let groupUpdate = await GroupModel.findOneAndUpdate({_id : req.params.id,company : req.user.company},newgroup);
-
-            if(groupUpdate)
+            /** Checks whetere any file is uploaded */
+            if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
             {
-                req.flash("success","group Updated Successfully");
-                res.redirect("/group");
+                if(req.files[0].fieldname == "enjazit_image")
+                    forms.enjazit_image = req.files[0].filename;
+            }
+            if(!errors.isEmpty())
+            {
+                res.render("group/edit",{
+                    errors : errors.array(),
+                    form : forms,
+                    group : group,
+                    fileError : req.fileValidationError
+                });
             }
             else
             {
-                req.flash("error","group Deleted Successfully");
-                res.redirect("/group");
+                if(group.enjazit_image !== forms.enjazit_image)
+                {
+                    fs.unlink("./public/uploads/enjazit/"+group.enjazit_image, (err) => {
+                        if(err)
+                        {
+                            console.log(err);
+                        }
+                    });
+                }
+                await groupUpdate(req,res,forms,group);
             }
         }
+        else
+        {
+            req.flash("danger","Group Not Found");
+            res.redirect("/group");
+        }
+       
     }
     catch(err)
     {
@@ -206,6 +199,33 @@ exports.deleteGroup = async(req,res) => {
         {
             req.flash("danger","Something went wrong");
             res.redirect("/group");
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Get group's Info */
+
+exports.getGroup = async(req,res) => {
+    try
+    {
+        let id = req.params.id;
+
+        let group = await GroupModel.findOne({_id : id, company : req.user.company}).populate("zone");
+
+        if(group)
+        {
+            res.render("group/view",{
+                group : group
+            });
+        }
+        else
+        {
+            req.flash("danger","group Not found");
+            res.redirect("/group/");
         }
     }
     catch(err)
@@ -270,8 +290,53 @@ const groupSave = async(req,res,forms) =>
         let group = await CompanyInfoModel.findOne({company : req.user.company});
        res.render("group/register",{
            form : forms,
-           fileError : "File is required",
+           fileError : "Enjazit Image is required",
            group : group
        });
     }    
+}
+
+const groupUpdate = async(req,res,forms) =>
+{
+        /** Saves forms data in group object */
+        let group = {};
+        group.group_sl = forms.group_sl;
+        group.visa_number = forms.visa_number;
+        group.visa_supplier = forms.visa_supplier;
+        group.visa_id = forms.visa_id;
+        group.amount = forms.amount;
+        group.company = req.user.company;
+        group.occupation = forms.occupation;
+        group.enjazit_image = forms.enjazit_image;
+    
+        let zone = await ZoneModel.findOne({company : req.user.company, name : forms.zone}); // Finds Zone
+
+        /** If Zones found, then set previous zone to group */
+        if(zone)
+        {
+            group.zone = zone._id;
+        }
+        /** New Zone Created */
+        else
+        {
+            let newZone = new ZoneModel();
+            newZone.name = forms.zone;
+            newZone.country = "--";
+            newZone.company = req.user.company;
+            let newZoneSave = await newZone.save();
+            group.zone = newZoneSave._id;
+        }
+
+        let groupUpdate = await GroupModel.updateOne({_id : req.params.id, company : req.user.company},group); // Updates group data
+
+        if(groupUpdate)
+        {
+            req.flash("success","Group updated successfully");
+            res.redirect("/group");
+        }
+        else
+        {
+            req.flash("danger","Something went wrong");
+            res.redirect("/group");
+        }
 }
