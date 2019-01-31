@@ -17,26 +17,10 @@
                 <td><%= supplier.name %></td>
             </tr>
             <tr>
-                <th>Email</th>
-                <td><%= supplier.email %></td>
-            </tr>
-            <tr>
-                <th>Birth Date</th>
-                <td><%= supplier.birth_date %></td>
-            </tr>
-            <tr>
-                <th>Blood Group</th>
-                <td><%= supplier.blood_group %></td>
-            </tr>
-            <tr>
-                <th>National ID</th>
+                <th>NID / Passport No. </th>
                 <td><%= supplier.nid %></td>
             </tr>
             <tr>
-                <th>Passport ID</th>
-                <td><%= supplier.passport %></td>
-            </tr>
-            <tr>
                 <th>Present Address</th>
                 <td><%= supplier.present_address %></td>
             </tr>
@@ -44,19 +28,25 @@
                 <th>Present Address</th>
                 <td><%= supplier.present_address %></td>
             </tr>
-            <% if (supplier.supplier) { %>
-                <tr>
-                    <th>Assigned Supplier</th>
-                    <td><%= supplier.supplier.name %></td>
-                </tr>
-             <% } %>   
+            <tr>
+                <th>Contact Number</th>
+                <td><%= supplier.contact %></td>
+            </tr>
+            <tr>
+                <th>Introducer Name</th>
+                <td><%= supplier.introducer_name %></td>
+            </tr>
+            <tr>
+                <th>Introducer Number</th>
+                <td><%= supplier.introducer_number %></td>
+            </tr>
             <tr>
                 <th>Profile Photo</th>
-                <td> <img src="/uploads/user/<%= supplier.profile_photo %>" alt="" style = "height : auto; max-width : 400px;"></td>
+                <td> <img src="/uploads/supplier/<%= supplier.profile_photo %>" alt="" style = "height : auto; max-width : 400px;"></td>
             </tr>
             <tr>
                 <th>Passport Photo</th>
-                <td> <img src="/uploads/user/<%= supplier.passport_photo %>" alt="" style = "height : auto; max-width : 400px;"></td>
+                <td> <img src="/uploads/supplier/<%= supplier.passport_photo %>" alt="" style = "height : auto; max-width : 400px;"></td>
             </tr>
         </table>
 <% include ../layouts/admin/footer %>

@@ -9,22 +9,12 @@ const StatusSchema = require("./statusSchema");
 /** Supplier Table Field .*/
 
 const SupplierSchema = mongoose.Schema({
+    code : 
+    {
+        type : Number,
+        required : true
+    },
     name : 
-    {
-        type : String,
-        required : true
-    },
-    email : 
-    {
-        type : String,
-        required : true
-    },
-    birth_date :
-    {
-        type : String,
-        required : true
-    },
-    blood_group : 
     {
         type : String,
         required : true
@@ -34,7 +24,17 @@ const SupplierSchema = mongoose.Schema({
         type : Number,
         required : true
     },
-    passport :
+    contact : 
+    {
+        type : String,
+        required : true,
+    },
+    introducer_name : 
+    {
+        type : String,
+        required : true,
+    },
+    introducer_number : 
     {
         type : String,
         required : true

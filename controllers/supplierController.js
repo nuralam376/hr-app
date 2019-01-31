@@ -7,7 +7,6 @@ const moment = require("moment");
 const {check,validationResult} = require("express-validator/check");
 
 
-
 /** Created Events Module */
 const createdEvents = require("../util/events");
 
@@ -28,7 +27,8 @@ exports.getAllSuppliers = async(req,res) => {
         let suppliers = await SupplierModel.find({company : req.user.company});
 
         res.render("supplier/index",{
-            suppliers : suppliers
+            suppliers : suppliers.reverse(),
+            moment : moment,
         });
     }
     catch(err)
@@ -41,9 +41,12 @@ exports.getAllSuppliers = async(req,res) => {
 /** Shows Supplier Registration Page */
 
 exports.getSupplierRegistration = async(req,res) => {
+    let companyInfo = await CompanyInfoModel.findOne({company : req.user.company});
     try 
     {
-        res.render("supplier/register");
+        res.render("supplier/register",{
+            companyInfo : companyInfo
+        });
     }
     catch(err)
     {
@@ -56,16 +59,14 @@ exports.getSupplierRegistration = async(req,res) => {
 exports.postSupplierRegistration = async(req,res) => {
     try {
         let forms = {
+            code : req.body.code,
             name : req.body.name,
-            email : req.body.email,
-            blood : req.body.blood,
+            nid : req.body.nid,
             present_address : req.body.present_address,
             permanent_address : req.body.permanent_address,
-            birth_date : req.body.birth_date,
-            nid : req.body.nid,
-            passport : req.body.passport,
-            profile_photo : "dummy.jpeg",
-            passport_photo : "dummy.jpeg",
+            contact : req.body.contact,
+            introducer_name : req.body.introducer_name,
+            introducer_number : req.body.introducer_number
         };
 
         /** Checks if the Supplier uploads any file */
@@ -102,51 +103,7 @@ exports.postSupplierRegistration = async(req,res) => {
         }
         else
         {
-            /** Stores Forms data in supplier object */
-            let supplier = new SupplierModel();
-            supplier.name = forms.name;
-            supplier.email = forms.email;
-            supplier.birth_date = forms.birth_date;
-            supplier.blood_group = forms.blood;
-            supplier.nid = forms.nid;
-            supplier.passport = forms.passport;
-            supplier.present_address = forms.present_address;
-            supplier.permanent_address = forms.permanent_address;
-            supplier.profile_photo = forms.profile_photo;
-            supplier.passport_photo = forms.passport_photo;
-            supplier.company = req.user.company;      
-
-             /** Supplier Status */
-             let supplierStatus = {
-                type : "profile_created",
-                display_name : "Profile Created",
-                description : `${req.user.name} created profile of ${supplier.name}`,
-            };
-
-            supplier.events.push(supplierStatus);
-
-            
-            let company = await CompanyInfoModel.findOne({company : req.user.company}); // Finds the last Inserted Id of the Supplier
-            let supplierCount = company.supplier + 1; 
-            
-            supplier.seq_id =  "s_" + supplierCount; // Adds 1 in the Supplier Sequence Number
-
-            let newSupplier = await supplier.save(); // Saves New Supplier
-
-            if(newSupplier)
-            {
-                let companyInfo = {};
-                companyInfo.supplier = supplierCount;
-                let query = {company: req.user.company};
-                let companyInfoUpdate = await CompanyInfoModel.findOneAndUpdate(query,companyInfo); // Updates the Number of the Supplier
-                req.flash("success","New Supplier has been created");
-                res.redirect("/supplier");
-            }
-            else
-            {
-                req.flash("danger","Something went wrong");
-                res.redirect("/supplier");
-            }
+           await supplierSave(req,res,forms);
         }
         
     } 
@@ -202,14 +159,14 @@ exports.updateSupplier = async(req,res) => {
 
     try{
         let forms = {
+            code : req.body.code,
             name : req.body.name,
-            email : req.body.email,
-            blood : req.body.blood,
+            nid : req.body.nid,
             present_address : req.body.present_address,
             permanent_address : req.body.permanent_address,
-            birth_date : req.body.birth_date,
-            nid : req.body.nid,
-            passport : req.body.passport,
+            contact : req.body.contact,
+            introducer_name : req.body.introducer_name,
+            introducer_number : req.body.introducer_number
         };
 
        
@@ -239,9 +196,9 @@ exports.updateSupplier = async(req,res) => {
                 if(!errors.isEmpty())
                 {
                    
-                    res.render("users/edit",{
+                    res.render("supplier/edit",{
                         errors : errors.array(),
-                        supplier : supplier,
+                        supplier : newSupplier,
                         fileError : req.fileValidationError
                     });
                   
@@ -269,17 +226,14 @@ exports.updateSupplier = async(req,res) => {
     
                     let supplier = {};
                     supplier.name = forms.name;
-                    supplier.email = forms.email;
-                    supplier.birth_date = forms.birth_date;
-                    supplier.blood_group = forms.blood;
                     supplier.nid = forms.nid;
-                    supplier.passport = forms.passport;
                     supplier.present_address = forms.present_address;
                     supplier.permanent_address = forms.permanent_address;
-                    supplier.profile_photo = newSupplier.profile_photo;
-                    supplier.passport_photo = newSupplier.passport_photo;
+                    supplier.contact = forms.contact;
+                    supplier.introducer_name = forms.introducer_name;
+                    supplier.introducer_number = forms.introducer_number;
                     supplier.profile_photo = forms.profile_photo;
-                    supplier.passport_photo = forms.passport_photo;
+                    supplier.passport_photo = forms.passport_photo;              
                     supplier.company = req.user.company;
                     supplier.updated_at = Date.now();
                     
@@ -412,3 +366,64 @@ exports.getSupplier = async(req,res) => {
     }
 
 }; 
+
+/** Saves New Supplier */
+const supplierSave = async(req,res,forms) => {
+
+    if(forms.profile_photo && forms.passport_photo)
+    {
+
+        /** Stores Forms data in supplier object */
+        let supplier = new SupplierModel();
+        supplier.code = forms.code;
+        supplier.name = forms.name;
+        supplier.nid = forms.nid;
+        supplier.present_address = forms.present_address;
+        supplier.permanent_address = forms.permanent_address;
+        supplier.contact = forms.contact;
+        supplier.introducer_name = forms.introducer_name;
+        supplier.introducer_number = forms.introducer_number;
+        supplier.profile_photo = forms.profile_photo;
+        supplier.passport_photo = forms.passport_photo;
+        supplier.company = req.user.company;      
+   
+         /** Supplier Status */
+         let supplierStatus = {
+            type : "profile_created",
+            display_name : "Profile Created",
+            description : `${req.user.name} created profile of ${supplier.name}`,
+        };
+   
+        supplier.events.push(supplierStatus);
+   
+        
+        let company = await CompanyInfoModel.findOne({company : req.user.company}); // Finds the last Inserted Id of the Supplier
+        let supplierCount = forms.code; 
+        
+        supplier.seq_id =  "s_" + supplierCount; // Adds 1 in the Supplier Sequence Number
+   
+        let newSupplier = await supplier.save(); // Saves New Supplier
+   
+        if(newSupplier)
+        {
+            let companyInfo = {};
+            companyInfo.supplier = supplierCount;
+            let query = {company: req.user.company};
+            let companyInfoUpdate = await CompanyInfoModel.findOneAndUpdate(query,companyInfo); // Updates the Number of the Supplier
+            req.flash("success","New Supplier has been created");
+            res.redirect("/supplier");
+        }
+        else
+        {
+            req.flash("danger","Something went wrong");
+            res.redirect("/supplier");
+        }
+    }
+    else
+    {
+        res.render("supplier/register",{
+            form : forms,
+            fileError : "Both Images are required",
+        });
+    }
+}

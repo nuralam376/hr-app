@@ -61,6 +61,13 @@ router.post("/register",auth,upload.any(),[
     check("zone").not().isEmpty().withMessage("Zone is required"),
     check("amount").not().isEmpty().withMessage("Amount is required"),
     check("occupation").not().isEmpty().withMessage("Occupation is required"),
+    sanitizeBody("group_seq").trim().unescape(),
+    sanitizeBody("group_sl").trim().unescape(),
+    sanitizeBody("visa").trim().unescape(),
+    sanitizeBody("id").trim().unescape(),
+    sanitizeBody("supplier").trim().unescape(),
+    sanitizeBody("amount").trim().unescape(),
+    sanitizeBody("occupation").trim().unescape(),
 ],GroupController.postGroupRegistration);
 router.get("/edit/:id",auth,GroupController.editGroup);
 router.post("/update/:id",auth,upload.any(),[
@@ -71,6 +78,12 @@ router.post("/update/:id",auth,upload.any(),[
     check("zone").not().isEmpty().withMessage("Zone is required"),
     check("amount").not().isEmpty().withMessage("Amount is required"),
     check("occupation").not().isEmpty().withMessage("Occupation is required"),
+    sanitizeBody("group_sl").trim().unescape(),
+    sanitizeBody("visa").trim().unescape(),
+    sanitizeBody("id").trim().unescape(),
+    sanitizeBody("supplier").trim().unescape(),
+    sanitizeBody("amount").trim().unescape(),
+    sanitizeBody("occupation").trim().unescape(),
 ],GroupController.updateGroup);
 router.delete("/delete/:id",auth,GroupController.deleteGroup);
 router.get("/:id",auth,GroupController.getGroup);

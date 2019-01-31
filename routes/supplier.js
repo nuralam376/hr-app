@@ -55,48 +55,42 @@ function checkFileType(req,file,cb)
 router.get("/",auth,SupplierController.getAllSuppliers);
 router.get("/register",auth,SupplierController.getSupplierRegistration);
 router.post("/register",auth,upload.any(),[
+    check("code").not().isEmpty().withMessage("Code is required").isNumeric().withMessage("Code must be numeric"),
     check("name").not().isEmpty().withMessage("Name is required"),
-    check("email").not().isEmpty().withMessage("Email is required"),
-    check("email").isEmail().withMessage("Email must be valid"),
-    check("birth_date").not().isEmpty().withMessage("Birth Date is required"),
-    check("blood").not().isEmpty().withMessage("Blood Group is required"),
-    check("nid").not().isEmpty().withMessage("National ID is required").isNumeric().withMessage("National Id must be numeric"),
-    check("passport").not().isEmpty().withMessage("Passport Id is required"),
+    check("nid").not().isEmpty().withMessage("NID / Passport No. is required"),
+    check("contact").not().isEmpty().withMessage("Contact No. is required"),
+    check("introducer_name").not().isEmpty().withMessage("Introducer Name is required"),
+    check("introducer_number").not().isEmpty().withMessage("Introducer Number is required"),
     check("present_address").not().isEmpty().withMessage("Present Addres is required"),
     check("permanent_address").not().isEmpty().withMessage("Permanent Address is required"),
 
     sanitizeBody("name").trim().unescape(),
-    sanitizeBody("email").trim().unescape(),
-    sanitizeBody("password").trim().unescape(),
-    sanitizeBody("birth_date").trim().unescape(),
-    sanitizeBody("blood").trim().unescape(),
-    sanitizeBody("passport").trim().unescape(),
+    sanitizeBody("nid").trim().unescape(),
     sanitizeBody("present_address").trim().unescape(),
     sanitizeBody("permanent_address").trim().unescape(),
-    sanitizeBody("nid").trim().toInt(),
+    sanitizeBody("introducer_name").trim().unescape(),
+    sanitizeBody("introducer_number").trim().unescape(),
+    sanitizeBody("contact").trim().unescape()
 ],SupplierController.postSupplierRegistration);
 
 router.get("/edit/:id",auth,SupplierController.editSupplier);
 
 router.post("/update/:id",auth,upload.any(),[
     check("name").not().isEmpty().withMessage("Name is required"),
-    check("email").not().isEmpty().withMessage("Email is required"),
-    check("email").isEmail().withMessage("Email must be valid"),
-    check("birth_date").not().isEmpty().withMessage("Birth Date is required"),
-    check("blood").not().isEmpty().withMessage("Blood Group is required"),
-    check("nid").not().isEmpty().withMessage("National ID is required").isNumeric().withMessage("National Id must be numeric"),
-    check("passport").not().isEmpty().withMessage("Passport Id is required"),
+    check("nid").not().isEmpty().withMessage("NID / Passport No. is required"),
+    check("contact").not().isEmpty().withMessage("Contact No. is required"),
+    check("introducer_name").not().isEmpty().withMessage("Introducer Name is required"),
+    check("introducer_number").not().isEmpty().withMessage("Introducer Number is required"),
     check("present_address").not().isEmpty().withMessage("Present Addres is required"),
     check("permanent_address").not().isEmpty().withMessage("Permanent Address is required"),
+
     sanitizeBody("name").trim().unescape(),
-    sanitizeBody("email").trim().unescape(),
-    sanitizeBody("password").trim().unescape(),
-    sanitizeBody("birth_date").trim().unescape(),
-    sanitizeBody("blood").trim().unescape(),
-    sanitizeBody("passport").trim().unescape(),
+    sanitizeBody("nid").trim().unescape(),
     sanitizeBody("present_address").trim().unescape(),
     sanitizeBody("permanent_address").trim().unescape(),
-    sanitizeBody("nid").trim().toInt(),
+    sanitizeBody("introducer_name").trim().unescape(),
+    sanitizeBody("introducer_number").trim().unescape(),
+    sanitizeBody("contact").trim().unescape()
 ],SupplierController.updateSupplier);
 
 router.delete("/delete/:id",auth,SupplierController.deleteSupplier);

@@ -13,9 +13,10 @@
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>Email</th>
-                        <th>Passport ID</th>
+                        <th>NID / Passport</th>
+                        <th>Introducer Name</th>
                         <th>Photo</th>
+                        <th>Date</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,9 +25,10 @@
                             <tr>
                                 <td><a href = "/supplier/<%= supplier.seq_id %>"><%= supplier.seq_id %></a></td>
                                 <td><%= supplier.name %></td>
-                                <td><%= supplier.email %></td>
-                                <td><%= supplier.passport %></td>
+                                <td><%= supplier.nid %></td>
+                                <td><%= supplier.introducer_name %></td>
                                 <td><img src = "uploads\supplier\<%= supplier.profile_photo %>" height = "50px" width = "50px"></td>
+                                <td><%= moment(supplier.created_at).format("llll")%></td>
                             </tr>
                         <% }) %>
                     <% } %>

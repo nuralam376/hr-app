@@ -4,39 +4,32 @@
     <form action="/supplier/register" method = "POST" enctype = "multipart/form-data">
         <div class="row">
             <div class="col-md-6">
+                <% if(companyInfo.supplier != 0) { %>
+                    <label for="code">Code : </label>  
+                    <input readonly type="text" name = "code" id = "code" class = "form-control" value = "<%= companyInfo.supplier + 1 %>">
+                <% } else { %>  
+                    <label for="code">Start from your New Supplier Code : </label>
+                    <input type="text" name = "code" id = "code" class = "form-control" value = "<%= typeof form != 'undefined' ? form.code : '' %>">
+                <% } %>   
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text" name = "name" id = "name" class = "form-control" value = "<%= typeof form != 'undefined' ? form.name : '' %>">
                 </div>
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" name = "email" id = "email" class = "form-control" value = "<%= typeof form != 'undefined' ? form.email : '' %>"> 
-                </div>
-                <div class="form-group">
-                    <label for="birth_date">Birth Date</label>
-                    <input type="date" name = "birth_date" id = "name" class = "form-control" value = "<%= typeof form != 'undefined' ? form.birth_date : '' %>">
-                </div>
-                <div class="form-group">
-                    <label for="blood">Blood Group</label>
-                    <select name="blood" id="blood" class = "form-control">
-                        <option value="">Choose Blood Group</option>
-                        <option value="A+" <%= typeof form != 'undefined' && form.blood == 'A+' ? 'selected' : '' %>>A+</option>
-                        <option value="A-" <%= typeof form != 'undefined' && form.blood == 'A-' ? 'selected' : '' %>>A-</option>
-                        <option value="AB+" <%= typeof form != 'undefined' && form.blood == 'AB+' ? 'selected' : '' %>>AB+</option>
-                        <option value="AB-" <%= typeof form != 'undefined' && form.blood == 'AB-' ? 'selected' : '' %>>AB-</option>
-                        <option value="B+" <%= typeof form != 'undefined' && form.blood == 'B+' ? 'selected' : '' %>>B+</option>
-                        <option value="B-" <%= typeof form != 'undefined' && form.blood == 'B-' ? 'selected' : '' %>>B-</option>
-                        <option value="O+" <%= typeof form != 'undefined' && form.blood == 'O+' ? 'selected' : '' %>>O+</option>
-                        <option value="O-" <%= typeof form != 'undefined' && form.blood == 'O-' ? 'selected' : '' %>>O-</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="nid">National ID</label>
+                    <label for="nid">NID OR Passport No</label>
                     <input type="text" name = "nid" id = "nid" class = "form-control" value = "<%= typeof form != 'undefined' ? form.nid : '' %>">
                 </div>
                 <div class="form-group">
-                    <label for="passport">Passport ID</label>
-                    <input type="text" name = "passport" id = "passport" class = "form-control" value = "<%= typeof form != 'undefined' ? form.passport : '' %>">
+                    <label for="contact">Contact Number</label>
+                    <input type="text" name = "contact" id = "contact" class = "form-control" value = "<%= typeof form != 'undefined' ? form.contact : '' %>">
+                </div>
+                <div class="form-group">
+                    <label for="introducer_name">Introducer Name</label>
+                    <input type="text" name = "introducer_name" id = "introducer_name" class = "form-control" value = "<%= typeof form != 'undefined' ? form.introducer_name : '' %>">
+                </div>
+                <div class="form-group">
+                    <label for="introducer_number">Introducer Number</label>
+                    <input type="text" name = "introducer_number" id = "introducer_number" class = "form-control" value = "<%= typeof form != 'undefined' ? form.introducer_number : '' %>">
                 </div>
             </div>
             <div class="col-md-6">        
@@ -54,14 +47,14 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="profile_photo">Profile Photo</label>
+                    <label for="profile_photo">Supplier Photo</label>
                     <input type="file" name = "profile_photo" id = "profile_photo">
                     <img src="" alt="" style = "height:auto;max-width:500px;" id = "photo">
                 </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                    <label for="passport_photo">Passport Photo</label>
+                    <label for="passport_photo">Passport/NID Photo</label>
                     <input type="file" name = "passport_photo" id = "passport_photo">
                     <img src="" alt="" style = "height:auto;max-width:500px;" id = "photo1">
                 </div>
