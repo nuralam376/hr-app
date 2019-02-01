@@ -8,8 +8,8 @@
                 <ul class="timeline">
                 <% newSupplier.events.reverse().forEach(supplier => { %>
                     <li>
-                        <a target="_blank" href="https://www.totoprayogo.com/#"><%= supplier.display_name %></a>
-                        <a href="#" class="pull-right"><%= moment(supplier.time).format('llll'); %></a>
+                        <a href="javascript:void(0)"><%= supplier.display_name %></a>
+                        <a href="javascript:void(0)" class="pull-right"><%= moment(supplier.time).format('llll'); %></a>
                         <p><%= supplier.description %></p>
                     </li>
                 <% }); %>    

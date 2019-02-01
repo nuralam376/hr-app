@@ -9,22 +9,47 @@ const StatusSchema = require("./statusSchema");
 /** User Table Field .*/
 
 const UserSchema = mongoose.Schema({
+    code : 
+    {
+        type : Number,
+        required : true
+    },
     name : 
     {
         type : String,
         required : true
     },
-    email : 
+    father : 
+    {
+        type : String,
+        required : true
+    },
+    mother : 
+    {
+        type : String,
+        required : true
+    },
+    contact : 
     {
         type : String,
         required : true
     },
     birth_date :
     {
-        type : String,
+        type : Date,
         required : true
     },
     blood_group : 
+    {
+        type : String,
+        required : true
+    },
+    national : 
+    {
+        type : String,
+        required : true
+    },
+    gender : 
     {
         type : String,
         required : true
@@ -37,6 +62,16 @@ const UserSchema = mongoose.Schema({
     passport :
     {
         type : String,
+        required : true
+    },
+    issue : 
+    {
+        type : Date,
+        required : true
+    },
+    expiry : 
+    {
+        type : Date,
         required : true
     },
     present_address : 
@@ -64,7 +99,13 @@ const UserSchema = mongoose.Schema({
     {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Supplier',
-        required : false
+        required : true
+    },
+    group : 
+    {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Group',
+        required : true
     },
     
     company : 
@@ -73,7 +114,16 @@ const UserSchema = mongoose.Schema({
         ref: 'Company',
         required : false
     },
-
+    experience_image : 
+    {
+        type : String,
+        required: false
+    },
+    experience : 
+    {
+        type : String,
+        required : false
+    },
     seq_id : 
     {
         type : String,
@@ -83,7 +133,7 @@ const UserSchema = mongoose.Schema({
     created_at : 
     {
         type : Date,
-        required : true,
+        required : false,
         default : Date.now()
     },
     updated_at : 

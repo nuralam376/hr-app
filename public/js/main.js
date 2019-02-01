@@ -115,4 +115,17 @@ $(document).ready(function(){
             }
         })
     }
+
+    function checkUncheck() { 
+      
+        if ( $('#experience:checked').length > 0) {
+            $("#experience-div").show();
+        } else {
+            $("#experience-div").hide();
+        }
+    
+    }
+
+    $("#experience-div").hide();
+    $("#experience").on( "click", checkUncheck );
 });

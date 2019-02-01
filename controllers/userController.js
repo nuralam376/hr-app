@@ -14,6 +14,8 @@ const createdEvents = require("../util/events");
 let UserModel = require("../models/userModel");
 /** Supplier Model Schema */
 let SupplierModel = require("../models/supplierModel");
+/** Group Model Schema */
+let GroupModel = require("../models/groupModel");
 
 /** Company Info Model Schema */
 let CompanyInfoModel = require("../models/companyInfoModel");
@@ -51,9 +53,13 @@ exports.getRegistration = async(req,res) => {
     {
     
         let suppliers = await SupplierModel.find({company : req.user.company}).exec(); // Selects All the Suppliers
+        let groups = await GroupModel.find({company : req.user.company}).exec(); // Selects All the Groups
+        let companyInfo = await CompanyInfoModel.findOne({company : req.user.company});
 
         res.render("users/register",{
-            suppliers : suppliers
+            suppliers : suppliers,
+            companyInfo : companyInfo,
+            groups : groups
         });
        
     }
@@ -69,16 +75,23 @@ exports.postRegistration  = async(req,res) => {
     {
         /** Stores The Users Input Field in forms Object */
         let forms = {
+            code : req.body.code,
             name : req.body.name,
-            email : req.body.email,
+            father : req.body.father,
+            mother : req.body.mother,
+            contact : req.body.mother,
             blood : req.body.blood,
             present_address : req.body.present_address,
             permanent_address : req.body.permanent_address,
             birth_date : req.body.birth_date,
+            national : req.body.national,
+            gender : req.body.gender,
             nid : req.body.nid,
             passport : req.body.passport,
-            profile_photo : "dummy.jpeg",
-            passport_photo : "dummy.jpeg",
+            issue : req.body.issue,
+            expiry : req.body.expiry,
+            group : req.body.group,
+            supplier : req.body.supplier
         };
 
         /** Checks if the user uploads any file */
@@ -95,13 +108,9 @@ exports.postRegistration  = async(req,res) => {
             forms.passport_photo = req.files[1].filename;
         }
 
-          // Checks If the user has any supplier and assigned supplier to user
-          if(req.body.supplier !== "")
-          {
-              forms.supplier = req.body.supplier;
-          }
-
             let suppliers = await SupplierModel.find({company : req.user.company}).exec();
+            let groups = await GroupModel.find({company : req.user.company}).exec(); // Selects All the Groups
+            let companyInfo = await CompanyInfoModel.findOne({company : req.user.company});
             
             let errors = validationResult(req);
 
@@ -111,7 +120,9 @@ exports.postRegistration  = async(req,res) => {
                     errors : errors.array(),
                     form : forms,
                     suppliers : suppliers,
-                    fileError : req.fileValidationError
+                    fileError : req.fileValidationError,
+                    groups : groups,
+                    companyInfo : companyInfo
                 });
             }
             else if(typeof req.fileValidationError != undefined && req.fileValidationError != null)
@@ -125,59 +136,8 @@ exports.postRegistration  = async(req,res) => {
             }
         
         else
-        {
-            /** Stores the users data in User Object */
-            let user = new UserModel();
-            user.name = forms.name;
-            user.email = forms.email;
-            user.birth_date = forms.birth_date;
-            user.blood_group = forms.blood;
-            user.nid = forms.nid;
-            user.passport = forms.passport;
-            user.present_address = forms.present_address;
-            user.permanent_address = forms.permanent_address;
-            user.profile_photo = forms.profile_photo;
-            user.passport_photo = forms.passport_photo;
-            user.company = req.user.company;
-
-            /** User Status */
-            let userStatus = {
-                type : "profile_created",
-                display_name : "Profile Created",
-                description : `${req.user.name} created profile of ${user.name}`,
-            };
-
-            user.events.push(userStatus);
-
-            // Checks If the user has any supplier and assigned supplier to user
-            if(req.body.supplier !== "")
-            {
-                user.supplier = forms.supplier;
-            }
-
-            let company = await CompanyInfoModel.findOne({company : req.user.company}); // Finds the last Inserted Id of the User
-            let userCount = company.user + 1; 
-            
-            user.seq_id = "w_" + userCount; // Adds 1 in the User Sequence Number
-
-            let userSave = await user.save(); // Saves the new User
-
-            if(userSave)
-            {
-                let companyInfo = {};
-                companyInfo.user = userCount;
-                let query = {company: req.user.company};
-                let companyInfoUpdate = await CompanyInfoModel.findOneAndUpdate(query,companyInfo); // Updates the Number of the User
-                req.flash("success","New User has been created");
-                res.redirect("/pax");
-            }
-            else
-            {
-                req.flash("danger","Something went wrong");
-                res.redirect("/pax");
-            }
-            
-           
+        { 
+            await saveNewUser(req,res,forms,suppliers,groups,companyInfo);
         }
     }
     catch(error)
@@ -494,3 +454,100 @@ exports.getUser = async(req,res) => {
     }
 
 }; 
+
+
+/** Saves New User from User Form Data */
+const saveNewUser = async(req,res,forms,suppliers,groups,companyInfo) => {
+    /** Checks if both the images are exists */
+    if(forms.profile_photo && forms.passport_photo)
+    {
+        /** If the user has any experience */
+        if(req.body.expericnce == 1)
+        {
+            forms.expericnce = req.body.year + " years, " + req.body.month + "months , " + req.body.day + "days";
+           
+            /** Checks if the user uploads any experience file */
+            
+            if(typeof req.files[2] !== "undefined" && req.files[2].fieldname == "experience_image" && req.fileValidationError == null)
+            {
+                forms.expericnce_image = req.files[2].filename;
+            }
+            else
+            {
+                return res.render("users/register",{
+                    form : forms,
+                    suppliers : suppliers,
+                    fileError : "Experience Image is required",
+                    groups : groups,
+                    companyInfo : companyInfo
+                });
+            }
+
+            
+        }
+         /** Stores the users data in User Object */
+         let user = new UserModel();
+         user.code = forms.code;
+         user.name = forms.name;
+         user.father = forms.father;
+         user.mother = forms.mother;
+         user.contact = forms.contact;
+         user.birth_date = forms.birth_date;
+         user.blood_group = forms.blood;
+         user.nid = forms.nid;
+         user.passport = forms.passport;
+         user.issue = forms.issue;
+         user.expiry = forms.expiry;
+         user.present_address = forms.present_address;
+         user.permanent_address = forms.permanent_address;
+         user.national = forms.national;
+         user.gender = forms.gender;
+         user.profile_photo = forms.profile_photo;
+         user.passport_photo = forms.passport_photo;
+         user.group = forms.group;
+         user.supplier = forms.supplier;
+         user.company = req.user.company;
+         user.created_at = Date.now();
+
+         /** User Status */
+         let userStatus = {
+             type : "profile_created",
+             display_name : "Profile Created",
+             description : `${req.user.name} created profile of ${user.name}`,
+         };
+
+         user.events.push(userStatus);
+
+         let company = await CompanyInfoModel.findOne({company : req.user.company}); // Finds the last Inserted Id of the User
+         let userCount = forms.code; 
+         
+         user.seq_id = "w_" + userCount; // Adds 1 in the User Sequence Number
+
+         let userSave = await user.save(); // Saves the new User
+
+         if(userSave)
+         {
+             let companyInfo = {};
+             companyInfo.user = userCount;
+             let query = {company: req.user.company};
+             let companyInfoUpdate = await CompanyInfoModel.findOneAndUpdate(query,companyInfo); // Updates the Number of the User
+             req.flash("success","New User has been created");
+             res.redirect("/pax");
+         }
+         else
+         {
+             req.flash("danger","Something went wrong");
+             res.redirect("/pax");
+         }
+    }
+    else
+    {
+        res.render("users/register",{
+            form : forms,
+            suppliers : suppliers,
+            fileError : "Both Images are required",
+            groups : groups,
+            companyInfo : companyInfo
+        });
+    }
+}
