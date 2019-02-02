@@ -12,11 +12,12 @@
             <table id="myTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Code</th>
                         <th>Name</th>
-                        <th>Email</th>
+                        <th>Contact</th>
                         <th>Passport ID</th>
                         <th>Assigned Supplier</th>
+                        <th>Group</th>
                         <th>Photo</th>
                     </tr>
                 </thead>
@@ -24,15 +25,16 @@
                     <% if(users) { %>
                         <% users.forEach(function(user) { %>
                             <tr>
-                                <td><a href = "/pax/<%= user.seq_id %>"><%= user.seq_id %></a></td>
+                                <td><a href = "/pax/<%= user.seq_id %>"><%= user.code %></a></td>
                                 <td><%= user.name %></td>
-                                <td><%= user.email %></td>
+                                <td><%= user.contact %></td>
                                 <td><%= user.passport %></td>
                                 <% if(user.supplier) { %>
                                     <td><a href="/supplier/<%= user.supplier.seq_id %>"><%= user.supplier.name %></a></td>
                                 <% } else { %>
                                     <td>No Supplier</td>
                                 <% } %>
+                                <td><a href="/group/<%= user.group._id %>"><%= user.group.group_seq %> / <%= user.group.group_sl %></a></td>
                                 <td><img src = "uploads/user/<%= user.profile_photo %>" height = "50px" width = "50px"></td>
                             </tr>
                         <% }) %>

@@ -1,5 +1,5 @@
 <% include ../layouts/admin/header %>
-    <h1>ID : <%= newUser.seq_id %>
+    <h1>Code : <%= newUser.code %>
         <div class="pull-right">
             <a href = "/pax/timeline/<%= newUser.seq_id %>" class = "btn btn-primary">Show Timeline</a>
             <a href = "/pax/sticker/<%= newUser.seq_id %>" class = "btn btn-warning">Generate Sticker</a>
@@ -18,8 +18,16 @@
                 <td><%= newUser.name %></td>
             </tr>
             <tr>
-                <th>Email</th>
-                <td><%= newUser.email %></td>
+                <th>Father Name</th>
+                <td><%= newUser.father %></td>
+            </tr>
+            <tr>
+                <th>Mother Name</th>
+                <td><%= newUser.mother %></td>
+            </tr>
+            <tr>
+                <th>Contact</th>
+                <td><%= newUser.contact %></td>
             </tr>
             <tr>
                 <th>Birth Date</th>
@@ -30,6 +38,10 @@
                 <td><%= newUser.blood_group %></td>
             </tr>
             <tr>
+                <th>Gender</th>
+                <td><%= newUser.gender %></td>
+            </tr>
+            <tr>
                 <th>National ID</th>
                 <td><%= newUser.nid %></td>
             </tr>
@@ -38,6 +50,14 @@
                 <td><%= newUser.passport %></td>
             </tr>
             <tr>
+                <th>Date of issue</th>
+                <td><%= newUser.issue %></td>
+            </tr>
+            <tr>
+                <th>Date of Expiry</th>
+                <td><%= newUser.expiry %></td>
+            </tr>
+            <tr>
                 <th>Present Address</th>
                 <td><%= newUser.present_address %></td>
             </tr>
@@ -45,12 +65,21 @@
                 <th>Present Address</th>
                 <td><%= newUser.present_address %></td>
             </tr>
-            <% if (newUser.supplier) { %>
+            <tr>
+                <th>Supplier</th>
+                <td><%= newUser.supplier.name %></td>
+            </tr>
+            <tr>
+                <th>Group</th>
+                <td><%= newUser.group.group_seq %> / <%= newUser.group.group_sl %></td>
+            </tr>
+            <% if (newUser.experience) { %>
                 <tr>
-                    <th>Assigned Supplier</th>
-                    <td><%= newUser.supplier.name %></td>
+                    <th>Experience</th>
+                    <td><%= newUser.experience %></td>
                 </tr>
              <% } %>   
+             
             <tr>
                 <th>Profile Photo</th>
                 <td> <img src="/uploads/user/<%= newUser.profile_photo %>" alt="" style = "height : auto; max-width : 400px;"></td>

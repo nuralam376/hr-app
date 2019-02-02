@@ -30,7 +30,7 @@ let CompanyInfoModel = require("../models/companyInfoModel");
 exports.getAllUsers= async(req,res) => {
     try 
     {
-        let users = await UserModel.find({company : req.user.company}).populate("supplier"); // Finds the Users of the Logged in Admin's Company
+        let users = await UserModel.find({company : req.user.company}).populate("supplier").populate("group"); // Finds the Users of the Logged in Admin's Company
         
         if(users)
         {
@@ -79,7 +79,7 @@ exports.postRegistration  = async(req,res) => {
             name : req.body.name,
             father : req.body.father,
             mother : req.body.mother,
-            contact : req.body.mother,
+            contact : req.body.contact,
             blood : req.body.blood,
             present_address : req.body.present_address,
             permanent_address : req.body.permanent_address,
