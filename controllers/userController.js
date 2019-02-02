@@ -91,7 +91,8 @@ exports.postRegistration  = async(req,res) => {
             issue : req.body.issue,
             expiry : req.body.expiry,
             group : req.body.group,
-            supplier : req.body.supplier
+            supplier : req.body.supplier,
+            experience : req.body.experience
         };
 
         /** Checks if the user uploads any file */
@@ -461,16 +462,18 @@ const saveNewUser = async(req,res,forms,suppliers,groups,companyInfo) => {
     /** Checks if both the images are exists */
     if(forms.profile_photo && forms.passport_photo)
     {
+        console.log(req.body.expericnce);
+        console.log(req.files[2]);
         /** If the user has any experience */
-        if(req.body.expericnce == 1)
+        if(req.body.experience == 1)
         {
-            forms.expericnce = req.body.year + " years, " + req.body.month + "months , " + req.body.day + "days";
+            forms.experience = req.body.year + " years, " + req.body.month + "months , " + req.body.day + "days";
            
             /** Checks if the user uploads any experience file */
             
             if(typeof req.files[2] !== "undefined" && req.files[2].fieldname == "experience_image" && req.fileValidationError == null)
             {
-                forms.expericnce_image = req.files[2].filename;
+                forms.experience_image = req.files[2].filename;
             }
             else
             {
