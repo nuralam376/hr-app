@@ -72,6 +72,9 @@ $(document).ready(function(){
       $("#enjazit").change(function() {
         readURL(this,"#photo");
       });
+      $("#experience_image").change(function() {
+        readURL(this,"#photo2");
+      });
 
       
       function getZones()

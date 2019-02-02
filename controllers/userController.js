@@ -459,11 +459,32 @@ exports.getUser = async(req,res) => {
 
 /** Saves New User from User Form Data */
 const saveNewUser = async(req,res,forms,suppliers,groups,companyInfo) => {
+     /** Stores the users data in User Object */
+     let user = new UserModel();
+     user.code = forms.code;
+     user.name = forms.name;
+     user.father = forms.father;
+     user.mother = forms.mother;
+     user.contact = forms.contact;
+     user.birth_date = forms.birth_date;
+     user.blood_group = forms.blood;
+     user.nid = forms.nid;
+     user.passport = forms.passport;
+     user.issue = forms.issue;
+     user.expiry = forms.expiry;
+     user.present_address = forms.present_address;
+     user.permanent_address = forms.permanent_address;
+     user.national = forms.national;
+     user.gender = forms.gender;
+     user.group = forms.group;
+     user.supplier = forms.supplier;
+     user.company = req.user.company;
+     user.created_at = Date.now();
     /** Checks if both the images are exists */
     if(forms.profile_photo && forms.passport_photo)
     {
-        console.log(req.body.expericnce);
-        console.log(req.files[2]);
+        user.profile_photo = forms.profile_photo;
+        user.passport_photo = forms.passport_photo;
         /** If the user has any experience */
         if(req.body.experience == 1)
         {
@@ -485,32 +506,9 @@ const saveNewUser = async(req,res,forms,suppliers,groups,companyInfo) => {
                     companyInfo : companyInfo
                 });
             }
-
-            
+            user.experience_image = forms.experience_image;
+            user.experience = forms.experience;
         }
-         /** Stores the users data in User Object */
-         let user = new UserModel();
-         user.code = forms.code;
-         user.name = forms.name;
-         user.father = forms.father;
-         user.mother = forms.mother;
-         user.contact = forms.contact;
-         user.birth_date = forms.birth_date;
-         user.blood_group = forms.blood;
-         user.nid = forms.nid;
-         user.passport = forms.passport;
-         user.issue = forms.issue;
-         user.expiry = forms.expiry;
-         user.present_address = forms.present_address;
-         user.permanent_address = forms.permanent_address;
-         user.national = forms.national;
-         user.gender = forms.gender;
-         user.profile_photo = forms.profile_photo;
-         user.passport_photo = forms.passport_photo;
-         user.group = forms.group;
-         user.supplier = forms.supplier;
-         user.company = req.user.company;
-         user.created_at = Date.now();
 
          /** User Status */
          let userStatus = {
@@ -525,6 +523,7 @@ const saveNewUser = async(req,res,forms,suppliers,groups,companyInfo) => {
          let userCount = forms.code; 
          
          user.seq_id = "w_" + userCount; // Adds 1 in the User Sequence Number
+
 
          let userSave = await user.save(); // Saves the new User
 
