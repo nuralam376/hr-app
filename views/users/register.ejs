@@ -99,6 +99,13 @@
                     <input type="text" name = "national" id = "national" class = "form-control" value = "<%= typeof form != 'undefined' ? form.national : '' %>">
 
                 </div>
+                <div class="form-group">
+
+                        <label for="religion">Religion</label>
+    
+                        <input type="text" name = "religion" id = "religion" class = "form-control" value = "<%= typeof form != 'undefined' ? form.religion : '' %>">
+    
+                    </div>
 
                 <div class="form-group">
 
@@ -108,39 +115,28 @@
 
                         <option value="">Choose Gender</option>
 
-                        <option value="A+" <%= typeof form != 'undefined' && form.gender == 'male' ? 'selected' : '' %>>Male</option>
+                        <option value="male" <%= typeof form != 'undefined' && form.gender == 'male' ? 'selected' : '' %>>Male</option>
 
-                        <option value="A-" <%= typeof form != 'undefined' && form.gender == 'female' ? 'selected' : '' %>>Female</option>
+                        <option value="female" <%= typeof form != 'undefined' && form.gender == 'female' ? 'selected' : '' %>>Female</option>
 
                     </select>
 
                 </div>
-
                 <div class="form-group">
 
-                        <label for="group">Assign Group</label>
-
-                        <select name="group" id="group" class = "form-control">
-
-                            <option value="">Choose Group</option>
-
-                            <% if(groups.length) { %>
-
-                                <% groups.forEach(group =>  { %>
-
-                                    <option value="<%= group._id %>" 
-
-                                            <% if(typeof form != 'undefined' && typeof form.group != 'undefined' && form.group == group._id) { %> selected <% } %>
-
-                                        ><%= group.group_seq %>/ <%= group.group_sl %></option>
-
-                                <% }) %>
-
-                            <% } %>
-
+                        <label for="maritial">Maritial Status</label>
+    
+                        <select name="maritial" id="maritial" class = "form-control">
+                                <option value="">Choose Status</option>
+                            <option value="married" <%= typeof form != 'undefined' && form.maritial == 'married' ? 'selected' : '' %>>Married</option>
+    
+                            <option value="unmarried" <%= typeof form != 'undefined' && form.maritial == 'unmarried' ? 'selected' : '' %>>Unmarried</option>
+    
                         </select>
-
+    
                     </div>
+
+             
 
             </div>
 
@@ -192,6 +188,31 @@
                     <textarea name="permanent_address" id="permanent_address" cols="30" rows="6" class = "form-control"><%= typeof form != 'undefined' ? form.permanent_address : '' %></textarea>
 
                 </div>
+                <div class="form-group">
+
+                        <label for="group">Assign Group</label>
+
+                        <select name="group" id="group" class = "form-control">
+
+                            <option value="">Choose Group</option>
+
+                            <% if(groups.length) { %>
+
+                                <% groups.forEach(group =>  { %>
+
+                                    <option value="<%= group._id %>" 
+
+                                            <% if(typeof form != 'undefined' && typeof form.group != 'undefined' && form.group == group._id) { %> selected <% } %>
+
+                                        ><%= group.group_seq %>/ <%= group.group_sl %></option>
+
+                                <% }) %>
+
+                            <% } %>
+
+                        </select>
+
+                    </div>
 
                 <div class="form-group">
 
@@ -227,30 +248,32 @@
 
         <div class="row">
 
-            <div class="col-md-6">
+         <div class="col-md-12">
+                <div class="col-md-6">
 
-                    <div class="form-group">
-
-                            <label for="profile_photo">Profile Photo</label>
-
-                            <input type="file" name = "profile_photo" id = "profile_photo" style = "height:auto;max-width:300px;">
-
-                            <img src="" alt="" id = "photo">
-
-                        </div>
-
-            </div>
-
-            <div class="col-md-6">
-
-                <div class="form-group">
-
-                        <label for="passport_photo">Passport Photo</label>
-
-                        <input type="file" name = "passport_photo" id = "passport_photo" style = "height:auto;max-width:300px;">
-
-                        <img src="" alt="" id = "photo1">
+                        <div class="form-group">
+    
+                                <label for="profile_photo">Profile Photo</label>
+    
+                                <input type="file" name = "profile_photo" id = "profile_photo" style = "height:auto;max-width:300px;">
+    
+                                <img src="" alt="" id = "photo">
+    
+                            </div>
+    
                 </div>
+    
+                <div class="col-md-6">
+    
+                    <div class="form-group">
+    
+                            <label for="passport_photo">Passport Photo</label>
+    
+                            <input type="file" name = "passport_photo" id = "passport_photo" style = "height:auto;max-width:300px;">
+    
+                            <img src="" alt="" id = "photo1">
+                    </div>
+         </div>
 
         </div>
 

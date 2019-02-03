@@ -86,6 +86,8 @@ exports.postRegistration  = async(req,res) => {
             birth_date : req.body.birth_date,
             national : req.body.national,
             gender : req.body.gender,
+            religion : req.body.religion,
+            maritial : req.body.maritial,
             nid : req.body.nid,
             passport : req.body.passport,
             issue : req.body.issue,
@@ -164,12 +166,15 @@ exports.editUser = async(req,res) => {
           let user = await UserModel.findOne(query);
 
           let suppliers = await SupplierModel.find({company : req.user.company});
+          let groups = await GroupModel.find({company : req.user.company});
           
           if(user)
           {
             res.render("users/edit",{
                 newUser : user,
-                suppliers : suppliers
+                suppliers : suppliers,
+                groups : groups,
+                moment : moment
             });
         }
         else
@@ -344,6 +349,15 @@ exports.deleteUser = async(req,res) => {
                         }
                     });
             }
+            if(user.experience_image)
+            {
+                fs.unlink("./public/uploads/user/"+user.experience_image, (err) => {
+                    if(err)
+                        {
+                            console.log(err);
+                        }
+                    });
+            }
 
             let userDelete = await UserModel.deleteOne(query);
 
@@ -444,7 +458,7 @@ exports.getUser = async(req,res) => {
     try{
         let query = {seq_id : req.params.id, company : req.user.company};
 
-        let user = await UserModel.findOne(query).populate("supplier").exec();
+        let user = await UserModel.findOne(query).populate("supplier").populate("group").exec();
         res.render("users/view",{
             newUser : user
         });
@@ -476,6 +490,8 @@ const saveNewUser = async(req,res,forms,suppliers,groups,companyInfo) => {
      user.permanent_address = forms.permanent_address;
      user.national = forms.national;
      user.gender = forms.gender;
+     user.religion = forms.religion;
+     user.maritial = forms.maritial;
      user.group = forms.group;
      user.supplier = forms.supplier;
      user.company = req.user.company;
@@ -488,7 +504,9 @@ const saveNewUser = async(req,res,forms,suppliers,groups,companyInfo) => {
         /** If the user has any experience */
         if(req.body.experience == 1)
         {
-            forms.experience = req.body.year + " years, " + req.body.month + "months , " + req.body.day + "days";
+            forms.experience_year = req.body.year;
+            forms.experience_month = req.body.month;
+            forms.experience_day = req.body.day;
            
             /** Checks if the user uploads any experience file */
             
@@ -507,7 +525,9 @@ const saveNewUser = async(req,res,forms,suppliers,groups,companyInfo) => {
                 });
             }
             user.experience_image = forms.experience_image;
-            user.experience = forms.experience;
+            user.experience_year = forms.experience_year;
+            user.experience_month = forms.experience_month;
+            user.experience_day = forms.experience_day;
         }
 
          /** User Status */
@@ -533,7 +553,7 @@ const saveNewUser = async(req,res,forms,suppliers,groups,companyInfo) => {
              companyInfo.user = userCount;
              let query = {company: req.user.company};
              let companyInfoUpdate = await CompanyInfoModel.findOneAndUpdate(query,companyInfo); // Updates the Number of the User
-             req.flash("success","New User has been created");
+             req.flash("success","New PAX has been created");
              res.redirect("/pax");
          }
          else

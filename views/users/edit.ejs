@@ -1,5 +1,5 @@
 <% include ../layouts/admin/header %>
-    <h1>ID : <%= newUser.seq_id %></h1> 
+    <h1>Code : <%= newUser.code %></h1> 
     
     <form action = "/pax/update/<%= newUser._id %>" method = "POST" enctype = "multipart/form-data">
         <div class="row">
@@ -9,12 +9,25 @@
                     <input type="text" name = "name" id = "name" class = "form-control" value = "<%= newUser.name %>" >
                 </div>
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" name = "email" id = "email" class = "form-control" value = "<%= newUser.email %>" > 
+                    <label for="father">Father Name</label>
+                    <input type="text" name = "father" id = "father" class = "form-control" value = "<%= newUser.father %>" >
+                </div>
+                <div class="form-group">
+                    <label for="mother">Mother Name</label>
+                    <input type="text" name = "mother" id = "mother" class = "form-control" value = "<%= newUser.mother %>" >
+                </div>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" name = "name" id = "name" class = "form-control" value = "<%= newUser.name %>" >
+                </div>
+                <div class="form-group">
+                    <label for="contact">Contact No.</label>
+                    <input type="text" name = "contact" id = "contact" class = "form-control" value = "<%= newUser.contact %>" > 
                 </div>
                 <div class="form-group">
                     <label for="birth_date">Birth Date</label>
-                    <input type="date" name = "birth_date" id = "name" class = "form-control" value = "<%= newUser.birth_date %>" >
+                    <input readonly disabled type="text" class = "form-control" value = "<%= moment(new Date(newUser.birth_date)).format('MM/DD/YYYY');%>" >
+                    <input type="date" name = "birth_date" id = "birth_date" class = "form-control" value = "<%= moment(new Date(newUser.birth_date)).format('MM/DD/YYYY');%>" >
                 </div>
                 <div class="form-group">
                     <label for="blood">Blood Group</label>
@@ -31,6 +44,52 @@
                     </select>
                 </div>
                 <div class="form-group">
+
+                        <label for="national">Nationality</label>
+    
+                        <input type="text" name = "national" id = "national" class = "form-control" value = "<%= newUser.national %>">
+    
+                    </div>
+    
+                    <div class="form-group">
+    
+                        <label for="gender">Gender</label>
+    
+                        <select name="gender" id="gender" class = "form-control">
+    
+                            <option value="">Choose Gender</option>
+    
+                            <option value="male" <%= newUser.gender == 'male' ? 'selected' : '' %>>Male</option>
+    
+                            <option value="female" <%= newUser.gender == 'female' ? 'selected' : '' %>>Female</option>
+    
+                        </select>
+    
+                    </div>
+                    <div class="form-group">
+
+                            <label for="religion">Religion</label>
+        
+                            <input type="text" name = "religion" id = "religion" class = "form-control" value = "<%= newUser.religion %>">
+        
+                        </div>
+    
+                        <div class="form-group">
+
+                                <label for="maritial">Maritial Status</label>
+            
+                                <select name="maritial" id="maritial" class = "form-control">
+                                        <option value="">Choose Status</option>
+                                    <option value="married" <%= newUser.maritial == 'married' ? 'selected' : '' %>>Married</option>
+            
+                                    <option value="unmarried" <%= newUser.maritial == 'unmarried' ? 'selected' : '' %>>Unmarried</option>
+            
+                                </select>
+            
+                            </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
                     <label for="nid">National ID</label>
                     <input type="text" name = "nid" id = "nid" class = "form-control" value = "<%= newUser.nid %>" >
                 </div>
@@ -38,8 +97,22 @@
                     <label for="passport">Passport ID</label>
                     <input type="text" name = "passport" id = "passport" class = "form-control" value = "<%= newUser.passport %>" >
                 </div>
-            </div>
-            <div class="col-md-6">
+                <div class="form-group">
+
+                    <label for="issue">Date of issue</label>
+
+                    <input readonly disabled type="text" class = "form-control" value = "<%= moment(new Date(newUser.issue)).format('MM/DD/YYYY');%>" >
+                    <input type="date" name = "issue" id = "issue" class = "form-control" value = "<%= moment(new Date(newUser.issue)).format('MM/DD/YYYY');%>" >
+
+                </div>
+                <div class="form-group">
+
+                    <label for="expiry">Date of expiry</label>
+
+                    <input readonly disabled type="text" class = "form-control" value = "<%= moment(new Date(newUser.expiry)).format('MM/DD/YYYY');%>" >
+                    <input type="date" name = "expiry" id = "expiry" class = "form-control" value = "<%= moment(new Date(newUser.expiry)).format('MM/DD/YYYY');%>" >
+
+                </div>
                 <div class="form-group">
                     <label for="present_address">Present Address</label>
                     <textarea name="present_address" id="present_address" cols="30" rows="5" class = "form-control" ><%= newUser.present_address %></textarea>
@@ -48,6 +121,32 @@
                     <label for="permanent_address">Permanent Address</label>
                     <textarea name="permanent_address" id="permanent_address" cols="30" rows="5" class = "form-control"><%= newUser.permanent_address %></textarea>
                 </div>
+                
+                <div class="form-group">
+    
+                        <label for="group">Assign Group</label>
+
+                        <select name="group" id="group" class = "form-control">
+
+                            <option value="">Choose Group</option>
+
+                            <% if(groups.length) { %>
+
+                                <% groups.forEach(group =>  { %>
+
+                                    <option value="<%= group._id %>" 
+
+                                            <% if(newUser.group.equals(group._id)) { %> selected <% } %>
+
+                                        ><%= group.group_seq %>/ <%= group.group_sl %></option>
+
+                                <% }) %>
+
+                            <% } %>
+
+                        </select>
+
+                    </div>
                 <div class="form-group">
                     <label for="supplier">Assign Supplier</label>
                     <select name="supplier" id="supplier" class = "form-control">
@@ -83,7 +182,157 @@
                 </div>
             </div>
         </div>
-       
+       <div class="col-md-12">
+           <% if(newUser.experience_year) { %>
+                <div class="form-group" >
+
+                    <label for="experience_image">Experience Image</label>
+                    <input type="file" name = "experience_image" id = "experience_image">
+                    <img src="" alt="" style = "height:auto;max-width:500px;" id = "photo2">
+                    <img src="/uploads/user/<%= newUser.experience_image %>" alt="" style = "height:auto;max-width:500px;">
+                </div>
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+
+                            <label for="year">Year</label>
+
+                            <select name="year" id="year" class = "form-control">
+
+                                <% for(let i = 0; i <= 100; i++) { %>
+
+                                    <option value="<%= i %>" <%= newUser.experience_year == i ? 'selected' : '' %>><%= i %></option>
+
+                                <% } %>
+
+                            </select>
+                        </div>
+                     </div>
+                     <div class="col-md-4">
+
+                            <div class="form-group">
+    
+                                <label for="year">Month</label>
+    
+                                <select name="month" id="month" class = "form-control">
+    
+                                    <% for(let i = 0; i <= 100; i++) { %>
+    
+                                        <option value="<%= i %>" <%= newUser.experience_month == i ? 'selected' : '' %>><%= i %></option>
+    
+                                    <% } %>
+    
+                                </select>
+                            </div>
+                         </div>
+                         <div class="col-md-4">
+
+                                <div class="form-group">
+        
+                                    <label for="year">Day</label>
+        
+                                    <select name="day" id="day" class = "form-control">
+        
+                                        <% for(let i = 0; i <= 100; i++) { %>
+        
+                                            <option value="<%= i %>" <%= newUser.experience_day == i ? 'selected' : '' %>><%= i %></option>
+        
+                                        <% } %>
+        
+                                    </select>
+                                </div>
+                             </div>
+           <% } else {  %>  
+            <div class="form-group">
+
+                    <input type="checkbox" name = "experience" value = "1" id = "experience">
+
+                    <label for="experience">Any Experience</label>
+
+                </div>
+
+                <div class="div" id = "experience-div">
+
+                        <div class="form-group" >
+
+                            <label for="experience_image">Experience Image</label>
+                            <input type="file" name = "experience_image" id = "experience_image">
+                            <img src="" alt="" style = "height:auto;max-width:500px;" id = "photo2">
+
+                        </div>
+                        <div class="col-md-4">
+
+                                    <div class="form-group">
+    
+                                        <label for="year">Year</label>
+    
+                                        <select name="year" id="year" class = "form-control">
+    
+                                            <% for(let i = 0; i <= 100; i++) { %>
+    
+                                                <option value="<%= i %>" <%= typeof form != 'undefined' && form.year == 'male' ? 'selected' : '' %>><%= i %></option>
+    
+                                            <% } %>
+    
+                                        </select>
+    
+                                    </div>
+    
+                               
+    
+                            </div>
+                            <div class="col-md-4">
+
+                                    <div class="form-group">
+        
+                                        <div class="form-group">
+        
+                                            <label for="month">Month</label>
+        
+                                            <select name="month" id="month" class = "form-control">
+        
+                                                <% for(let i = 0; i <= 11; i++) { %>
+        
+                                                    <option value="<%= i %>" <%= typeof form != 'undefined' && form.year == 'male' ? 'selected' : '' %>><%= i %></option>
+        
+                                                <% } %>
+        
+                                            </select>
+        
+                                        </div>
+        
+                                    </div>
+        
+                                </div>
+        
+                                <div class="col-md-4">
+        
+                                        <div class="form-group">
+        
+                                                <div class="form-group">
+        
+                                                    <label for="day">Day</label>
+        
+                                                    <select name="day" id="day" class = "form-control">
+        
+                                                        <% for(let i = 0; i <= 30; i++) { %>
+        
+                                                            <option value="<%= i %>" <%= typeof form != 'undefined' && form.year == 'male' ? 'selected' : '' %>><%= i %></option>
+        
+                                                        <% } %>
+        
+                                                    </select>
+        
+                                                </div>
+        
+                                            </div>
+        
+                                </div>
+                </div>        
+                        
+           <% } %> 
+
+       </div>
       
         <div class="form-group">
             <input type="submit" name = "submit" value = "Update" class = "btn btn-success">

@@ -54,6 +54,16 @@ const UserSchema = mongoose.Schema({
         type : String,
         required : true
     },
+    religion : 
+    {
+        type : String,
+        required : true
+    },
+    maritial : 
+    {
+        type : String,
+        required : true
+    },
     nid : 
     {
         type : Number,
@@ -119,9 +129,19 @@ const UserSchema = mongoose.Schema({
         type : String,
         required: false
     },
-    experience : 
+    experience_year : 
     {
-        type : String,
+        type : Number,
+        required : false
+    },
+    experience_month : 
+    {
+        type : Number,
+        required : false
+    },
+    experience_day : 
+    {
+        type : Number,
         required : false
     },
     seq_id : 

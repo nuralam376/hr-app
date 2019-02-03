@@ -73,11 +73,15 @@
                 <th>Group</th>
                 <td><%= newUser.group.group_seq %> / <%= newUser.group.group_sl %></td>
             </tr>
-            <% if (newUser.experience) { %>
+            <% if (newUser.experience_year) { %>
                 <tr>
                     <th>Experience</th>
-                    <td><%= newUser.experience %></td>
+                    <td><%= newUser.experience_year %> year, <%= newUser.experience_month %> months, <%= newUser.experience_day %> days,</td>
                 </tr>
+                <tr>
+                        <th>Experience Image</th>
+                        <td> <img src="/uploads/user/<%= newUser.experience_image %>" alt="" style = "height : auto; max-width : 400px;"></td>
+                    </tr>
              <% } %>   
              
             <tr>

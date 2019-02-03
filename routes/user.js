@@ -70,15 +70,25 @@ router.post("/register",auth,upload.any(),[
     check("expiry").not().isEmpty().withMessage("Passport Date of expiry is required"),
     check("present_address").not().isEmpty().withMessage("Present Address is required"),
     check("permanent_address").not().isEmpty().withMessage("Permanent Address is required"),
+    check("gender").not().isEmpty().withMessage("Gender is required"),
+    check("religion").not().isEmpty().withMessage("Religion is required"),
+    check("maritial").not().isEmpty().withMessage("Maritial Status is required"),
     check("group").not().isEmpty().withMessage("Group is required"),
     check("supplier").not().isEmpty().withMessage("Supplier is required"),
     sanitizeBody("name").trim().unescape(),
-    sanitizeBody("email").trim().unescape(),
-    sanitizeBody("birth_date").trim().unescape(),
     sanitizeBody("blood").trim().unescape(),
     sanitizeBody("present_address").trim().unescape(),
     sanitizeBody("permanent_address").trim().unescape(),
-    sanitizeBody("nid").trim().toInt()
+    sanitizeBody("gender").trim().unescape(),
+    sanitizeBody("father").trim().unescape(),
+    sanitizeBody("mother").trim().unescape(),
+    sanitizeBody("contact").trim().unescape(),
+    sanitizeBody("gender").trim().unescape(),
+    sanitizeBody("religion").trim().unescape(),
+    sanitizeBody("maritial").trim().unescape(),
+    sanitizeBody("national").trim().unescape(),
+    sanitizeBody("nid").trim().unescape(),
+    sanitizeBody("passport").trim().unescape(),
 ],UserController.postRegistration);
 
 router.get("/edit/:id",auth,UserController.editUser);
