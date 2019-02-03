@@ -2,7 +2,7 @@
 
 /** Required modules */
 const fs = require("fs");
-var moment = require('moment-timezone');
+const moment = require('moment-timezone');
 
 /** Validation Configuration */
 const {check,validationResult} = require("express-validator/check");
@@ -204,45 +204,85 @@ exports.updateUser = async(req,res) => {
         /** Stores the forms data */
         let forms = {
             name : req.body.name,
-            email : req.body.email,
+            father : req.body.father,
+            mother : req.body.mother,
+            contact : req.body.contact,
             blood : req.body.blood,
             present_address : req.body.present_address,
             permanent_address : req.body.permanent_address,
             birth_date : req.body.birth_date,
+            national : req.body.national,
+            gender : req.body.gender,
+            religion : req.body.religion,
+            maritial : req.body.maritial,
             nid : req.body.nid,
             passport : req.body.passport,
+            issue : req.body.issue,
+            expiry : req.body.expiry,
+            group : req.body.group,
+            supplier : req.body.supplier,
+            experience_year : req.body.experience_year,
+            experience_month : req.body.experience_month,
+            experience_day : req.body.experience_day
         };
 
        
         let query = {_id : req.params.id, company : req.user.company};
 
         let newUser = await UserModel.findOne(query);
+        let suppliers = await SupplierModel.find({company : req.user.company});
+        let groups = await GroupModel.find({company : req.user.company});
 
         let errors = validationResult(req);
         forms.profile_photo = newUser.profile_photo;
         forms.passport_photo = newUser.passport_photo;
+        if(newUser.experience_image)
+        {
+            forms.experience_image = newUser.experience_image;
+            forms.experience_year = req.body.year;
+            forms.experience_month = req.body.month;
+            forms.experience_day = req.body.day;
+        }
+        else
+        {
+            forms.experience_image = null;
+        }
 
         /** Checks whether the user updates the picture */
         if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
         {
             if(req.files[0].fieldname == "profile_photo")
                 forms.profile_photo = req.files[0].filename;
-            else
+            else if (req.files[0].fieldname == "passport_photo")
                 forms.passport_photo = req.files[0].filename;
+            else if(req.files[0].fieldname == "experience_image")
+                forms.experience_image = req.files[0].filename;
         }
         
         if(typeof req.files[1] !== "undefined" && req.files[1].fieldname == "passport_photo" && req.fileValidationError == null)
         {
             forms.passport_photo = req.files[1].filename;
         }
+        else if(typeof req.files[1] !== "undefined" && req.files[1].fieldname == "experience_image" && req.fileValidationError == null)
+        {
+            forms.experience_image = req.files[1].filename;
+        }
 
+        if(typeof req.files[2] !== "undefined" && req.files[2].fieldname == "experience_image" && req.fileValidationError == null)
+        {
+            forms.experience_image = req.files[1].filename;
+        }
+    
         if(!errors.isEmpty())
         {
             
             res.render("users/edit",{
                 errors : errors.array(),
                 newUser : newUser,
-                fileError : req.fileValidationError
+                fileError : req.fileValidationError,
+                suppliers : suppliers,
+                groups : groups,
+                moment : moment
             });
             
         }
@@ -267,42 +307,17 @@ exports.updateUser = async(req,res) => {
                         }
                     });
             }
+            if(newUser.experience_image !== forms.experience_image && newUser.experience_image != null)
+            {
+                fs.unlink("./public/uploads/user/"+newUser.experience_image, (err) => {
+                    if(err)
+                        {
+                            console.log(err);
+                        }
+                    });
+            }
 
-            /** Saves the User Input Data */
-            let user = {};
-            user.name = forms.name;
-            user.email = forms.email;
-            user.birth_date = forms.birth_date;
-            user.blood_group = forms.blood;
-            user.nid = forms.nid;
-            user.passport = forms.passport;
-            user.present_address = forms.present_address;
-            user.permanent_address = forms.permanent_address;
-            user.profile_photo = newUser.profile_photo;
-            user.passport_photo = newUser.passport_photo;
-            user.profile_photo = forms.profile_photo;
-            user.passport_photo = forms.passport_photo;
-            user.company = req.user.company;
-            user.updated_at = Date.now();
-
-            // Checks If the user has any supplier and assigned supplier to user
-            if(req.body.supplier !== "")
-            {
-                forms.supplier = req.body.supplier;
-                user.supplier = forms.supplier;
-            }
-            await createdEvents(req,user,req.params.id,"user");
-            let userUpdate = await UserModel.updateOne(query,user);
-            if(userUpdate)
-            {
-                req.flash("success","PAX Details Updated");
-                res.redirect("/pax");
-            }
-            else
-            {
-                req.flash("danger","Something went wrong");
-                res.redirect("/pax");
-            }
+           await userUpdate(req,res,forms,query,newUser,suppliers,groups);
           
         }
         
@@ -572,4 +587,75 @@ const saveNewUser = async(req,res,forms,suppliers,groups,companyInfo) => {
             companyInfo : companyInfo
         });
     }
+}
+
+/** Updates User Data */
+const userUpdate = async(req,res,forms,query,newUser,suppliers,groups) => {
+     /** Saves the User Input Data */
+     let user = {};
+     user.name = forms.name;
+     user.father = forms.father;
+     user.mother = forms.mother;
+     user.contact = forms.contact;
+     user.birth_date = forms.birth_date;
+     user.blood_group = forms.blood;
+     user.nid = forms.nid;
+     user.passport = forms.passport;
+     user.issue = forms.issue;
+     user.expiry = forms.expiry;
+     user.present_address = forms.present_address;
+     user.permanent_address = forms.permanent_address;
+     user.national = forms.national;
+     user.gender = forms.gender;
+     user.religion = forms.religion;
+     user.maritial = forms.maritial;
+     user.group = forms.group;
+     user.supplier = forms.supplier;   
+     user.profile_photo = forms.profile_photo;
+     user.passport_photo = forms.passport_photo;
+     
+
+        /** If the user has any experience */
+        if(req.body.experience == 1)
+        {
+            forms.experience_year = req.body.year;
+            forms.experience_month = req.body.month;
+            forms.experience_day = req.body.day;
+            if(forms.experience_image)
+            {
+                user.experience_image = forms.experience_image;
+                user.experience_year = forms.experience_year;
+                user.experience_month = forms.experience_month;
+                user.experience_day = forms.experience_day;
+            }
+            else
+            {
+                return res.render("users/edit",{
+                    newUser : newUser,
+                    suppliers : suppliers,
+                    fileError : "Experience Image is required",
+                    groups : groups,
+                    moment : moment,
+
+                });
+            }
+        }
+        user.experience_image = forms.experience_image;
+        user.experience_year = forms.experience_year;
+        user.experience_month = forms.experience_month;
+        user.experience_day = forms.experience_day;
+
+     await createdEvents(req,user,req.params.id,"user");
+     let userUpdatedData = await UserModel.updateOne(query,user);
+
+     if(userUpdatedData)
+     {
+         req.flash("success","PAX Details Updated");
+         res.redirect("/pax");
+     }
+     else
+     {
+         req.flash("danger","Something went wrong");
+         res.redirect("/pax");
+     }
 }

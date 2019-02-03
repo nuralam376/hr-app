@@ -73,7 +73,7 @@
                 <th>Group</th>
                 <td><%= newUser.group.group_seq %> / <%= newUser.group.group_sl %></td>
             </tr>
-            <% if (newUser.experience_year) { %>
+            <% if (newUser.experience_year || newUser.experience_month || newUser.experience_day) { %>
                 <tr>
                     <th>Experience</th>
                     <td><%= newUser.experience_year %> year, <%= newUser.experience_month %> months, <%= newUser.experience_day %> days,</td>
