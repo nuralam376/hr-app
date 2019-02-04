@@ -6,40 +6,21 @@
         
         <table class = "table table-bordered" id = "sticker">
                 <tr>
-                    <th>Company Name</th>
-                    <td><%= newUser.company.name %></td>
+                    <th>Code</th>
+                    <td><%= newUser.code %></td>
                 </tr>
                 <tr>
-                    <th>Worker ID</th>
-                    <td><%= newUser.seq_id %></td>
+                    <th>Reference</th>
+                    <td><%= newUser.supplier.name %></td>
                 </tr>
                 <tr>
-                    <th>Name</th>
-                    <td><%= newUser.name %></td>
+                    <th>Country</th>
+                    <td><%= zone.country %></td>
                 </tr>
                 <tr>
-                    <th>National ID</th>
-                    <td><%= newUser.nid %></td>
+                    <th>Occupation</th>
+                    <td><%= newUser.group.occupation %></td>
                 </tr>
-                <tr>
-                    <th>Passport ID</th>
-                    <td><%= newUser.passport %></td>
-                </tr>
-                <% if (newUser.supplier) { %>
-                    <tr>
-                        <th>Supplier ID</th>
-                        <td><%= newUser.supplier.seq_id %></td>
-                    </tr>
-                    <tr>
-                        <th>Supplier Name</th>
-                        <td><%= newUser.supplier.name %></td>
-                    </tr>
-                <% } else { %>   
-                    <tr>
-                        <th>Suppplier</th>
-                        <td>N/A</td>
-                    </tr>
-                <% } %>
             </table>
         </div>    
 <% include ../layouts/admin/footer %>

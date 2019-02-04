@@ -3,20 +3,7 @@ const vfsFonts = require('../public/bower_components/pdfmake/build/vfs_fonts');
 
 pdfMake.vfs = vfsFonts.pdfMake.vfs;
 
-const pdf = (res,user) => {
-
-    let supplier = {};
-    
-    if(typeof user.supplier !== "undefined")
-    {
-        supplier.seq_id = user.supplier.seq_id;    
-        supplier.name = user.supplier.name;    
-    }
-    else
-    {
-        supplier.seq_id = "N/A";    
-        supplier.name = "N/A";    
-    }
+const pdf = (res,user,zone) => {
     var documentDefinition = {
         content: [
            {
@@ -26,13 +13,10 @@ const pdf = (res,user) => {
                  widths: [ 200, 200, 200, 200],
                  padding : [20,10,10,10],
                  body: [
-                    ['Company Name: ', user.company.name],
-                    ['Worker ID: ', user.seq_id],
-                    ['Name', user.name],
-                    ['National ID: ', user.nid],
-                    ['Passport ID: ', user.passport],
-                    ['Supplier ID: ', supplier.seq_id],
-                    ['Supplier Name: ', supplier.name],
+                    ['Code: ', user.code],
+                    ['Reference : ', user.supplier.name],
+                    ['Country : ', zone.country],
+                    ['Occupation : ', user.group.occupation],
                  ]
               },
               layout: 'noBorders'
@@ -61,7 +45,7 @@ const pdf = (res,user) => {
     };
   
     const pdfDoc = pdfMake.createPdf(documentDefinition);
-    let filename = user.seq_id + "_" + supplier.seq_id + ".pdf";
+    let filename = user.code + "_" + zone.country + ".pdf";
 
     pdfDoc.getBase64((data)=>{
         res.setHeader('Content-disposition', 'attachment; filename=' + filename);

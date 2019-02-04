@@ -17,6 +17,9 @@ let SupplierModel = require("../models/supplierModel");
 /** Group Model Schema */
 let GroupModel = require("../models/groupModel");
 
+/** Group Model Schema */
+let ZoneModel = require("../models/zoneModel");
+
 /** Company Info Model Schema */
 let CompanyInfoModel = require("../models/companyInfoModel");
 
@@ -406,10 +409,12 @@ exports.getUsersSticker = async(req,res) => {
     try{
         let query = {seq_id : req.params.id, company : req.user.company};
 
-        let user = await UserModel.findOne(query).populate("supplier").populate("company").exec();
+        let user = await UserModel.findOne(query).populate("supplier").populate("group").exec();
+        let zone = await ZoneModel.findOne({_id : user.group.zone});
 
         res.render("users/sticker",{
-            newUser : user
+            newUser : user,
+            zone : zone
         });
     }
     catch(error)
@@ -428,11 +433,12 @@ exports.downloadUsersSticker = async(req,res) => {
     try{
         let query = {seq_id : req.params.id, company : req.user.company};
 
-        let user = await UserModel.findOne(query).populate("supplier").populate("company").exec();
-
+        let user = await UserModel.findOne(query).populate("supplier").populate("group").exec();
+        let zone = await ZoneModel.findOne({_id : user.group.zone});
+    
         let stickerPdf = require("../util/pdfmake");
 
-        stickerPdf(res,user);
+        stickerPdf(res,user,zone);
        
     }
     catch(error)
