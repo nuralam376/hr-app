@@ -1,0 +1,46 @@
+<% include ../layouts/admin/header %>
+    <div style = "text-align: center">
+        <h1>Search By PAX Code</h1>
+
+        <form action="/medical/pax" method = "POST">
+            <div class="row">
+                <div class="col-md-offset-4 col-md-4 ">
+                    <div class="form-group">
+                        <label for="code">PAX Code</label>
+                        <input type="text" name = "code" id = "code" class = "form-control" value = "<%= typeof form != 'undefined' ? form.code : '' %>">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <input type="submit" name = "submit" value = "Search" class = "btn btn-success">
+                    </div>
+                </div>
+        </form>
+    </div>
+    <% if(pax) { %>
+        <table class = "table table-bordered">
+            <tr>
+                <th></th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>PAX Name</th>
+                <td><%= pax.name %></td>
+            </tr>
+            <tr>
+                <th>PAX No. </th>
+                <td><%= pax.passport %></td>
+            </tr>
+            <tr>
+                <th>Reference</th>
+                <td><a href="/supplier/<%= pax.supplier.seq_id %>"><%= pax.supplier.name %></a></td>
+            </tr>
+            <tr>
+                <th>Group</th>
+                <td><a href="/group/<%= pax.group._id %>"><%= pax.group.group_seq %> / <%= pax.group.group_sl %></a></td>
+            </tr>
+        </table>
+    <% } else { %>    
+        <h1><%= result %></h1>
+    <% } %>
+<% include ../layouts/admin/footer %>

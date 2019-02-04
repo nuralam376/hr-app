@@ -88,6 +88,7 @@ const forgetPassword = require("./controllers/forgetPasswordController");
 const changePassword = require("./controllers/changePasswordController");
 const zone = require("./routes/zone");
 const group = require("./routes/group");
+const medical = require("./routes/medical");
 
 
 /** Other Routes */
@@ -102,6 +103,7 @@ app.use("/forget-password",forgetPassword);
 app.use("/change-password",changePassword);
 app.use("/zone",zone);
 app.use("/group",group);
+app.use("/medical",medical);
 
 // Start the server
 app.listen(port,function(){
