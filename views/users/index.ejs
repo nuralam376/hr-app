@@ -18,6 +18,7 @@
                         <th>Passport ID</th>
                         <th>Assigned Supplier</th>
                         <th>Group</th>
+                        <th>Date</th>
                         <th>Photo</th>
                     </tr>
                 </thead>
@@ -35,6 +36,7 @@
                                     <td>No Supplier</td>
                                 <% } %>
                                 <td><a href="/group/<%= user.group._id %>"><%= user.group.group_seq %> / <%= user.group.group_sl %></a></td>
+                                <td><%= moment(user.created_at).format("llll") %></td>
                                 <td><img src = "uploads/user/<%= user.profile_photo %>" height = "50px" width = "50px"></td>
                             </tr>
                         <% }) %>

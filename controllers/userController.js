@@ -38,7 +38,8 @@ exports.getAllUsers= async(req,res) => {
         if(users)
         {
             res.render("users/index",{
-                users : users
+                users : users,
+                moment : moment
             });
         }
     }
@@ -481,7 +482,8 @@ exports.getUser = async(req,res) => {
 
         let user = await UserModel.findOne(query).populate("supplier").populate("group").exec();
         res.render("users/view",{
-            newUser : user
+            newUser : user,
+            moment : moment
         });
     }
     catch(error)

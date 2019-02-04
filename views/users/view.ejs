@@ -10,8 +10,8 @@
    
     <table class = "table table-bordered">
             <tr>
-                <th></th>
-                <td></td>
+                <th>Profile created at</th>
+                <td><%= moment(newUser.created_at).format("llll") %></td>
             </tr>
             <tr>
                 <th>Name</th>
@@ -31,7 +31,7 @@
             </tr>
             <tr>
                 <th>Birth Date</th>
-                <td><%= newUser.birth_date %></td>
+                <td><%= moment(newUser.birth_date).format("llll") %></td>
             </tr>
             <tr>
                 <th>Blood Group</th>
