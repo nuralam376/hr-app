@@ -10,18 +10,8 @@ let PAXModel = require("../models/userModel");
 const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody} = require("express-validator/filter");
 
-/** Gets All Medical Information */
-exports.getAllMedicals = async(req,res) => {
-    try
-    {
 
-    }
-    catch(err)
-    {
-        console.log(err);
-    }
-}
-
+/** Shows Medical Status of the PAX */
 exports.getMedicalRegistrationSearch = async(req,res) => {
     try
     {
@@ -61,7 +51,7 @@ exports.postPAXCode = async(req,res) => {
 
             if(pax)
             {
-                res.render("medical/searchPax",{
+                res.render("medical/register",{
                     form : forms,
                     pax : pax,
                 }); 
@@ -78,6 +68,53 @@ exports.postPAXCode = async(req,res) => {
     }
     catch(err)
     {
+        console.log(err);
+    }
+}
 
+/** Posts Medical Registration Data */
+exports.postMedicalRegistration = async(req,res) => {
+    try
+    {
+        let forms = {
+            code : req.body.code
+        };
+
+        let paxCode = req.body.code;
+        let errors = validationResult(req);
+        let query = {code : paxCode, company : req.user.company};
+        let pax = await PAXModel.findOne(query).populate("supplier").populate("group");
+
+        if(!errors.isEmpty())
+        {
+            res.render("medical/register",{
+                errors : errors.array(),
+                form : forms,
+                pax : pax,
+                result : null
+            });
+        }
+        else
+        {
+            if(pax)
+            {
+                res.render("medical/register",{
+                    form : forms,
+                    pax : pax,
+                }); 
+            }
+            else 
+            {
+                res.render("medical/register",{
+                    form : forms,
+                    pax : pax,
+                    result : "No Data Found"
+                });
+            }
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
     }
 }

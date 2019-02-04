@@ -75,6 +75,9 @@ $(document).ready(function(){
       $("#experience_image").change(function() {
         readURL(this,"#photo2");
       });
+      $("#slip").change(function() {
+        readURL(this,"#photo");
+      });
 
       
       function getZones()
