@@ -30,42 +30,40 @@ exports.getMedicalRegistrationSearch = async(req,res) => {
     }
 }
 
-/** Shows PAX Code Information */
-exports.postPAXCode = async(req,res) => {
+/** Shows Medical Status of the PAX */
+exports.getMedicalCenterInfo = async(req,res) => {
     try
     {
-        let forms = {
-            code : req.body.code
-        };
+       
+        res.render("medical/searchPax",{
+            pax : null,
+            result : null,
+            postUrl : "/center"
+        });
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
 
-        let errors = validationResult(req);
+/** Shows PAX Code Information For Group */
+exports.postPAXCodeForGroup = async(req,res) => {
+    try
+    {
+        await postPaxCode(req,res,"medical/register/");
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
 
-        if(!errors.isEmpty())
-        {
-            res.render("medical/searchPax",{
-                errors : errors.array(),
-                form : forms,
-                pax : null,
-                result : null
-            });
-        }
-        else
-        {
-            let query = {code : forms.code, company : req.user.company};
-            let pax = await PAXModel.findOne(query).populate("supplier").populate("group");
-            if(pax)
-            {
-               res.redirect("/medical/register/" + pax.code);
-            }
-            else 
-            {
-                res.render("medical/searchPax",{
-                    form : forms,
-                    pax : pax,
-                    result : "No Data Found"
-                });
-            }
-        }
+/** Shows PAX Code Information For Medical Center */
+exports.postPAXCodeForMedicalCenter = async(req,res) => {
+    try
+    {
+        await postPaxCode(req,res,"/medical/register/center/");
     }
     catch(err)
     {
@@ -207,7 +205,7 @@ exports.postMedicalRegistration = async(req,res) => {
     }
 }
 
-/** Gets PAX info */
+/** Gets PAX info for group*/
 exports.getMedicalPAXInfo = async(req,res) => {
     try
     {
@@ -233,5 +231,89 @@ exports.getMedicalPAXInfo = async(req,res) => {
     catch(err)
     {
         console.log(err);
+    }
+}
+
+/** Gets PAX info for medical center */
+exports.getMedicalPAXInfoForCenter = async(req,res) => {
+    try
+    {
+        let query = {company : req.user.company, code : req.params.id};
+        let pax = await PAXModel.findOne(query).populate("supplier").populate("group");
+
+        if(pax)
+        {
+            let medical = await MedicalModel.findOne({company : req.user.company, pax : pax._id});
+            let groups = await GroupModel.find({});
+
+            if(medical && medical.group)
+            {
+                res.render("medical/information",{
+                    pax : pax,
+                    medical : medical,
+                    groups : groups,
+                    postUrl : "/center"
+                });
+            }
+            else
+            {
+                req.flash("danger","Group Registration is required");
+                res.redirect("/medical/register/" + pax.code);
+            }
+        }    
+        else
+        {
+            req.flash("danger","PAX Not found");
+            res.redirect("/medical");
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** POSTS PAX Code */
+const postPaxCode = async(req,res,url) => {
+    try 
+    {
+        let forms = {
+            code : req.body.code
+        };
+
+        let errors = validationResult(req);
+
+        if(!errors.isEmpty())
+        {
+            res.render("medical/searchPax",{
+                errors : errors.array(),
+                form : forms,
+                pax : null,
+                result : null
+            });
+        }
+        else
+        {
+            let query = {code : forms.code, company : req.user.company};
+            let pax = await PAXModel.findOne(query).populate("supplier").populate("group");
+            if(pax)
+            {
+                let medical = await GroupModel.findOne({company : req.user.company, pax : pax._id});
+    
+                res.redirect(url + pax.code);
+            }
+            else 
+            {
+                res.render("medical/searchPax",{
+                    form : forms,
+                    pax : pax,
+                    result : "No Data Found"
+                });
+            }
+        }
+    }
+    catch(err)
+    {
+       console.log(err);
     }
 }

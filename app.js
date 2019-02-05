@@ -105,6 +105,9 @@ app.use("/zone",zone);
 app.use("/group",group);
 app.use("/medical",medical);
 
+app.use((req,res,next) => {
+    res.status(404).send("PAGE NOT FOUND");
+});
 // Start the server
 app.listen(port,function(){
     console.log("Server started on port " + port);

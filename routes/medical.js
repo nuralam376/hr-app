@@ -58,11 +58,19 @@ router.get("/",auth, MedicalController.getMedicalRegistrationSearch);
 router.post("/",auth,[
     check("code").not().isEmpty().withMessage("Code is required").isNumeric().withMessage("Code must be numeric"),
     sanitizeBody("code").trim().unescape()
-],MedicalController.postPAXCode);
+],MedicalController.postPAXCodeForGroup);
+
+
+router.post("/center",auth,[
+    check("code").not().isEmpty().withMessage("Code is required").isNumeric().withMessage("Code must be numeric"),
+    sanitizeBody("code").trim().unescape()
+],MedicalController.postPAXCodeForMedicalCenter);
+
 
 router.post("/register",auth,MedicalController.postMedicalGroup);
 
-router.get("/center/register",auth,MedicalController.getMedicalRegistrationSearch);
+router.get("/register/center",auth, MedicalController.getMedicalCenterInfo);
+
 
 router.post("/center/register",auth,upload.any(),[
     check("center").not().isEmpty().withMessage("Center Name is required"),
@@ -71,6 +79,9 @@ router.post("/center/register",auth,upload.any(),[
     sanitizeBody("issue").trim().toDate(),
 ],MedicalController.postMedicalRegistration);
 
+router.get("/register/center/:id",auth,MedicalController.getMedicalPAXInfoForCenter);
+
 router.get("/register/:id",auth,MedicalController.getMedicalPAXInfo);
+
 
 module.exports = router;

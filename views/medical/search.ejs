@@ -1,7 +1,7 @@
 <div style = "text-align: center">
     <h1>Search By PAX Code</h1>
 
-    <form action="/medical" method = "POST">
+    <form action="/medical<%= typeof postUrl != 'undefined' ? postUrl : ''%>" method = "POST">
             <div class="col-md-offset-4 col-md-4 ">
                 <div class="form-group">
                     <label for="code">PAX Code</label>

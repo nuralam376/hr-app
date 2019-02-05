@@ -30,7 +30,7 @@
                                 <td><%= group.visa_supplier %>, <%= group.zone.name %>, <%= group.amount %></td>
                                 <td><%= group.occupation %></td>
                                 <td><%= moment(group.created_at).format("llll") %></td>
-                                <td><img src="/uploads/enjazit/<%= group.enjazit_image %>" alt="" style = "width:100px; height : 50px"></td>
+                                <td><a data-fancybox="gallery" href="/uploads/enjazit/<%= group.enjazit_image %>"><img src="/uploads/enjazit/<%= group.enjazit_image %>" alt="" style = "width:100px; height : 50px"></a></td>
                             </tr>
                         <% }) %>
                     <% } %>
