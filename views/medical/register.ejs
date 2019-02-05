@@ -1,46 +1,52 @@
 <% include ../layouts/admin/header %>
-<% if(pax) { %>
-    <h1>PAX Information</h1>
-    <table class = "table table-bordered">
-        <tr>
-            <th>PAX Code</th>
-            <th>PAX No</th>
-            <th>Reference</th>
-            <th>Group</th>
-        </tr>
-        <tr>
-            <td><%= pax.code %></td>
-            <td><%= pax.passport %></td>
-            <td><a href="/supplier/<%= pax.supplier.seq_id %>"><%= pax.supplier.name %></a></td>
-            <td><a href="/group/<%= pax.group._id %>"><%= pax.group.group_seq %> / <%= pax.group.group_sl %></a></td>
-        </tr>
-    </table>
-    <h1>Medical Information</h1>
-    <div class="row">
-    <div class="col-md-6">
-            <form action="/medical/register" method = "POST" enctype = "multipart/form-data">
-                <input type="hidden" name = "code" value = "<%= pax.code %>">
-                <div class="form-group">
-                    <label for="center">Medical Center Name</label>
-                    <input type="text" name = "center" id = "center" class = "form-control"> 
-                </div>
-                <div class="form-group">
-                    <label for="slip">Medical Slip</label>
-                    <input type="file" name = "slip" id = "slip" class = "form-control"> 
-                    <img src="" alt="" style = "max-width : 500px; height : auto" id = "photo">
-                </div>
-                <div class="form-group">
-                    <label for="issue">Medical Issue Date</label>
-                    <input type="date" name = "issue" id = "issue">
-                </div>
-                <div class="form-group">
-                    <input type="submit" value = "Save" class = "btn btn-success">
-                </div>
-            </form>
+<% include ./search %>
+
+<div class="row">
+    <div class="col-md-12">
+        <% if(pax) { %>
+            <h1 class = "text-center">PAX Information</h1>
+            <table class = "table table-bordered">
+                <tr>
+                    <th>PAX Code</th>
+                    <th>PAX Name</th>
+                    <th>PAX No</th>
+                    <th>Reference</th>
+                    <th>Group</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td><%= pax.code %></td>
+                    <td><%= pax.name %></td>
+                    <td><%= pax.passport %></td>
+                    <td><a href="/supplier/<%= pax.supplier.seq_id %>"><%= pax.supplier.name %></a></td>
+                    <td><form action="/medical/register" method = "POST">
+                        <input type="hidden" name = "code" value = "<%= pax.code %>">
+                       <div class="form-group">
+                           <select name="group" id="group" class = "form-control">
+                               <% if(groups) { %>
+                                   <% groups.forEach(group => { %>
+                                       <option value="<%= group._id %>" <%= typeof medical != 'undefined' && medical && medical.group.equals(group._id) ? 'selected' : '' %>><%= group.group_seq %> / <%= group.group_sl %></option>
+                                   <% }) %>
+                               <% } %>
+                           </select>
+                         
+                       </div>
+                     </td>
+                     <td>
+                    <% if(medical && medical.group) { %>
+                        <input type="submit" value = "Update" class = "btn btn-success">    
+                        <a href="/medical/print/<%= pax.code %>" class = "btn btn-info">Print Medical Documents</a>
+                    <% } else {  %>
+                            <input type="submit" value = "Save" class = "btn btn-success">         
+                    <% } %>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <% } else { %>    
+            <h1><%= result %></h1>
+        <% } %>
     </div>
-    </div>
-    
-<% } else { %>    
-    <h1><%= result %></h1>
-<% } %>
+</div>
+
 <% include ../layouts/admin/footer %>

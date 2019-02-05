@@ -8,28 +8,28 @@ const MedicalSchema = mongoose.Schema({
     center_name : 
     {
         type : String,
-        required : true
+        required : false
     },
     medical_slip :
     {
         type : String,
-        required : true
+        required : false
     },
     issue : 
     {
         type : Date,
-        required : true
+        required : false
     },
     expiry : 
     {
         type : Date,
-        required : true
+        required : false
     },
 
     status : 
     {
         type : String,
-        required : true
+        required : false
     },
 
     unfit_reason : 
@@ -48,6 +48,13 @@ const MedicalSchema = mongoose.Schema({
     {
         type : mongoose.Schema.Types.ObjectId,
         ref : "User",
+        required : true
+    },
+
+    group : 
+    {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "Group",
         required : true
     },
 

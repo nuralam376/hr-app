@@ -1,6 +1,7 @@
 /** Required Modules */
 const express = require("express");
 const router = express.Router();
+const path = require("path");
 
 /** Validation Configuration */
 const {check,validationResult} = require("express-validator/check");
@@ -59,12 +60,17 @@ router.post("/",auth,[
     sanitizeBody("code").trim().unescape()
 ],MedicalController.postPAXCode);
 
-router.get("/register",MedicalController.getMedicalRegistrationSearch);
+router.post("/register",auth,MedicalController.postMedicalGroup);
 
-router.post("/register",auth,upload.any(),[
-    check("center").not().isEmpty().withMessage("Center Name is required").isNumeric().withMessage("Code must be numeric"),
-    check("issue").not().isEmpty().withMessage("Center Name is required"),
+router.get("/center/register",auth,MedicalController.getMedicalRegistrationSearch);
+
+router.post("/center/register",auth,upload.any(),[
+    check("center").not().isEmpty().withMessage("Center Name is required"),
+    check("issue").not().isEmpty().withMessage("Medical Issue Date is required"),
     sanitizeBody("code").trim().unescape(),
     sanitizeBody("issue").trim().toDate(),
 ],MedicalController.postMedicalRegistration);
+
+router.get("/register/:id",auth,MedicalController.getMedicalPAXInfo);
+
 module.exports = router;
