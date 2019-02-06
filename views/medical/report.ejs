@@ -33,12 +33,33 @@
                     </tr>
                     <tr>
                         <td><%= medical.center_name %></td>
-                        <td><%= moment(medical.issue).format("llll") %></td>
+                        <td><%= moment(medical.issue).format("ll") %></td>
                         <td><a data-fancybox="gallery" href="/uploads/medical/<%= medical.medical_slip %>"><img src="/uploads/medical/<%= medical.medical_slip %>" alt="" style = "max-width : 500px; height : 100px" ></a></td>
                     </tr>
                 </table>
-                <% } if (medical && medical.medical_slip && medical.medical_status) { %>
-               
+                <% } if (medical && medical.medical_slip && medical.status) { %>
+                    <table class = "table table-bordered">
+                            <tr>
+                                <th>Medical Status</th>
+                                <% if(medical.unfit_reason) { %>
+                                    <th>Unfit Reason</th>
+                                    <th>Unfit Medical Slip</th>
+                                <% } %>
+                                <% if(medical.interview_date) { %>
+                                    <th>Interview Date</th>
+                                <% } %>
+                            </tr>
+                            <tr>
+                                <td><%= medical.status %></td>
+                                <% if(medical.unfit_reason) { %>
+                                    <td><%= medical.unfit_reason %></td>
+                                    <td><a data-fancybox="gallery" href="/uploads/medical/<%= medical.unfit_slip %>"><img src="/uploads/medical/<%= medical.unfit_slip %>" alt="" style = "max-width : 500px; height : 100px" ></a></td>
+                                <% } %>
+                                <% if(medical.interview_date) { %>
+                                    <td><%= moment(medical.interview_date).format("ll") %></td>
+                                <% } %>
+                            </tr>
+                        </table>
             <% } else {  %>    
                 <div class="row">
                     <div class="col-md-6">
@@ -61,7 +82,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="slip">Medical Slip</label>
-                                        <input type="file" name = "slip" id = "slip" class = "form-control"> 
+                                        <input type="file" name = "unfit_slip" id = "slip" class = "form-control"> 
                                         <img src="" alt="" style = "max-width : 500px; height : auto" id = "photo">
                                     </div>
                                 </div>
@@ -72,8 +93,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                        <label for="expiry">Medical Expiry Date</label>
-                                        <input type="date" name = "expiry" id = "expiry" class = "form-control">
+                                        <label for="expiry">Medical Expiration Date</label>
+                                        <input type="date" name = "expiry" id = "expiry" class = "form-control"  value = "<%= typeof form != 'undefined' ? moment(new Date(form.expiry)).format('YYYY-MM-DD') : '' %>">
                                     </div>
                                 <div class="form-group">
                                     <input type="submit" value = "Save" class = "btn btn-success">

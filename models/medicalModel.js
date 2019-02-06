@@ -38,6 +38,12 @@ const MedicalSchema = mongoose.Schema({
         required : false
     },
 
+    unfit_slip : 
+    {
+        type : String,
+        required : false
+    },
+
     interview_date : 
     {
         type : Date,
