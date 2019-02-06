@@ -274,7 +274,7 @@ exports.updateUser = async(req,res) => {
 
         if(typeof req.files[2] !== "undefined" && req.files[2].fieldname == "experience_image" && req.fileValidationError == null)
         {
-            forms.experience_image = req.files[1].filename;
+            forms.experience_image = req.files[2].filename;
         }
     
         if(!errors.isEmpty())
@@ -652,6 +652,8 @@ const userUpdate = async(req,res,forms,query,newUser,suppliers,groups) => {
         user.experience_year = forms.experience_year;
         user.experience_month = forms.experience_month;
         user.experience_day = forms.experience_day;
+
+        console.log(user);
 
      await createdEvents(req,user,req.params.id,"user");
      let userUpdatedData = await UserModel.updateOne(query,user);
