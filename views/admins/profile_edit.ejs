@@ -22,7 +22,7 @@
                 <div class="form-group">
                     <label for="profile_photo">Profile Photo</label>
                         <input type = "file" name = "profile_photo" id = "profile_photo">
-                        <img src = "/uploads/admin/<%= adminInfo.profile_photo %>" style = "height:auto; max-width:100%;" id = "photo">
+                        <a data-fancybox="gallery" href="/uploads/admin/<%= adminInfo.profile_photo %>"><img src = "/uploads/admin/<%= adminInfo.profile_photo %>" style = "height:auto; max-width:100%;" id = "photo"></a>
                 </div>
             </div>
         </div>

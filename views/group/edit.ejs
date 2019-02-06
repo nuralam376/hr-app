@@ -38,7 +38,7 @@
                 <div class="form-group">
                     <label for="enjazit">Enjazit Image</label>
                     <input type="file" name = "enjazit_image" id = "enjazit">
-                    <img src="/uploads/enjazit/<%= group.enjazit_image %>" alt="Enjazit Image" style = "width:200px; height : 200px;" id = "photo">
+                    <a data-fancybox="gallery" href="/uploads/enjazit/<%= group.enjazit_image %>"><img src="/uploads/enjazit/<%= group.enjazit_image %>" alt="Enjazit Image" style = "width:200px; height : 200px;" id = "photo"></a>
                 </div>
             </div>
             <div class="col-md-12">

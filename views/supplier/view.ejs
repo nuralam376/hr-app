@@ -43,11 +43,11 @@
             </tr>
             <tr>
                 <th>Profile Photo</th>
-                <td> <img src="/uploads/supplier/<%= supplier.profile_photo %>" alt="" style = "height : auto; max-width : 400px;"></td>
+                <td><a data-fancybox="gallery" href = "/uploads\supplier\<%= supplier.profile_photo %>"><img src="/uploads/supplier/<%= supplier.profile_photo %>" alt="" style = "height : auto; max-width : 400px;"></a></td>
             </tr>
             <tr>
                 <th>Passport Photo</th>
-                <td> <img src="/uploads/supplier/<%= supplier.passport_photo %>" alt="" style = "height : auto; max-width : 400px;"></td>
+                <td><a data-fancybox="gallery" href = "/uploads/supplier/<%= supplier.passport_photo %>"><img src="/uploads/supplier/<%= supplier.passport_photo %>" alt="" style = "height : auto; max-width : 400px;"></a></td>
             </tr>
         </table>
 <% include ../layouts/admin/footer %>

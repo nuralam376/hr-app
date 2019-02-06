@@ -37,7 +37,7 @@
                                 <% } %>
                                 <td><a href="/group/<%= user.group._id %>"><%= user.group.group_seq %> / <%= user.group.group_sl %></a></td>
                                 <td><%= moment(user.created_at).format("llll") %></td>
-                                <td><img src = "uploads/user/<%= user.profile_photo %>" height = "50px" width = "50px"></td>
+                                <td><a data-fancybox="gallery" href = "uploads/user/<%= user.profile_photo %>"><img src = "uploads/user/<%= user.profile_photo %>" height = "50px" width = "50px"></a></td>
                             </tr>
                         <% }) %>
                     <% } %>

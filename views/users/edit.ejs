@@ -162,14 +162,14 @@
                 <div class="form-group">
                     <label for="profile_photo">Profile Photo</label>
                     <input type = "file" name = "profile_photo" id = "profile_photo">
-                    <img src = "/uploads/user/<%= newUser.profile_photo %>" style = "height:auto;max-width:500px;" id = "photo">
+                    <a data-fancybox="gallery" href = "/uploads/user/<%= newUser.profile_photo %>"><img src = "/uploads/user/<%= newUser.profile_photo %>" style = "height:auto;max-width:500px;" id = "photo"></a>
                 </div>      
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="passport_photo">Passport Photo</label>
                     <input type = "file" name = "passport_photo" id = "passport_photo">
-                    <img src = "/uploads/user/<%= newUser.passport_photo %>" style = "height:auto;max-width:500px;" style = "height:auto;max-width:100%;" id = "photo1">
+                    <a data-fancybox="gallery" href = "/uploads/user/<%= newUser.passport_photo %>"><img src = "/uploads/user/<%= newUser.passport_photo %>" style = "height:auto;max-width:500px;" style = "height:auto;max-width:100%;" id = "photo1"></a>
                 </div>
             </div>
         </div>
@@ -180,7 +180,7 @@
                     <label for="experience_image">Experience Image</label>
                     <input type="file" name = "experience_image" id = "experience_image">
                     <img src="" alt="" style = "height:auto;max-width:500px;" id = "photo2">
-                    <img src="/uploads/user/<%= newUser.experience_image %>" alt="" style = "height:auto;max-width:500px;">
+                    <a data-fancybox="gallery" href = "/uploads/user/<%= newUser.experience_image %>"><img src="/uploads/user/<%= newUser.experience_image %>" alt="" style = "height:auto;max-width:500px;"></a>
                 </div>
                     <div class="col-md-4">
 

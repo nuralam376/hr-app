@@ -25,7 +25,7 @@
                                 <td><a href = "/admin/<%= admin.seq_id %>"><%= admin.seq_id %></a></td>
                                 <td><%= admin.name %></td>
                                 <td><%= admin.email %></td>
-                                <td><img src = "uploads\admin/<%= admin.profile_photo %>" height = "50px" width = "50px"></td>
+                                <td><a data-fancybox="gallery" href="uploads\admin/<%= admin.profile_photo %>"><img src = "uploads\admin/<%= admin.profile_photo %>" height = "50px" width = "50px"></a></td>
                             </tr>
                         <% }) %>
                     <% } %>

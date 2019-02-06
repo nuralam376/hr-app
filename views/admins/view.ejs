@@ -25,7 +25,7 @@
             </tr>
             <tr>
                 <th>Profile Photo</th>
-                <td> <img src = "/uploads/admin/<%= adminInfo.profile_photo %>" style = "height:auto;max-width:500px;" id = "photo"></td>
+                <td><a data-fancybox="gallery" href="/uploads/admin/<%= adminInfo.profile_photo %>"><img src = "/uploads/admin/<%= adminInfo.profile_photo %>" style = "height:auto;max-width:500px;" id = "photo"></a></td>
             </tr>
         </table>
 <% include ../layouts/admin/footer %>

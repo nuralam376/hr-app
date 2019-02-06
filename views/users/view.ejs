@@ -80,17 +80,17 @@
                 </tr>
                 <tr>
                         <th>Experience Image</th>
-                        <td> <img src="/uploads/user/<%= newUser.experience_image %>" alt="" style = "height : auto; max-width : 400px;"></td>
+                        <td><a data-fancybox="gallery" href = "/uploads/user/<%= newUser.experience_image %>"><img src="/uploads/user/<%= newUser.experience_image %>" alt="" style = "height : auto; max-width : 400px;"></a></td>
                     </tr>
              <% } %>   
              
             <tr>
                 <th>Profile Photo</th>
-                <td> <img src="/uploads/user/<%= newUser.profile_photo %>" alt="" style = "height : auto; max-width : 400px;"></td>
+                <td><a data-fancybox="gallery" href = "/uploads/user/<%= newUser.profile_photo %>"><img src="/uploads/user/<%= newUser.profile_photo %>" alt="" style = "height : auto; max-width : 400px;"></a></td>
             </tr>
             <tr>
                 <th>Passport Photo</th>
-                <td> <img src="/uploads/user/<%= newUser.passport_photo %>" alt="" style = "height : auto; max-width : 400px;"></td>
+                <td><a data-fancybox="gallery" href = "/uploads/user/<%= newUser.passport_photo %>"><img src="/uploads/user/<%= newUser.passport_photo %>" alt="" style = "height : auto; max-width : 400px;"></a></td>
             </tr>
         </table>
 <% include ../layouts/admin/footer %>
