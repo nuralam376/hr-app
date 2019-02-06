@@ -148,15 +148,18 @@ exports.postMedicalRegistration = async(req,res) => {
         let errors = validationResult(req);
         let query = {code : paxCode, company : req.user.company};
         let pax = await PAXModel.findOne(query).populate("supplier").populate("group");
+        let medical = await MedicalModel.findOne({company : req.user.company, pax : pax._id}).populate("group");
 
         if(!errors.isEmpty())
         {
-            res.render("medical/register",{
+            res.render("medical/information",{
                 errors : errors.array(),
                 form : forms,
                 pax : pax,
                 result : null,
-                moment : moment
+                moment : moment,
+                medical : medical,
+                postUrl : "/center"
             });
         }
         else
@@ -168,33 +171,32 @@ exports.postMedicalRegistration = async(req,res) => {
                     forms.medical_slip = req.files[0].filename;
 
                 /** Saves Medical Data */
-                let medical = new MedicalModel();
-                medical.medical_slip = forms.medical_slip;
-                medical.issue = forms.issue;
-                medical.center_name = forms.center;
-                medical.company = req.user.company;
-                medical.pax = req.body.pax;
+                let newMedical = {};
+                newMedical.medical_slip = forms.medical_slip;
+                newMedical.issue = forms.issue;
+                newMedical.center_name = forms.center;
 
-                let medicalSave = await medical.save();
+                let medicalUpdate = await MedicalModel.updateOne({company : req.user.company, pax : pax._id}, newMedical);
 
-                if(medicalSave)
+                if(medicalUpdate)
                 {
                     req.flash("success","Medical Information has been saved");
-                    res.redirect("/medical/register");
+                    res.redirect("/medical/register/center/" + pax.code);
                 }
                 else
                 {
                     req.flash("danger","Something went wrong");
-                    res.redirect("/medical/register");
+                    res.redirect("/medical/register/center/" + pax.code);
                 }
             }
             else
             {
-                res.render("medical/register",{
+                res.render("medical/information",{
                     form : forms,
                     pax : pax,
                     fileError : "Medical slip is required",
-                    moment : moment
+                    moment : moment,
+                    medical : medical
                 }); 
             }
         }
@@ -243,7 +245,7 @@ exports.getMedicalPAXInfoForCenter = async(req,res) => {
 
         if(pax)
         {
-            let medical = await MedicalModel.findOne({company : req.user.company, pax : pax._id});
+            let medical = await MedicalModel.findOne({company : req.user.company, pax : pax._id}).populate("group");
             let groups = await GroupModel.find({});
 
             if(medical && medical.group)
@@ -252,7 +254,8 @@ exports.getMedicalPAXInfoForCenter = async(req,res) => {
                     pax : pax,
                     medical : medical,
                     groups : groups,
-                    postUrl : "/center"
+                    postUrl : "/center",
+                    moment : moment
                 });
             }
             else

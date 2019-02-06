@@ -3,8 +3,28 @@
 
 <div class="row">
     <div class="col-md-12">
-            <h1>Medical Information</h1>
-            <% if(medical.medical_slip) { %>
+            <% if(pax && medical) { %>
+                <h1 class = "text-center">PAX Information</h1>
+                <table class = "table table-bordered">
+                    <tr>
+                        <th>PAX Code</th>
+                        <th>PAX Name</th>
+                        <th>PAX No</th>
+                        <th>Reference</th>
+                        <th>Group</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td><%= pax.code %></td>
+                        <td><%= pax.name %></td>
+                        <td><%= pax.passport %></td>
+                        <td><a href="/supplier/<%= pax.supplier.seq_id %>"><%= pax.supplier.name %></a></td>
+                        <td><a href="/group/<%= medical.group._id %>"><%= medical.group.group_seq %> / <%= medical.group.group_sl  %></a></td>
+                    </tr>          
+                </table>
+             <% } %>   
+            <% if(medical && medical.medical_slip) { %>
+                <h1>Medical Information</h1>
                 <table class = "table table-bordered">
                     <tr>
                         <th>Medical Center name</th>
@@ -14,13 +34,13 @@
                     <tr>
                         <td><%= medical.center_name %></td>
                         <td><%= moment(medical.issue).format("llll") %></td>
-                        <td><img src="/uploads/medical/<%= medical.medical_slip %>" alt="" style = "max-width : 500px; height : 100px" ></td>
+                        <td><a data-fancybox="gallery" href="/uploads/medical/<%= medical.medical_slip %>"><img src="/uploads/medical/<%= medical.medical_slip %>" alt="" style = "max-width : 500px; height : 100px" ></a></td>
                     </tr>
                 </table>
             <% }else {  %>    
                 <div class="row">
                     <div class="col-md-6">
-                            <form action="/medical/center/register" method = "POST" enctype = "multipart/form-data">
+                            <form action="/medical/register/center/<%= pax.code %>" method = "POST" enctype = "multipart/form-data">
                                 <input type="hidden" name = "code" value = "<%= pax.code %>">
                                 <input type="hidden" name = "pax" value = "<%= pax._id %>">
                                 <div class="form-group">

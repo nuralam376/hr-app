@@ -72,7 +72,7 @@ router.post("/register",auth,MedicalController.postMedicalGroup);
 router.get("/register/center",auth, MedicalController.getMedicalCenterInfo);
 
 
-router.post("/center/register",auth,upload.any(),[
+router.post("/register/center/:id",auth,upload.any(),[
     check("center").not().isEmpty().withMessage("Center Name is required"),
     check("issue").not().isEmpty().withMessage("Medical Issue Date is required"),
     sanitizeBody("code").trim().unescape(),
