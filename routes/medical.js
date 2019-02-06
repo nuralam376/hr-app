@@ -60,6 +60,8 @@ router.post("/",auth,[
     sanitizeBody("code").trim().unescape()
 ],MedicalController.postPAXCodeForGroup);
 
+router.get("/all",auth,MedicalController.allMedicals);
+
 
 router.post("/center",auth,[
     check("code").not().isEmpty().withMessage("Code is required").isNumeric().withMessage("Code must be numeric"),
@@ -88,6 +90,8 @@ router.get("/register/report/:id",auth,MedicalController.getMedicalPAXInfoForRep
 router.post("/register/report/:id",auth,upload.any(),[
     check("expiry").not().isEmpty().withMessage("Medical Expiration Date is required")
 ],MedicalController.postMedicalReportInfo);
+
+
 
 router.get("/register/center/:id",auth,MedicalController.getMedicalPAXInfoForCenter);
 

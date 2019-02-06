@@ -1,0 +1,50 @@
+<% include ../layouts/admin/header %>
+    <h1 class = "text-center">Medicals</h1>
+    <div class="card">
+        <div class="card-body">
+            <h2>All Medicals</h2>    
+
+            <table class = "table" id = "myTable">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>PAX No</th>
+                        <th>Group</th>
+                        <th>Medical center Name</th>
+                        <th>Medical Issue Date</th>
+                        <th>Medical Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(medicals) { %>
+                        <% medicals.forEach((medical) => { %>
+                            <tr>
+                                <td><a href = "/medical/<%= medical._id %>" 
+                                    class = "<%= medical.status == 'fit' ? 'text-success' : medical.status == 'unfit' ? 'text-danger' : medical.status == 'interview' ? 'text-primary' : 'text-secondary'%>">
+                                    <%= medical.pax.code %></a></td>
+                                <td><%= medical.pax.name %></td>
+                                <td><%= medical.pax.passport %></td>
+                                <td><%= medical.group.group_seq %> / <%= medical.group.group_sl %></td>
+                                <% if(medical.center_name) { %>
+                                    <td><%= medical.center_name %></td>
+                                    <td><%= moment(medical.issue).format("ll")%></td>
+                                <% } else { %>
+                                    <td>---</td>
+                                    <td>---</td>
+                                <% } %>
+                                <% if(medical.status) { %>
+                                    <td><%= medical.status %></td>
+                                <% } else { %>
+                                    <td>---</td>
+                                <% } %>
+
+                              
+                            </tr>
+                        <% }) %>
+                    <% } %>
+                 </tbody>   
+            </table>
+        </div>
+    </div>
+<% include ../layouts/admin/footer %>

@@ -503,3 +503,20 @@ exports.postMedicalReportInfo = async(req,res) => {
         console.log(err);
     }
 }
+
+/** All Medicals */
+exports.allMedicals = async(req,res) => {
+    try
+    {
+        let medicals = await MedicalModel.find({company : req.user.company}).populate("group").populate("pax");
+
+        res.render("medical/index",{
+            medicals : medicals,
+            moment : moment
+        });
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
