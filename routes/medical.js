@@ -79,6 +79,12 @@ router.post("/register/center/:id",auth,upload.any(),[
     sanitizeBody("issue").trim().toDate(),
 ],MedicalController.postMedicalRegistration);
 
+router.get("/report",auth,MedicalController.searchPAXForReport);
+
+router.post("/report",auth,MedicalController.getReportRegistration);
+
+router.get("/register/report/:id",auth,MedicalController.getMedicalPAXInfoForReport);
+
 router.get("/register/center/:id",auth,MedicalController.getMedicalPAXInfoForCenter);
 
 router.get("/register/:id",auth,MedicalController.getMedicalPAXInfo);

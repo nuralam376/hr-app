@@ -301,8 +301,6 @@ const postPaxCode = async(req,res,url) => {
             let pax = await PAXModel.findOne(query).populate("supplier").populate("group");
             if(pax)
             {
-                let medical = await GroupModel.findOne({company : req.user.company, pax : pax._id});
-    
                 res.redirect(url + pax.code);
             }
             else 
@@ -318,5 +316,78 @@ const postPaxCode = async(req,res,url) => {
     catch(err)
     {
        console.log(err);
+    }
+}
+
+/** Search PAX Info for Medical Report */
+exports.searchPAXForReport = async(req,res) => {
+    try
+    {
+        res.render("medical/searchPax",{
+            pax : null,
+            result : null,
+            postUrl : "/report"
+        });
+    }   
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Gets Report page for Medical Registration */
+exports.getReportRegistration = async(req,res) => {
+    try
+    {
+        await postPaxCode(req,res,"/medical/register/report/");
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Gets Medical pax Info for report */
+exports.getMedicalPAXInfoForReport = async(req,res) => {
+    try
+    {
+        let query = {company : req.user.company, code : req.params.id};
+        let pax = await PAXModel.findOne(query).populate("supplier").populate("group");
+
+        if(pax)
+        {
+            let medical = await MedicalModel.findOne({company : req.user.company, pax : pax._id}).populate("group");
+            let groups = await GroupModel.find({});
+
+            if(medical && medical.group && medical.medical_slip)
+            {
+                res.render("medical/report",{
+                    pax : pax,
+                    medical : medical,
+                    groups : groups,
+                    postUrl : "/report",
+                    moment : moment
+                });
+            }
+            else if(medical && medical.group)
+            {
+                req.flash("danger","Medical Center Information is required");
+                res.redirect("/medical/register/center" + pax.code);
+            }
+            else
+            {
+                req.flash("danger","Group Registration is required");
+                res.redirect("/medical/register/" + pax.code);
+            }
+        }    
+        else
+        {
+            req.flash("danger","PAX Not found");
+            res.redirect("/medical");
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
     }
 }

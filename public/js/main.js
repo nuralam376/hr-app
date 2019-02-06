@@ -134,4 +134,29 @@ $(document).ready(function(){
 
     $("#experience-div").hide();
     $("#experience").on( "click", checkUncheck );
+
+    $("#unfit").hide();
+    $("#interview").hide();
+
+    function showDiv()
+    {
+        if($("#status").val() == "unfit")
+        {
+            $("#unfit").show();
+            $("#interview").hide();
+        }
+        else if($("#status").val() == "interview")
+        {
+            $("#interview").show();
+            $("#unfit").hide();
+        }
+        else
+        {
+            $("#unfit").hide();
+            $("#interview").hide();
+        }
+    }
+
+    $("#status").on("click",showDiv);
+
 });

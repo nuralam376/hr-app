@@ -37,25 +37,44 @@
                         <td><a data-fancybox="gallery" href="/uploads/medical/<%= medical.medical_slip %>"><img src="/uploads/medical/<%= medical.medical_slip %>" alt="" style = "max-width : 500px; height : 100px" ></a></td>
                     </tr>
                 </table>
-            <% }else {  %>    
+                <% } if (medical && medical.medical_slip && medical.medical_status) { %>
+               
+            <% } else {  %>    
                 <div class="row">
                     <div class="col-md-6">
-                            <form action="/medical/register/center/<%= pax.code %>" method = "POST" enctype = "multipart/form-data">
+                            <h1>Medical Report</h1>
+                            <form action="/medical/register/report/<%= pax.code %>" method = "POST" enctype = "multipart/form-data">
                                 <input type="hidden" name = "code" value = "<%= pax.code %>">
                                 <input type="hidden" name = "pax" value = "<%= pax._id %>">
                                 <div class="form-group">
-                                    <label for="center">Medical Center Name</label>
-                                    <input type="text" name = "center" id = "center" class = "form-control" value = "<%= typeof form != 'undefined' ? form.center : '' %>"> 
+                                    <label for="status">Medical Status</label>
+                                    <select name="status" id="status" class = "form-control">
+                                        <option value="fit">Fit</option>
+                                        <option value="unfit">Unfit</option>
+                                        <option value="interview">Interview</option>
+                                    </select>
+                                </div>
+                                <div id="unfit">
+                                    <div class="form-group">
+                                        <label for="reason">Reason for unfit</label>
+                                        <textarea name="reason" id="reason" cols="30" rows="10" class = "form-control"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="slip">Medical Slip</label>
+                                        <input type="file" name = "slip" id = "slip" class = "form-control"> 
+                                        <img src="" alt="" style = "max-width : 500px; height : auto" id = "photo">
+                                    </div>
+                                </div>
+                                <div id="interview">
+                                    <div class="form-group">
+                                        <label for="interview">Interview Date</label>
+                                        <input type="date" name = "interview" id = "interview" class = "form-control">
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="slip">Medical Slip</label>
-                                    <input type="file" name = "slip" id = "slip" class = "form-control"> 
-                                    <img src="" alt="" style = "max-width : 500px; height : auto" id = "photo">
-                                </div>
-                                <div class="form-group">
-                                    <label for="issue">Medical Issue Date</label>
-                                    <input type="date" name = "issue" id = "issue" class = "form-control" value = "<%= typeof form != 'undefined' ? moment(new Date(form.issue)).format('YYYY-MM-DD') : '' %>">
-                                </div>
+                                        <label for="expiry">Medical Expiry Date</label>
+                                        <input type="date" name = "expiry" id = "expiry" class = "form-control">
+                                    </div>
                                 <div class="form-group">
                                     <input type="submit" value = "Save" class = "btn btn-success">
                                 </div>
