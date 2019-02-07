@@ -261,8 +261,10 @@ exports.getMedicalPAXInfoForCenter = async(req,res) => {
             }
             else
             {
-                req.flash("danger","Group Registration is required");
-                res.redirect("/medical/register/" + pax.code);
+                var link  = '/medical/register/' + pax.code;
+                var message =  'Group Registration is required for PAX Code '+pax.code+'. <a href="'+ link +'"> Click here to save group</a>.'
+                req.flash("danger",message);
+                res.redirect("/medical/register/center");
             }
         }    
         else
@@ -372,13 +374,17 @@ exports.getMedicalPAXInfoForReport = async(req,res) => {
             }
             else if(medical && medical.group)
             {
-                req.flash("danger","Medical Center Information is required");
-                res.redirect("/medical/register/center/" + pax.code);
+                let link  = '/medical/register/center/' + pax.code;
+                let message =  'Medical Center Information is required for PAX Code '+pax.code+'. <a href="'+ link +'"> Click here to save medical center information</a>.'
+                req.flash("danger",message);
+                res.redirect("/medical/report");
             }
             else
             {
-                req.flash("danger","Group Registration is required");
-                res.redirect("/medical/register/" + pax.code);
+                link  = '/medical/register/' + pax.code;
+                message =  'Group Registration is required for PAX Code '+pax.code+'. <a href="'+ link +'"> Click here to save group</a>.'
+                req.flash("danger",message);
+                res.redirect("/medical/report");
             }
         }    
         else
