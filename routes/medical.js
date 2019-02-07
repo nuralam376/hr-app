@@ -91,13 +91,16 @@ router.post("/register/report/:id",auth,upload.any(),[
     check("expiry").not().isEmpty().withMessage("Medical Expiration Date is required")
 ],MedicalController.postMedicalReportInfo);
 
-
+router.get("/center/edit/:id",auth,MedicalController.editMedicalCenterInfo);
+router.post("/center/update/:id",auth,upload.any(),[
+    check("center").not().isEmpty().withMessage("Center Name is required"),
+    check("issue").not().isEmpty().withMessage("Medical Issue Date is required")
+],MedicalController.updateMedicalCenterInfo);
 
 router.get("/register/center/:id",auth,MedicalController.getMedicalPAXInfoForCenter);
 
-router.get("/register/:id",auth,MedicalController.getMedicalPAXInfo);
 
-router.get("/edit/:id",auth,MedicalController.editMedicalInfo);
+router.get("/register/:id",auth,MedicalController.getMedicalPAXInfo);
 router.delete("/delete/:id",auth,MedicalController.deleteMedicalInfo);
 router.get("/:id",auth,MedicalController.getMedicalInfo);
 

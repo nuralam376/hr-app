@@ -1,6 +1,5 @@
 <% include ../layouts/admin/header %>
         <div class="pull-right">
-            <a href = "/medical/edit/<%= medical._id %>" class = "btn btn-info">Edit</a>
             <a href = "#" class = "btn btn-danger delete-medical" data-id = "<%= medical._id %>">Delete</a>
         </div>
     </h1>    
@@ -34,6 +33,10 @@
                 <tr>
                     <th>Medical Issue Date</th>
                     <td><%= moment(medical.issue).format("ll")%></td>
+                </tr>
+                <tr>
+                    <th>Medical Slip</th>
+                    <td><a data-fancybox="gallery" href = "/uploads/medical/<%= medical.medical_slip %>"><img src="/uploads/medical/<%= medical.medical_slip %>" alt="" style = "max-width : 500px; height : auto"></a></td>
                 </tr>
             <%  } if(medical.status) { %>
                 <tr>

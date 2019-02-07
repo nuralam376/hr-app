@@ -12,6 +12,7 @@ let GroupModel = require("../models/groupModel");
 /** Validation Configuration */
 const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody} = require("express-validator/filter");
+const fs = require("fs");
 
 const moment = require("moment-timezone");
 
@@ -573,37 +574,6 @@ exports.deleteMedicalInfo = async(req,res) => {
     }
 }
 
-/** Edits Medical Info */
-exports.editMedicalInfo = async(req,res) => {
-    try
-    {
-        let query = {company : req.user.company, _id : req.params.id};
-        let medical = await MedicalModel.findOne(query).populate("group").populate("pax");
-
-        if(medical)
-        {
-            let pax = await PAXModel.findOne({company : req.user.company, code : medical.pax.code}).populate("supplier");
-            let groups = await GroupModel.find({company : req.user.company});
-            res.render("medical/edit",{
-                medical : medical,
-                pax : pax,
-                moment : moment,
-                groups : groups
-            });
-        }
-        else
-        {
-            req.flash("danger","Medical Information not found");
-            res.redirect("/medical/all");
-        }
-    }
-    catch(err)
-    {
-        req.flash("danger","Medical Information not found");
-        res.redirect("/medical/all");
-        console.log(err);
-    }
-}
 
 /** Gets Medical Information */
 exports.getMedicalInfo = async(req,res) => {
@@ -630,6 +600,121 @@ exports.getMedicalInfo = async(req,res) => {
     catch(err)
     {
         req.flash("danger","Medical Information not found");
+        res.redirect("/medical/all");
+        console.log(err);
+    }
+}
+
+/** Edits Medical Center Info */
+exports.editMedicalCenterInfo = async(req,res) => {
+    try
+    {
+        let forms = {
+            center : req.body.center,
+            issue : req.body.issue
+        };
+        let medical = await MedicalModel.findOne({company : req.user.company,_id : req.params.id}).populate("group").populate("pax");
+        let pax = await PAXModel.findOne({company : req.user.company, _id : medical.pax._id}).populate("supplier");
+
+        if(medical)
+        {
+                    
+            res.render("medical/information",{
+                postUrl : "/center",
+                editMedical : true,
+                medical : medical,
+                pax : pax,
+                moment : moment
+            });
+        }
+        else
+        {
+            /** Checks whetere any file is uploaded */
+            if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+            {
+                if(req.files[0].fieldname == "slip")
+                    forms.medical_slip = req.files[0].filename;
+            }
+            if(medical.medical_slip != forms.medical.slip)
+            {
+
+            }
+        }
+    }
+    catch(err)
+    {
+        req.flash("danger","Medical Information Not Found");
+        res.redirect("/medical/all");
+        console.log(err);
+    }
+}
+
+/** Updates Medical Center Info */
+
+exports.updateMedicalCenterInfo = async(req,res) => {
+    try
+    {
+        let forms = {
+            center : req.body.center,
+            issue : req.body.issue
+        };
+
+        let medical = await MedicalModel.findOne({company : req.user.company,_id : req.params.id}).populate("group").populate("pax");
+        let pax = await PAXModel.findOne({company : req.user.company, _id : medical.pax._id}).populate("supplier");
+        let errors = validationResult(req);
+
+        if(!errors.isEmpty())
+        {
+            res.render("medical/information",{
+                errors : errors.array(),
+                editMedical : true,
+                medical : medical,
+                pax : pax,
+                moment : moment
+            });
+        }
+        else
+        {
+            forms.medical_slip = medical.medical_slip;
+
+            /** Checks whetere any file is uploaded */
+            if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+            {
+                if(req.files[0].fieldname == "slip")
+                    forms.medical_slip = req.files[0].filename;
+            }
+
+            if(medical.medical_slip !== forms.medical_slip)
+            {
+                fs.unlink("./public/uploads/medical/"+medical.medical_slip, (err) => {
+                    if(err)
+                    {
+                        console.log(err);
+                    }
+                });
+            }
+            let newMedical = {};
+            newMedical.center_name = forms.center;
+            newMedical.medical_slip = forms.medical_slip;
+            newMedical.issue = forms.issue;
+
+            let medicalUpdate = await MedicalModel.updateOne({company : req.user.company,_id : medical._id},newMedical);
+
+            if(medicalUpdate)
+            {
+                req.flash("success","Medical Center Information has been updated");
+                res.redirect("/medical/register/center/" + pax.code);
+            }
+            else
+            {
+                req.flash("danger","Something went wrong");
+                res.redirect("/medical/register/center/" + pax.code);
+            }
+        }
+    }
+    catch(err)
+    {
+        req.flash("danger","Medical Information Not Found");
         res.redirect("/medical/all");
         console.log(err);
     }
