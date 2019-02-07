@@ -484,6 +484,7 @@ exports.postMedicalReportInfo = async(req,res) => {
                     });
                 }
             }  
+            newMedical.expiry = forms.expiry;
             let medicalUpdate = await MedicalModel.updateOne({company : req.user.company,pax : pax._id},newMedical);
 
             if(medicalUpdate)
@@ -568,6 +569,38 @@ exports.deleteMedicalInfo = async(req,res) => {
     }
     catch(err)
     {
+        console.log(err);
+    }
+}
+
+/** Edits Medical Info */
+exports.editMedicalInfo = async(req,res) => {
+    try
+    {
+        let query = {company : req.user.company, _id : req.params.id};
+        let medical = await MedicalModel.findOne(query).populate("group").populate("pax");
+
+        if(medical)
+        {
+            let pax = await PAXModel.findOne({company : req.user.company, code : medical.pax.code}).populate("supplier");
+            let groups = await GroupModel.find({company : req.user.company});
+            res.render("medical/edit",{
+                medical : medical,
+                pax : pax,
+                moment : moment,
+                groups : groups
+            });
+        }
+        else
+        {
+            req.flash("danger","Medical Information not found");
+            res.redirect("/medical/all");
+        }
+    }
+    catch(err)
+    {
+        req.flash("danger","Medical Information not found");
+        res.redirect("/medical/all");
         console.log(err);
     }
 }
