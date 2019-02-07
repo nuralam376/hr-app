@@ -97,6 +97,8 @@ router.post("/center/update/:id",auth,upload.any(),[
     check("issue").not().isEmpty().withMessage("Medical Issue Date is required")
 ],MedicalController.updateMedicalCenterInfo);
 
+router.get("/report/edit/:id",auth,MedicalController.editMedicalReportInfo);
+
 router.get("/register/center/:id",auth,MedicalController.getMedicalPAXInfoForCenter);
 
 

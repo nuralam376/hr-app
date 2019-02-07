@@ -615,10 +615,6 @@ exports.getMedicalInfo = async(req,res) => {
 exports.editMedicalCenterInfo = async(req,res) => {
     try
     {
-        let forms = {
-            center : req.body.center,
-            issue : req.body.issue
-        };
         let medical = await MedicalModel.findOne({company : req.user.company,_id : req.params.id}).populate("group").populate("pax");
         let pax = await PAXModel.findOne({company : req.user.company, _id : medical.pax._id}).populate("supplier");
 
@@ -632,19 +628,6 @@ exports.editMedicalCenterInfo = async(req,res) => {
                 pax : pax,
                 moment : moment
             });
-        }
-        else
-        {
-            /** Checks whetere any file is uploaded */
-            if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
-            {
-                if(req.files[0].fieldname == "slip")
-                    forms.medical_slip = req.files[0].filename;
-            }
-            if(medical.medical_slip != forms.medical.slip)
-            {
-
-            }
         }
     }
     catch(err)
@@ -716,6 +699,34 @@ exports.updateMedicalCenterInfo = async(req,res) => {
                 req.flash("danger","Something went wrong");
                 res.redirect("/medical/register/center/" + pax.code);
             }
+        }
+    }
+    catch(err)
+    {
+        req.flash("danger","Medical Information Not Found");
+        res.redirect("/medical/all");
+        console.log(err);
+    }
+}
+
+/** Edits Medical Report Info */
+exports.editMedicalReportInfo = async(req,res) => {
+    try
+    {
+
+        let medical = await MedicalModel.findOne({company : req.user.company,_id : req.params.id}).populate("group").populate("pax");
+        let pax = await PAXModel.findOne({company : req.user.company, _id : medical.pax._id}).populate("supplier");
+
+        if(medical)
+        {
+                    
+            res.render("medical/report",{
+                postUrl : "/center",
+                editReport : true,
+                medical : medical,
+                pax : pax,
+                moment : moment
+            });
         }
     }
     catch(err)
