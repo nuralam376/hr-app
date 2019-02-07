@@ -97,5 +97,8 @@ router.get("/register/center/:id",auth,MedicalController.getMedicalPAXInfoForCen
 
 router.get("/register/:id",auth,MedicalController.getMedicalPAXInfo);
 
+router.delete("/delete/:id",auth,MedicalController.deleteMedicalInfo);
+router.get("/:id",auth,MedicalController.getMedicalInfo);
+
 
 module.exports = router;

@@ -18,12 +18,12 @@ mongoose.connect(config.database, {useNewUrlParser : true});
 
 const db = mongoose.connection;
 
-db.once("open",function(){
+db.once("open",() => {
     console.log("Connected to MongoDB");
 });
 
-db.on("error",function(err){
-    console.log("error");
+db.on("error",err => {
+    console.log(err);
 });
 
 /** Required middleware */

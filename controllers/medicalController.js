@@ -372,7 +372,7 @@ exports.getMedicalPAXInfoForReport = async(req,res) => {
             else if(medical && medical.group)
             {
                 req.flash("danger","Medical Center Information is required");
-                res.redirect("/medical/register/center" + pax.code);
+                res.redirect("/medical/register/center/" + pax.code);
             }
             else
             {
@@ -517,6 +517,87 @@ exports.allMedicals = async(req,res) => {
     }
     catch(err)
     {
+        console.log(err);
+    }
+}
+
+
+/** Deletes Medical Info */
+exports.deleteMedicalInfo = async(req,res) => {
+    try
+    {
+        let query = {_id : req.params.id, company : req.user.company}; 
+
+        let medical = await MedicalModel.findOne(query);
+
+        if(medical)
+        {
+                /** Removes the slips */
+            if(medical.medical_slip)
+            {
+                fs.unlink("./public/uploads/medical/"+medical.medical_slip, err => {
+                    if(err)
+                    {
+                        console.log(err);
+                    }
+                });
+            }
+            if(medical.unfit_slip)
+            {
+                fs.unlink("./public/uploads/medical/"+medical.medical_slip, err => {
+                    if(err)
+                        {
+                            console.log(err);
+                        }
+                    });
+            }
+
+            let medicalDelete = await MedicalModel.deleteOne(query);
+
+            if(medicalDelete)
+            {
+                req.flash("danger","Medical Information Deleted");
+                res.redirect("/medical/all");
+            }
+            else
+            {
+                req.flash("danger","Something Went Wrong");
+                res.redirect("/medical/all");
+            }  
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Gets Medical Information */
+exports.getMedicalInfo = async(req,res) => {
+    try
+    {
+        let query = {company : req.user.company, _id : req.params.id};
+        let medical = await MedicalModel.findOne(query).populate("group").populate("pax");
+
+        if(medical)
+        {
+            let pax = await PAXModel.findOne({company : req.user.company, code : medical.pax.code}).populate("supplier");
+            res.render("medical/view",{
+                medical : medical,
+                pax : pax,
+                moment : moment
+            });
+        }
+        else
+        {
+            req.flash("danger","Medical Information not found");
+            res.redirect("/medical/all");
+        }
+    }
+    catch(err)
+    {
+        req.flash("danger","Medical Information not found");
+        res.redirect("/medical/all");
         console.log(err);
     }
 }

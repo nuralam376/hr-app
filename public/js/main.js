@@ -21,6 +21,12 @@ $(document).ready(function(){
         ajaxDelete(e,"group");
       
     });
+    
+    
+    $(".delete-medical").on("click",function(e){
+        ajaxDelete(e,"medical");      
+    });
+    
 
     function ajaxDelete(e,route)
     {
@@ -38,12 +44,26 @@ $(document).ready(function(){
                 url : "/"+route+"/delete/" + id,
                 success : function(response)
                 {
-                    window.location.href = "/"+route+"";
+                    if(route == "medical")
+                    {
+                        window.location.href = "/"+route+"/all";
+                    }
+                    else
+                    {
+                        window.location.href = "/"+route+"";
+                    }
                 },
     
                 error : function(err)
                 {
-                    window.location.href =  "/"+route+"";
+                    if(route == "medical")
+                    {
+                        window.location.href = "/"+route+"/all";
+                    }
+                    else
+                    {
+                        window.location.href = "/"+route+"";
+                    }
                 }
             });
         }   
