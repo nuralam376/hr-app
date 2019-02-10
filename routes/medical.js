@@ -99,6 +99,10 @@ router.post("/center/update/:id",auth,upload.any(),[
 
 router.get("/report/edit/:id",auth,MedicalController.editMedicalReportInfo);
 
+router.post("/report/update/:id",auth,upload.any(),[
+    check("expiry").not().isEmpty().withMessage("Medical Expiration Date is required")
+],MedicalController.updateMedicalReportInfo);
+
 router.get("/register/center/:id",auth,MedicalController.getMedicalPAXInfoForCenter);
 
 

@@ -20,7 +20,7 @@ const MedicalSchema = mongoose.Schema({
         type : Date,
         required : false
     },
-    expiry : 
+    medical_expiry : 
     {
         type : Date,
         required : false

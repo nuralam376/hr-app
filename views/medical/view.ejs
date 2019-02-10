@@ -43,6 +43,10 @@
                     <th>Medical Status</th>
                     <td><%= medical.status %></td>
                 </tr>
+                <tr>
+                    <th>Medical Expiration Date</th>
+                    <td><%= moment(medical.medical_expiry).format("ll") %></td>
+                </tr>
                 <% if(medical.status == 'unfit') { %>
                     <tr>
                         <th>Unfit Reason</th>

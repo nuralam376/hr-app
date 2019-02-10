@@ -47,21 +47,21 @@
                                     <th>Unfit Reason</th>
                                     <th>Unfit Medical Slip</th>
                                 <% } %>
-                                <% if(medical.interview_date) { %>
+                                <% if(medical.status == "interview" && medical.interview_date) { %>
                                     <th>Interview Date</th>
                                 <% } %>
                                 <th>Medical Expiration Date</th>
                             </tr>
                             <tr>
                                 <td><%= medical.status %></td>
-                                <% if(medical.unfit_reason) { %>
+                                <% if(medical.status == "unfit" && medical.unfit_reason) { %>
                                     <td><%= medical.unfit_reason %></td>
                                     <td><a data-fancybox="gallery" href="/uploads/medical/<%= medical.unfit_slip %>"><img src="/uploads/medical/<%= medical.unfit_slip %>" alt="" style = "max-width : 500px; height : 100px" ></a></td>
                                 <% } %>
-                                <% if(medical.interview_date) { %>
+                                <% if(medical.status == "interview" && medical.interview_date) { %>
                                     <td><%= moment(medical.interview_date).format("ll") %></td>
                                 <% } %>
-                                <td><%= moment(medical.expiry).format("ll") %></td>
+                                <td><%= moment(medical.medical_expiry).format("ll") %></td>
                             </tr>
                         </table>
             <% } else {  %>    
@@ -124,10 +124,11 @@
                                 <div id="unfit">
                                     <div class="form-group">
                                         <label for="reason">Reason for unfit</label>
-                                        <textarea name="reason" id="reason" cols="30" rows="10" class = "form-control"></textarea>
+                                        <textarea name="reason" id="reason" cols="30" rows="10" class = "form-control" ><% if (medical.status == "unfit") { %><%= medical.unfit_reason %><% } %></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label for="slip">Medical Slip</label>
+                                        <% if (medical.status == "unfit") { %><img src="/uploads/medical/<%= medical.unfit_slip %>" alt="" style = "max-width : 500px; height : auto"><% } %>
                                         <input type="file" name = "unfit_slip" id = "slip" class = "form-control"> 
                                         <img src="" alt="" style = "max-width : 500px; height : auto" id = "photo">
                                     </div>
@@ -140,10 +141,10 @@
                                 </div>
                                 <div class="form-group">
                                         <label for="expiry">Medical Expiration Date</label>
-                                        <input type="date" name = "expiry" id = "expiry" class = "form-control"  value = "<%= moment(new Date(medical.expiry)).format('YYYY-MM-DD') %>">
+                                        <input type="date" name = "expiry" id = "expiry" class = "form-control"  value = "<%= moment(new Date(medical.medical_expiry)).format('YYYY-MM-DD') %>">
                                     </div>
                                 <div class="form-group">
-                                    <input type="submit" value = "Save" class = "btn btn-success">
+                                    <input type="submit" value = "Update" class = "btn btn-success">
                                 </div>
                             </form>
                     </div>

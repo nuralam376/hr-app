@@ -736,3 +736,133 @@ exports.editMedicalReportInfo = async(req,res) => {
         console.log(err);
     }
 }
+
+/** Updates Medical Report Info */
+exports.updateMedicalReportInfo = async(req,res) => {
+    try
+    {
+        let forms = {
+            status : req.body.status,
+            expiry : req.body.expiry
+        };
+
+        let query = {company : req.user.company, _id : req.params.id};
+        let medical = await MedicalModel.findOne(query).populate("group");
+        let pax = await PAXModel.findOne({_id : medical.pax}).populate("supplier");
+        let errors = validationResult(req);
+
+        if(!errors.isEmpty())
+        {
+            res.render("medical/report",{
+                posturl : "/report",
+                errors : errors.array(),
+                pax : pax,
+                medical : medical,
+                moment : moment,
+                form : forms,
+                editReport : true
+            });
+        }
+        else
+        {
+            let newMedical = {};
+
+            if(forms.status == "fit")
+            {
+                newMedical.status = "fit";
+            }
+            else if(forms.status == "unfit")
+            {
+                newMedical.status = "unfit";
+                 /** Checks uploaded file */
+                if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+                {
+                    if(req.files[0].fieldname == "unfit_slip")
+                        forms.unfit_slip = req.files[0].filename;
+                    
+                    if(medical.unfit_slip)
+                    {
+                        fs.unlink("./public/uploads/medical/"+medical.unfit_slip, err => {
+                            if(err)
+                            {
+                                console.log(err);
+                            }
+                        });
+                    }
+                    newMedical.unfit_slip = forms.unfit_slip;
+                }
+                else
+                {
+                    if(typeof medical.unfit_slip == "undefined")
+                    {
+                        return res.render("medical/report",{
+                            posturl : "/report",
+                            fileError : "Medical Slip is required",
+                            pax : pax,
+                            medical : medical,
+                            moment : moment,
+                            form : forms,
+                            editReport : true
+                        });
+                    }    
+                }
+                if(req.body.reason)
+                {
+                    forms.reason = req.body.reason;
+                    newMedical.unfit_reason = req.body.reason;
+                }
+                else
+                {
+                    return res.render("medical/report",{
+                        posturl : "/report",
+                        fileError : "Unfit reason is required",
+                        pax : pax,
+                        medical : medical,
+                        moment : moment,
+                        form : forms,
+                        editReport : true
+                    });
+                }
+            }  
+            else
+            {
+                newMedical.status = "interview";
+                if(req.body.interview)
+                {
+                    forms.interview = req.body.interview;
+                    newMedical.interview_date = req.body.interview;
+                }
+                else
+                {
+                    return res.render("medical/report",{
+                        posturl : "/report",
+                        fileError : "Interview Date is required",
+                        pax : pax,
+                        medical : medical,
+                        moment : moment,
+                        form : forms,
+                        editReport : true
+                    });
+                }
+            }  
+            newMedical.medical_expiry = forms.expiry;
+            let medicalUpdate = await MedicalModel.updateOne({company : req.user.company,_id : req.params.id},newMedical);
+
+            if(medicalUpdate)
+            {
+                req.flash("success","Medical information has been updated");
+                res.redirect("/medical/register/report/" + pax.code);
+            }
+            else
+            {
+                req.flash("danger","Something went wrong");
+                res.redirect("/medical/register/report/" + pax.code);
+            }
+        
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
