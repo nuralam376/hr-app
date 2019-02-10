@@ -3,7 +3,7 @@ const vfsFonts = require('../public/bower_components/pdfmake/build/vfs_fonts');
 
 pdfMake.vfs = vfsFonts.pdfMake.vfs;
 
-const pdf = (req,res,pax) => {
+const pdf = (req,res,group) => {
     let fullUrl = req.protocol + '://' + req.get('host');
 
     var fs = require('fs');
@@ -15,22 +15,22 @@ const pdf = (req,res,pax) => {
         // convert binary data to base64 encoded string
         return new Buffer.from(bitmap).toString('base64');
     }
-    let image = base64_encode("./public/uploads/user/" + pax.passport_photo);
+    let image = base64_encode("./public/uploads/enjazit/" + group.enjazit_image);
     let dd = {
         content: [
             {
-                image: 'passport',
+                image: 'enjazit',
             },
         ],
         images: {
-            passport: "data:image/jpeg;base64,"+image
+            enjazit: "data:image/jpeg;base64,"+image
         }
         
     
     };
 
     const pdfDoc = pdfMake.createPdf(dd);
-    let filename = pax.code + "_" + pax.company.name + ".pdf";
+    let filename = group.seq + "_" + group.sl + ".pdf";
 
     pdfDoc.getBase64((data)=>{
         res.setHeader('Content-disposition', 'attachment; filename=' + filename);

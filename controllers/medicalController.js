@@ -929,11 +929,35 @@ exports.printApplication = async(req,res) => {
         {
             let medicalApplication = require("../util/medicalApplication");
 
-            medicalApplication(res,pax);
+            medicalApplication(req,res,pax);
         }
         else
         {
             req.flash("danger","PAX Not Found");
+            res.redirect("/medical/register/" + req.params.id);
+        }
+    }   
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+/** Prints Enjazit Image */
+exports.printEnjazit = async(req,res) => {
+    try
+    {
+        let query = {company : req.user.company, _id : req.params.id};
+        let group = await GroupModel.findOne(query);
+
+        if(group)
+        {
+            let enjazitPdf = require("../util/enjazitPdf");
+
+            enjazitPdf(req,res,group);
+        }
+        else
+        {
+            req.flash("danger","Enjazit Not Found");
             res.redirect("/medical/register/" + req.params.id);
         }
     }   

@@ -109,6 +109,7 @@ router.delete("/delete/:id",auth,MedicalController.deleteMedicalInfo);
 router.get("/print/:id",auth,MedicalController.printDoc);
 router.get("/passport/:id",auth,MedicalController.printPassport);
 router.get("/application/:id",auth,MedicalController.printApplication);
+router.get("/enjazit/:id",auth,MedicalController.printEnjazit);
 router.get("/:id",auth,MedicalController.getMedicalInfo);
 
 
