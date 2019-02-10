@@ -104,10 +104,11 @@ router.post("/report/update/:id",auth,upload.any(),[
 ],MedicalController.updateMedicalReportInfo);
 
 router.get("/register/center/:id",auth,MedicalController.getMedicalPAXInfoForCenter);
-
-
 router.get("/register/:id",auth,MedicalController.getMedicalPAXInfo);
 router.delete("/delete/:id",auth,MedicalController.deleteMedicalInfo);
+router.get("/print/:id",auth,MedicalController.printDoc);
+router.get("/passport/:id",auth,MedicalController.printPassport);
+router.get("/application/:id",auth,MedicalController.printApplication);
 router.get("/:id",auth,MedicalController.getMedicalInfo);
 
 

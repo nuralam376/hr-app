@@ -866,3 +866,79 @@ exports.updateMedicalReportInfo = async(req,res) => {
         console.log(err);
     }
 }
+
+/** Prints Documents  */
+exports.printDoc = async(req,res) => {
+    try 
+    {
+        let query = {company : req.user.company, code : req.params.id};
+        let pax = await PAXModel.findOne(query).populate("group");
+        let medical = await MedicalModel.findOne({company : req.user.company, pax : pax._id});
+        if(pax && medical)
+        {
+            res.render("medical/print",{
+                pax : pax,
+                medical : medical
+            });
+        }
+        else
+        {
+            req.flash("danger","PAX or Medical Information not found");
+            res.redirect("/medical/register/" + req.params.id);
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Prints Passport Copy */
+exports.printPassport = async(req,res) => {
+    try
+    {
+        let query = {company : req.user.company, _id : req.params.id};
+        let pax = await PAXModel.findOne(query).populate("company");
+
+        if(pax)
+        {
+            let passportPdf = require("../util/passportPdf");
+
+            passportPdf(req,res,pax);
+        }
+        else
+        {
+            req.flash("danger","PAX Not Found");
+            res.redirect("/medical/register/" + req.params.id);
+        }
+    }   
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Prints Medical Copy */
+exports.printApplication = async(req,res) => {
+    try
+    {
+        let query = {company : req.user.company, _id : req.params.id};
+        let pax = await PAXModel.findOne(query).populate("company");
+
+        if(pax)
+        {
+            let medicalApplication = require("../util/medicalApplication");
+
+            medicalApplication(res,pax);
+        }
+        else
+        {
+            req.flash("danger","PAX Not Found");
+            res.redirect("/medical/register/" + req.params.id);
+        }
+    }   
+    catch(err)
+    {
+        console.log(err);
+    }
+}

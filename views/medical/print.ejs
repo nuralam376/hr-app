@@ -1,0 +1,21 @@
+<% include ../layouts/admin/header %>
+<% include ./search %>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-4">
+            <h3>Medical Application</h3>
+            <a href="/medical/application/<%= pax._id %>" class = "btn btn-info">Print</a>
+        </div>
+        <div class="col-md-4">
+            <h3>Passport Copy</h3>
+            <a href="/medical/passport/<%= pax._id %>" class = "btn btn-info">Print</a>
+        </div>
+        <div class="col-md-4">
+            <h3>Enjazit Image</h3>
+            <a href="" class = "btn btn-info">Print</a>
+        </div>
+    </div>
+</div>
+
+<% include ../layouts/admin/footer %>
