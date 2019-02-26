@@ -8,6 +8,8 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const passport = require("passport");
 const app = express();
+const csrf = require("csurf");
+const csrfProtection = csrf();
 const port = process.env.PORT || 8000;
 
 /** Database Configuration File */
@@ -42,6 +44,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(require('connect-flash')());
+app.use(csrfProtection);
 
 /** Required Global Variables */
 app.use(function(req,res,next){
@@ -50,8 +53,10 @@ app.use(function(req,res,next){
     res.locals.messages = require('express-messages')(req, res);
     res.locals.admin = req.user || null;
     res.locals.fileError = null;
+    res.locals.csrfToken = req.csrfToken();
     next();
 });
+
 
 /** EJS view engine */
 app.set("view engine","ejs");

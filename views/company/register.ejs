@@ -2,6 +2,7 @@
     <h1>Register Company</h1>
 
     <form action="/register/<%= superAdmin %>/company" method = "POST">
+        <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
         <input type="hidden" name = "superAdmin" value = "<%= superAdmin %>">
         <div class="form-group">
             <label for="name">Name</label>

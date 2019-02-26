@@ -20,6 +20,7 @@
     "bower": "^1.8.4",
     "connect-flash": "^0.1.1",
     "crypto": "^1.0.1",
+    "csurf": "^1.9.0",
     "datauri": "^1.1.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",

@@ -20,6 +20,7 @@
                     <td><%= pax.passport %></td>
                     <td><a href="/supplier/<%= pax.supplier.seq_id %>"><%= pax.supplier.name %></a></td>
                     <td><form action="/medical/register" method = "POST">
+                        <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
                         <input type="hidden" name = "code" value = "<%= pax.code %>">
                        <div class="form-group">
                            <select name="group" id="group" class = "form-control">

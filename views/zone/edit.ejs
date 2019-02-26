@@ -2,6 +2,7 @@
     <h1>Register Zone</h1>
 
     <form action="/zone/update/<%= zone._id %>" method = "POST">
+        <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">

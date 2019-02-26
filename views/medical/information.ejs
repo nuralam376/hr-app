@@ -42,6 +42,7 @@
                 <div class="row">
                     <div class="col-md-6">
                             <form action="/medical/register/center/<%= pax.code %>" method = "POST" enctype = "multipart/form-data">
+                                <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
                                 <input type="hidden" name = "code" value = "<%= pax.code %>">
                                 <input type="hidden" name = "pax" value = "<%= pax._id %>">
                                 <div class="form-group">
@@ -68,6 +69,7 @@
                 <div class="row">
                         <div class="col-md-6">
                                 <form action="/medical/center/update/<%= medical._id %>" method = "POST" enctype = "multipart/form-data">
+                                    <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
                                     <input type="hidden" name = "code" value = "<%= pax.code %>">
                                     <input type="hidden" name = "pax" value = "<%= pax._id %>">
                                     <div class="form-group">

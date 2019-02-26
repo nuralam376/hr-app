@@ -2,6 +2,7 @@
     <h1 class = "text-center">Edit Company Details</h1>    
    
     <form action="/company/update" method = "POST">
+        <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
