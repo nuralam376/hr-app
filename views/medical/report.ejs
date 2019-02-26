@@ -67,8 +67,7 @@
             <% } else {  %>    
                 <div class="row">
                     <div class="col-md-6">
-                            <form action="/medical/register/report/<%= pax.code %>" method = "POST" enctype = "multipart/form-data">
-                                <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
+                            <form action="/medical/register/report/<%= pax.code %>/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
                                 <input type="hidden" name = "code" value = "<%= pax.code %>">
                                 <input type="hidden" name = "pax" value = "<%= pax._id %>">
                                 <div class="form-group">
@@ -111,8 +110,7 @@
                 <div class="row">
                     <div class="col-md-6">
                             <h1>Medical Report</h1>
-                            <form action="/medical/report/update/<%= medical._id %>" method = "POST" enctype = "multipart/form-data">
-                                <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
+                            <form action="/medical/report/update/<%= medical._id %>/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
                                 <input type="hidden" name = "code" value = "<%= pax.code %>">
                                 <input type="hidden" name = "pax" value = "<%= pax._id %>">
                                 <div class="form-group">

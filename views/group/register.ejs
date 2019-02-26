@@ -1,8 +1,7 @@
 <% include ../layouts/admin/header %>
     <h1>Register Group</h1>
 
-    <form action="/group/register" method = "POST" enctype = "multipart/form-data">
-        <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
+    <form action="/group/register/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
         <div class="row">
             <div class="col-md-5">
                 <div class="form-group">

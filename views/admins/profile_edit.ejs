@@ -1,7 +1,6 @@
 <% include ../layouts/admin/header %>
     <h1>Edit Admin <%= adminInfo._id %></h1>
-    <form action = "/admin/profile/update" method = "POST" enctype = "multipart/form-data">
-        <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
+    <form action = "/admin/profile/update/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">

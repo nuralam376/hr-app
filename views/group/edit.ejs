@@ -1,8 +1,7 @@
 <% include ../layouts/admin/header %>
     <h1>Update Group</h1>
 
-    <form action="/group/update/<%= group._id %>" method = "POST" enctype = "multipart/form-data">
-        <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
+    <form action="/group/update/<%= group._id %>/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">

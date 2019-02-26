@@ -1,8 +1,7 @@
 <% include ../layouts/admin/header %>
     <h1>Code : <%= newUser.code %></h1> 
     
-    <form action = "/pax/update/<%= newUser._id %>" method = "POST" enctype = "multipart/form-data">
-        <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
+    <form action = "/pax/update/<%= newUser._id %>/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">

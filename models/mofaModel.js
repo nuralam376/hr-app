@@ -41,6 +41,12 @@ const mofaSchema = new Schema({
         ref : "Group",
         required : true
     },
+    company : 
+    {
+        type : Schema.Types.ObjectId,
+        ref : "Company",
+        required : true
+    },
     created_at : 
     {
         type : Date,

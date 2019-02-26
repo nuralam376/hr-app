@@ -1,7 +1,6 @@
 <% include ../layouts/admin/header %>
     <h1>Code : <%= supplier.code %></h1>    
-    <form action = "/supplier/update/<%= supplier._id %>" method = "POST" enctype = "multipart/form-data">
-        <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
+    <form action = "/supplier/update/<%= supplier._id %>/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
