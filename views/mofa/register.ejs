@@ -46,7 +46,7 @@
                                         </tr>
                                         <tr>
                                             <th>Reference</th>
-                                            <td><%= pax.supplier.name %></td>
+                                            <td><%= pax.group.visa_supplier %></td>
                                         </tr>
                                         <tr>
                                             <th>Group/SL</th>
@@ -86,6 +86,12 @@
                                             <th>Type</th>
                                             <td><input type="checkbox" value = "100" name = "type" <%= typeof mofa != 'undefined' && mofa.type == '100' ? 'checked' : '' %>> 100</td>
                                         </tr>
+                                       <% if(typeof mofa != "undefined" && mofa.embassy_payment != 0 && mofa.health_payment != 0 && mofa.type != 0) { %>
+                                            <tr>
+                                                <th>E-Number</th>
+                                                <td><input type="text" name = "enumber" value = "<%= mofa.e_number %>"></td>
+                                            </tr>
+                                       <% } %>
                                         <tr>
                                             <th>Total</th>
                                             <% if(typeof mofa == 'undefined') { %>

@@ -17,7 +17,12 @@ const {validationResult} = require("express-validator/check");
 exports.getMofas = async(req,res) => {
     try
     {
-        res.render("mofa/index");
+        let mofas = await MofaModel.find({company : req.user.company}).populate("pax").populate("group").exec();
+
+
+        res.render("mofa/index",{
+            mofas : mofas
+        });
     }
     catch(err)
     {
@@ -118,6 +123,7 @@ exports.postMofaRegistration = async(req,res) => {
                 groups : groups
             });
         }
+      
         /** Updates Groups Occupation */
        let newGroup = {};
        newGroup.occupation = form.occupation;
@@ -130,6 +136,25 @@ exports.postMofaRegistration = async(req,res) => {
             if(mofaInfo)
             {
                 mofa = {};
+                let total = mofaInfo.health_payment + mofaInfo.embassy_payment + mofaInfo.type;
+
+                if(total == 2400)
+                {
+                    if(!req.body.enumber)
+                    {
+                        return res.render("mofa/register",{
+                            fileError : "E Number is required",
+                            form : form,
+                            pax : pax,
+                            groups : groups,
+                            mofa : mofaInfo
+                        });
+                    }
+                    else 
+                    {
+                        mofa.e_number = req.body.enumber;
+                    }
+            }
             }
             else
             {
@@ -141,7 +166,7 @@ exports.postMofaRegistration = async(req,res) => {
             mofa.company = req.user.company;
             mofa.pax = req.body.pax;
             mofa.group = form.group;
-
+            
 
             if(mofaInfo)
             {
