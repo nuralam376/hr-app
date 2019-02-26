@@ -13,7 +13,7 @@ const {sanitizeBody} = require("express-validator/filter");
 const mofaController = require("../controllers/mofaController");
 
 
-router.get("/index",auth,mofaController.getMofas);
+router.get("/",auth,mofaController.getMofas);
 
 router.get("/search",auth,mofaController.getMofaSearch);
 
@@ -22,6 +22,11 @@ router.post("/search",auth,[
     sanitizeBody("code").trim().unescape()
 ],mofaController.postSearch);
 
-router.post("/register",auth,mofaController.postMofaRegistration);
+router.post("/register",auth,[
+    body("occupation").not().isEmpty().withMessage("Occupation is required"),
+    sanitizeBody("occupation").trim().unescape()
+],mofaController.postMofaRegistration);
+
+router.get("/groups",auth,mofaController.getAllGroups);
 
 module.exports = router;

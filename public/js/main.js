@@ -125,12 +125,55 @@ $(document).ready(function(){
 
     $("#zone").on("focus",function(){
         getZones();
+    });
+
+    function getOccupations()
+      {
+        $.ajax({
+            type : "GET",
+            url : "/mofa/groups",
+            success : function(response)
+            {
+                let availableGroups = [];
+                let groupInfo;
+                response.forEach(group => {
+                    groupInfo = group.occupation;
+                    availableGroups.push(groupInfo);
+                });
+                showGroup(availableGroups);
+            },
+
+            error : function(err)
+            {
+                availableTags = err;
+            }
+        });
+      }
+
+    $("#occupation").on("focus",function(){
+        getOccupations();
     })
+
 
     function showResult(availableZones)
     {
         $("#zone").autocomplete({
             source: availableZones,
+            selectFirst: true, 
+            minLength: 0,
+            focus : function(event,ui) {
+                $(this).autocomplete("search", $(this).val());
+            },
+            select : function(event,ui){
+                $(this).val(ui.item.label);
+            }
+        })
+    }
+
+    function showGroup(availableGroups)
+    {
+        $("#occupation").autocomplete({
+            source: availableGroups,
             selectFirst: true, 
             minLength: 0,
             focus : function(event,ui) {

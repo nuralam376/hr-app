@@ -10,24 +10,24 @@ const mofaSchema = new Schema({
     {
         type : Number,
         required : true,
-        default : 1100 
+        default : 0 
     },
     embassy_payment : 
     {
         type : Number,
         required : true,
-        default : 1200
+        default : 0
     },
     type : 
     {
         type : Number,
         required : true,
-        default : 100
+        default : 0
     },
     e_number :
     {
         type : Number,
-        required : true
+        required : false
     },
     pax : 
     {
@@ -50,7 +50,7 @@ const mofaSchema = new Schema({
     created_at : 
     {
         type : Date,
-        required : false,
+        required : true,
         default : Date.now()
     },
     updated_at : 

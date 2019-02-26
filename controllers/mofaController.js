@@ -4,6 +4,12 @@ const PAXModel = require("../models/userModel");
 /** Medical Model */
 const MedicalModel = require("../models/medicalModel");
 
+/** Group Model */
+const GroupModel = require("../models/groupModel");
+
+/** Mofa Model */
+const MofaModel = require("../models/mofaModel");
+
 /** Validation Result */
 const {validationResult} = require("express-validator/check");
 
@@ -56,12 +62,16 @@ exports.postSearch = async(req,res) => {
         if(pax)
         {
             let medical = await MedicalModel.findOne({pax : pax._id, status : "fit"});
+            let mofa = await MofaModel.findOne({pax : pax._id,company : req.user.company}) || undefined;
 
             /** Finds Medical information of the PAX */
             if(medical)
             {
+                let groups = await GroupModel.find({company : req.user.company}).exec();
                 res.render("mofa/register",{
-                    pax : pax
+                    pax : pax,
+                    groups : groups,
+                    mofa : mofa
                 });
             }
             else
@@ -86,10 +96,84 @@ exports.postSearch = async(req,res) => {
 exports.postMofaRegistration = async(req,res) => {
     try
     {
+        let form = {
+            group : req.body.group,
+            occupation : req.body.occupation,
+        };
 
+        form.health = req.body.health || 0;
+        form.embassy = req.body.embassy || 0;
+        form.type = req.body.type || 0;
+
+        const errors = validationResult(req);
+        let pax = await PAXModel.findById(req.body.pax).populate("supplier").populate("group").exec();
+        let groups = await GroupModel.find({company : req.user.company}).exec();
+
+        if(!errors.isEmpty())
+        {
+            return res.render("mofa/register",{
+                errors : errors.array(),
+                form : form,
+                pax : pax,
+                groups : groups
+            });
+        }
+        /** Updates Groups Occupation */
+       let newGroup = {};
+       newGroup.occupation = form.occupation;
+       let groupUpdate = await GroupModel.updateOne({_id : form.group}, newGroup).exec();
+
+       if(groupUpdate)
+       {
+            let mofaInfo = await MofaModel.findOne({pax : pax._id,company : req.user.company}) || undefined;
+            let mofa;
+            if(mofaInfo)
+            {
+                mofa = {};
+            }
+            else
+            {
+                mofa = new MofaModel();
+            }
+            mofa.health_payment = form.health;
+            mofa.embassy_payment = form.embassy;
+            mofa.type = form.type;
+            mofa.company = req.user.company;
+            mofa.pax = req.body.pax;
+            mofa.group = form.group;
+
+
+            if(mofaInfo)
+            {
+                mofa.updated_at = Date.now();
+                let mofaUpdate = await MofaModel.updateOne({pax : req.body.pax,company :req.user.company},mofa);
+                if(mofaUpdate)
+                {
+                    req.flash("success","Mofa Updated Successfully");
+                    res.redirect("/mofa");
+                }
+            }
+            else
+            {
+                let mofaSave = await mofa.save();
+                if(mofaSave)
+                {
+                    req.flash("success","Mofa Saved Successfully");
+                    res.redirect("/mofa");
+                }
+            }
+
+         
+       }
     }
     catch(err)
     {
         console.log(err);
     }
+}
+
+/** Gets All Groups For Mofa */
+exports.getAllGroups = async(req,res) => {
+    let groups = await GroupModel.find({company : req.user.company});
+    res.jsonp(groups);
 }
