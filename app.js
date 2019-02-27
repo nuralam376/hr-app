@@ -94,6 +94,7 @@ const zone = require("./routes/zone");
 const group = require("./routes/group");
 const medical = require("./routes/medical");
 const mofa = require("./routes/mofa");
+const stamping = require("./routes/stamping");
 
 
 /** Other Routes */
@@ -110,6 +111,7 @@ app.use("/zone",zone);
 app.use("/group",group);
 app.use("/medical",medical);
 app.use("/mofa",mofa);
+app.use("/stamping",stamping);
 
 app.use((req,res,next) => {
     res.status(404).send("PAGE NOT FOUND");

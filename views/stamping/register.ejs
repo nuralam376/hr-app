@@ -1,0 +1,117 @@
+<% include ../layouts/admin/header %>
+    <div class="row">
+        <div class="col-md-12">
+                <div style = "text-align: center">
+                        <h1>Search By PAX Code</h1>
+                    
+                        <form action="/medical/search" method = "POST">
+                            <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
+                                <div class="col-md-offset-4 col-md-4 ">
+                                    <div class="form-group">
+                                        <label for="code">PAX Code</label>
+                                        <input type="text" name = "code" id = "code" class = "form-control" value = "<%= typeof form != 'undefined' ? form.code : '' %>">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <input type="submit" name = "submit" value = "Search" class = "btn btn-success">
+                                    </div>
+                                </div>
+                        </form>
+                </div>
+        </div>
+    </div>
+    
+   <div class="row">
+       <div class="col-md-12">
+            <div class="card">
+                    <div class="card-body">
+                        <h2>Stamping Info 
+                            <% if(typeof stamping != 'undefined') { %>
+                            <a href = "#" class = "btn btn-danger delete-stamping" data-id = "<%= stamping._id %>" data-csrf = "<%= csrfToken %>">Delete</a> 
+                            <% } %>
+                        </h2>  
+                        <form action="/stamping/register/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
+                            <input type="hidden" name = "pax" value = "<%= pax._id %>">
+                            <table class = "table">
+                                    <thead>
+                                        <tr>
+                                            <th>PAX Code</th>
+                                            <td><%= pax.code %></td>
+                                        </tr>
+                                        <tr>
+                                            <th>PAX Name</th>
+                                            <td><%= pax.name %></td>
+                                        </tr>
+                                        <tr>
+                                            <th>PAX NO</th>
+                                            <td><%= pax.passport %></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Reference</th>
+                                            <td><%= mofa.group.visa_supplier %></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Group/SL</th>
+                                            <td>
+                                               <%= mofa.group.group_seq %> / <%= mofa.group.group_sl %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Occupation</th>
+                                            <td><%= mofa.group.occupation %></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Visa Id</th>
+                                            <td><%= mofa.group.visa_id %></td>
+                                        </tr>
+                                        <tr>
+                                            <th>E-Number</th>
+                                            <td><%= mofa.e_number %></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Health Payment</th>
+                                            <td><%= mofa.health_payment %></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Embassy Payment</th>
+                                            <td><%= mofa.embassy_payment %></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Type</th>
+                                            <td><%= mofa.type %></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total</th>
+                                            <td>TK <%= mofa.embassy_payment + mofa.health_payment + mofa.type %></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Police Clearance</th>
+                                            <td><select name="status" id="status">
+                                                <option value="ok"  <%= typeof stamping != 'undefined' && stamping.status == 'ok' ? 'selected' : '' %>>Ok</option>
+                                                <option value="negative"  <%= typeof stamping != 'undefined' && stamping.status == 'negative' ? 'selected' : '' %>>Negative</option>
+                                            </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><labe for = "pc_image">Police Clearance Documents</labe></th>
+                                            <td>
+                                                <input type="file" name = "pc_image" id = "pc_image">
+                                                <img src="" alt="" id = "photo" style = "height:auto;max-width:500px;">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <% if(typeof stamping == 'undefined') { %>
+                                                <td><input type="submit" value = "Save" class = "btn btn-success"></td>
+                                            <% } else { %>
+                                                <td><input type="submit" value = "Update" class = "btn btn-success"></td>
+                                            <% } %>
+                                        </tr>
+                                    </form>    
+                            </table>
+                    </div>
+                </div>
+       </div>
+   </div>
+<% include ../layouts/admin/footer %>

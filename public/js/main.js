@@ -105,7 +105,9 @@ $(document).ready(function(){
       $("#slip").change(function() {
         readURL(this,"#photo");
       });
-
+      $("#pc_image").change(function() {
+        readURL(this,"#photo");
+      });
       
       function getZones()
       {
