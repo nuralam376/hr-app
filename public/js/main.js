@@ -26,6 +26,9 @@ $(document).ready(function(){
     $(".delete-medical").on("click",function(e){
         ajaxDelete(e,"medical");      
     });
+    $(".delete-mofa").on("click",function(e){
+        ajaxDelete(e,"mofa");      
+    });
     
 
     function ajaxDelete(e,route)
@@ -36,14 +39,18 @@ $(document).ready(function(){
         {
             $target = $(e.target);
             const id = $target.attr("data-id");
-            console.log();
-
+            const csrf = $target.attr("data-csrf");
           
             $.ajax({
                 type : "Delete",
                 url : "/"+route+"/delete/" + id,
+                data : 
+                {
+                    _csrf : csrf
+                },
                 success : function(response)
                 {
+                    console.log(response);
                     if(route == "medical")
                     {
                         window.location.href = "/"+route+"/all";

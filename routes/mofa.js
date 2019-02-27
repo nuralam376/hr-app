@@ -33,4 +33,6 @@ router.get("/sticker/:id",auth,mofaController.getSticker);
 
 router.get("/pdf/:id",auth,mofaController.downloadSticker);
 
+router.delete("/delete/:id",auth,mofaController.deleteMofa);
+
 module.exports = router;

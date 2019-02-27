@@ -254,3 +254,28 @@ exports.downloadSticker = async(req,res) => {
         console.log(err);
     }
 }
+
+/** Deletes Mofa */
+exports.deleteMofa = async(req,res) => {
+    try
+    {
+        let query = {_id : req.params.id,company : req.user.company};
+
+        let mofaDelete = await MofaModel.deleteOne(query);
+
+        if(mofaDelete)
+        {
+            req.flash("success","Mofa Deleted Successfully");
+            res.redirect("/mofa");
+        }
+        else
+        {
+            req.flash("error","Something went wrong");
+            res.redirect("/mofa");
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
