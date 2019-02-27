@@ -1,0 +1,22 @@
+<% include ../layouts/admin/header %>
+    
+   <div id="sticker-info">
+        
+        <h6><a href="/mofa/pdf/<%= mofa._id %>" class = "btn btn-info">Download Sticker</a></h6>
+        
+        <table class = "table table-bordered" id = "sticker">
+                <tr>
+                    <th>Group / SL</th>
+                    <td><%= mofa.group.group_seq %> / <%= mofa.group.group_sl %></td>
+                </tr>
+                <tr>
+                    <th>Occupation</th>
+                    <td><%= mofa.group.occupation %></td>
+                </tr>
+                <tr>
+                    <th>E-number</th>
+                    <td><%= mofa.e_number %></td>
+                </tr>
+            </table>
+        </div>    
+<% include ../layouts/admin/footer %>

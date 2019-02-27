@@ -202,3 +202,55 @@ exports.getAllGroups = async(req,res) => {
     let groups = await GroupModel.find({company : req.user.company});
     res.jsonp(groups);
 }
+
+/** Mofa Stikcer Info */
+exports.getSticker = async(req,res) => {
+    try
+    {
+        let id = req.params.id;
+        let mofa = await MofaModel.findById(id).populate("group").exec();
+
+        /** If Mofa Founds */
+        if(mofa && mofa.e_number)
+        {
+            res.render("mofa/sticker",{
+                mofa : mofa
+            });
+        }
+        else
+        {
+            req.flash("error","Mofa E Number Not Found");
+            res.redirect("/mofa");
+        }
+
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Downloads Mofa Sticker */
+exports.downloadSticker = async(req,res) => {
+    try
+    {
+        let id = req.params.id;
+        let mofa = await MofaModel.findById(id).populate("group").exec();
+
+        if(mofa && mofa.e_number)
+        {
+            const stickerPdf = require("../util/mofaPdf");
+
+            stickerPdf(res,mofa);
+        }
+        else
+        {
+            req.flash("error","Mofa E Number not found");
+            res.redirect("/mofa");
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}

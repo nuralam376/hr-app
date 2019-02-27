@@ -38,11 +38,12 @@
                                 <td>----</td>
                             <% } %>
                             <td><%= mofa.health_payment + mofa.embassy_payment + mofa.type %></td>
+                            <% if(mofa.e_number) { %>
+                                <td><a href="/mofa/sticker/<%= mofa._id %>">Sticker</a></td>
+                            <% } %>
                         </tr>
                     <% }) %>
                 </tbody>
-                <tbody>
-                 </tbody>   
             </table>
         </div>
     </div>

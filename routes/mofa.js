@@ -29,4 +29,8 @@ router.post("/register",auth,[
 
 router.get("/groups",auth,mofaController.getAllGroups);
 
+router.get("/sticker/:id",auth,mofaController.getSticker);
+
+router.get("/pdf/:id",auth,mofaController.downloadSticker);
+
 module.exports = router;
