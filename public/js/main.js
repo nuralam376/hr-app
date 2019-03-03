@@ -29,6 +29,10 @@ $(document).ready(function(){
     $(".delete-mofa").on("click",function(e){
         ajaxDelete(e,"mofa");      
     });
+
+    $(".delete-stamping").on("click",function(e){
+        ajaxDelete(e,"stamping");      
+    });
     
 
     function ajaxDelete(e,route)

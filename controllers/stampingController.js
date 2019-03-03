@@ -13,6 +13,23 @@ const moment = require("moment-timezone");
 
 const fs = require("fs");
 
+/** Gets All Infos */
+exports.getAllInfos = async(req,res) => {
+    try
+    {
+        let stampings = await StampingModel.find({company : req.user.company}).populate("pax").exec();
+
+        res.render("stamping/index",{
+            stampings : stampings,
+            moment : moment
+        });
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
 /** Search Stamping by PAX Code */
 exports.getSearch = async(req,res) => {
     try
@@ -312,6 +329,45 @@ exports.postCompleteStampingRegistration = async(req,res) => {
                 req.flash("danger","Something went wrong");
                 res.redirect("/stamping/completesearch");
             }
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Deletes Stamping Data */
+exports.deleteStamping = async(req,res) => {
+    try
+    {
+        let query = {_id : req.params.id, company : req.user.company}; 
+
+        let stamping = await StampingModel.findOne(query);
+
+        if(stamping)
+        {
+            
+            fs.unlink("./public/uploads/stamping/"+stamping.pc_image, (err) => {
+                if(err)
+                {
+                    console.log(err);
+                }
+            });
+            
+
+            let stampingDelete = await StampingModel.deleteOne(query);
+
+            if(stampingDelete)
+            {
+                req.flash("danger","Stamping Deleted");
+                res.redirect("/stamping");
+            }
+            else
+            {
+                req.flash("danger","Something Went Wrong");
+                res.redirect("/stamping");
+            }  
         }
     }
     catch(err)

@@ -50,6 +50,8 @@ function checkFileType(req,file,cb)
 const {check,body} = require("express-validator/check");
 const {sanitizeBody} = require("express-validator/filter");
 
+router.get("/",auth,stampingController.getAllInfos);
+
 router.get("/search",auth,stampingController.getSearch);
 
 router.get("/search/:id",auth,stampingController.registerStamping);
@@ -79,5 +81,6 @@ router.post("/completeregistration/:id",auth,[
     sanitizeBody("stamping_date").trim().unescape().toDate()
 ],stampingController.postCompleteStampingRegistration);
 
+router.delete("/delete/:id",auth,stampingController.deleteStamping);
 
 module.exports = router;

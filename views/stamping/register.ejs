@@ -26,11 +26,7 @@
        <div class="col-md-12">
             <div class="card">
                     <div class="card-body">
-                        <h2>Stamping Info 
-                            <% if(typeof stamping != 'undefined') { %>
-                            <a href = "#" class = "btn btn-danger delete-stamping" data-id = "<%= stamping._id %>" data-csrf = "<%= csrfToken %>">Delete</a> 
-                            <% } %>
-                        </h2>  
+                        <h2>Stamping Info </h2>  
                         <form action="/stamping/register/<%= pax._id %>/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
                             <table class = "table">
                                     <thead>
@@ -103,7 +99,7 @@
                                            
                                             <th></th>
                                             <% if(typeof stamping != 'undefined') { %>
-                                                <td><img src="/uploads/stamping/<%= stamping.pc_image %>" alt="<%= stamping.pax %>" id = "photo" style = "height:auto;max-width:300px;"></td>
+                                                <td><a data-fancybox="gallery" href = "/uploads/stamping/<%= stamping.pc_image %>"><img src="/uploads/stamping/<%= stamping.pc_image %>" alt="<%= stamping.pax %>" id = "photo" style = "height:auto;max-width:300px;"></a></td>
                                             <% } %>
                                         </tr>
                                         <tr>
