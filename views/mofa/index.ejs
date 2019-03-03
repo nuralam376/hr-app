@@ -4,47 +4,49 @@
         <div class="card-body">
             <h2>All Mofas</h2>    
 
-            <table class = "table" id = "myTable">
-                <thead>
-                    <tr>
-                      <th>PAX Code</th>
-                      <th>PAX Name</th>
-                      <th>Reference</th>
-                      <th>Group/SL</th>
-                      <th>Occupation</th>
-                      <th>Visa ID</th>
-                      <th>Health Payment</th>
-                      <th>Embassy Payment</th>
-                      <th>Type</th>
-                      <th>E Number</th>
-                      <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% mofas.forEach(mofa => { %>
-                        <tr>
-                            <td><%= mofa.pax.code %></td>
-                            <td><%= mofa.pax.name %></td>
-                            <td><%= mofa.group.visa_supplier %></td>
-                            <td><%= mofa.group.group_seq %> / <%= mofa.group.group_sl %></td>
-                            <td><%= mofa.group.occupation %></td>
-                            <td><%= mofa.group.visa_id %></td>
-                            <td><%= mofa.health_payment %></td>
-                            <td><%= mofa.embassy_payment %></td>
-                            <td><%= mofa.type %></td>
-                            <% if(mofa.e_number) { %>
-                                <td><%= mofa.e_number %></td>
-                            <% } else { %>
-                                <td>----</td>
-                            <% } %>
-                            <td><%= mofa.health_payment + mofa.embassy_payment + mofa.type %></td>
-                            <% if(mofa.e_number) { %>
-                                <td><a href="/mofa/sticker/<%= mofa._id %>">Sticker</a></td>
-                            <% } %>
-                        </tr>
-                    <% }) %>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                    <table class = "table" id = "myTable">
+                            <thead>
+                                <tr>
+                                  <th>PAX Code</th>
+                                  <th>PAX Name</th>
+                                  <th>Reference</th>
+                                  <th>Group/SL</th>
+                                  <th>Occupation</th>
+                                  <th>Visa ID</th>
+                                  <th>Health Payment</th>
+                                  <th>Embassy Payment</th>
+                                  <th>Type</th>
+                                  <th>E Number</th>
+                                  <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% mofas.forEach(mofa => { %>
+                                    <tr>
+                                        <td><%= mofa.pax.code %></td>
+                                        <td><%= mofa.pax.name %></td>
+                                        <td><%= mofa.group.visa_supplier %></td>
+                                        <td><%= mofa.group.group_seq %> / <%= mofa.group.group_sl %></td>
+                                        <td><%= mofa.group.occupation %></td>
+                                        <td><%= mofa.group.visa_id %></td>
+                                        <td><%= mofa.health_payment %></td>
+                                        <td><%= mofa.embassy_payment %></td>
+                                        <td><%= mofa.type %></td>
+                                        <% if(mofa.e_number) { %>
+                                            <td><%= mofa.e_number %></td>
+                                        <% } else { %>
+                                            <td>----</td>
+                                        <% } %>
+                                        <td><%= mofa.health_payment + mofa.embassy_payment + mofa.type %></td>
+                                        <% if(mofa.e_number) { %>
+                                            <td><a href="/mofa/sticker/<%= mofa._id %>">Sticker</a></td>
+                                        <% } %>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+            </div>
         </div>
     </div>
 <% include ../layouts/admin/footer %>

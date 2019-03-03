@@ -9,6 +9,8 @@ const MofaModel = require("../models/mofaModel");
 /** Validation */
 const {validationResult} = require("express-validator/check");
 
+const moment = require("moment-timezone");
+
 const fs = require("fs");
 
 /** Search Stamping by PAX Code */
@@ -182,6 +184,134 @@ exports.postStamping = async(req,res) => {
                 stamping : stamping,
                 fileError : "Image is required"
             });
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Gets Stamping Complete Page */
+exports.getCompleteStampingSearch = async(req,res) => {
+    try
+    {
+        res.render("stamping/afterStampingSearch");
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Posts Complete Stamping Search */
+exports.postStampingCompleteSearch = async(req,res) => {
+    try
+    {
+        let form = {
+            code : req.body.code
+        };
+        let query = {code : req.body.code, company : req.user.company};
+        let pax = await PAXModel.findOne(query).exec();
+        if(pax)
+        {
+            let stamping = await StampingModel.findOne({pax : pax._id}).exec();
+           
+            if(stamping)
+            {
+               res.redirect("/stamping/completeregistration/" + stamping._id);
+            }
+            else
+            {
+                req.flash("danger","Stamping Information is needed. Go to <a href = '/stamping/search'>Stamping</a> section");
+                res.redirect("/stamping/completesearch");
+            }
+        }
+        else
+        {
+            req.flash("danger","PAX Not Found");
+            res.redirect("/stamping/completesearch");
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Gets Stamping Complete Registration Page */
+exports.getCompleteRegistration = async(req,res) => {
+    try
+    {
+        let query  = {_id : req.params.id,company : req.user.company};
+        let stamping  = await StampingModel.findById(query).populate("pax").exec();
+        let mofa = await MofaModel.findOne({pax : stamping.pax._id}).populate("pax").populate("group").exec();
+        if(stamping)
+        {
+            res.render("stamping/afterStampingRegistration",{
+                stamping : stamping,
+                mofa : mofa,
+                moment : moment
+            });
+        }
+        else
+        {
+            req.flash("danger","Stamping Not Found");
+            res.redirect("/stamping/completesearch");
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Posts Complete Stamping Registrtation */
+exports.postCompleteStampingRegistration = async(req,res) => {
+    try
+    {
+        let form = {
+            visa_no : req.body.visa_no,
+            stamping_date : req.body.stamping_date
+        };
+
+        let errors = validationResult(req);
+        
+        let query = {_id : req.params.id, company : req.user.company};
+        let stamping = await StampingModel.findOne(query).populate("pax").exec();
+        let mofa = await MofaModel.findOne({pax : stamping.pax._id}).populate("group").exec();
+        if(!errors.isEmpty())
+        {
+            res.render("stamping/afterStampingRegistration",{
+                stamping : stamping,
+                mofa :mofa,
+                errors : errors.array(),
+                form : form,
+                moment : moment
+            });
+        }
+        else
+        {
+            let stampingStatus;
+
+            // Updates Stamping Information
+            let newStamping = {};
+            newStamping.visa_no = form.visa_no;
+            newStamping.stamping_date = form.stamping_date;
+            newStamping.updated_at = Date.now();
+            stampingStatus = await StampingModel.updateOne({_id : stamping._id},newStamping);
+
+
+            if(stampingStatus)
+            {
+                req.flash("success","Stamping information has been updated");
+                res.redirect("/stamping/completeregistration/"+stamping._id);
+            }
+            else
+            {
+                req.flash("danger","Something went wrong");
+                res.redirect("/stamping/completesearch");
+            }
         }
     }
     catch(err)

@@ -1,0 +1,91 @@
+<% include ../layouts/admin/header %>
+    <div class="row">
+        <div class="col-md-12">
+                <div style = "text-align: center">
+                        <h1>Search By PAX Code</h1>
+                    
+                        <form action="/stamping/completeSearch" method = "POST">
+                            <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
+                                <div class="col-md-offset-4 col-md-4 ">
+                                    <div class="form-group">
+                                        <label for="code">PAX Code</label>
+                                        <input type="text" name = "code" id = "code" class = "form-control" value = "<%= typeof form != 'undefined' ? form.code : '' %>">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <input type="submit" name = "submit" value = "Search" class = "btn btn-success">
+                                    </div>
+                                </div>
+                        </form>
+                </div>
+        </div>
+    </div>
+    
+   <div class="row">
+       <div class="col-md-12">
+            <div class="card">
+                    <div class="card-body">
+                         <div class="table-responsive">
+                                <table class = "table">
+                                        <thead>
+                                            <tr>
+                                                <th>PAX Code</th>
+                                                <th>PAX Name</th>
+                                                <th>PAX NO</th>
+                                                <th>Reference</th>
+                                                <th>Group/SL</th>
+                                                <th>Occupation</th>
+                                                <th>Visa Id</th>
+                                                <th>E-Number</th>
+                                                <th>Health Payment</th>
+                                                <th>Embassy Payment</th>
+                                                <th>Type</th>
+                                                <th>Total</th>
+                                            </tr>
+                                            <tbody>
+                                                <tr>
+                                                    <td><%= stamping.pax.code %></td>
+                                                    <td><%= stamping.pax.name %></td>
+                                                    <td><%= stamping.pax.passport %></td>
+                                                    <td><%= mofa.group.visa_supplier %></td>
+                                                    <td><%= mofa.group.group_seq %> / <%= mofa.group.group_sl %></td>
+                                                    <td><%= mofa.group.occupation %></td>
+                                                    <td><%= mofa.group.visa_id %></td>
+                                                    <td><%= mofa.e_number %></td>
+                                                    <td><%= mofa.health_payment %></td>
+                                                    <td><%= mofa.embassy_payment %></td>
+                                                    <td><%= mofa.type %></td>
+                                                    <td>TK <%= mofa.embassy_payment + mofa.health_payment + mofa.type %></td>
+                                                </tr>
+                                            </tbody>
+                                </table>
+                         </div>
+                         <form action="/stamping/completeregistration/<%= stamping._id %>" method = "POST">
+                            <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h2>Stamping Info</h2>
+                                   <div class="form-group">
+                                        <label for="visa_no">Individual Visa No</label>
+                                        <input type="text" name = "visa_no" id = "visa_no" class = "form-control" value = "<%= typeof form != 'undefined' ? form.visa_no : stamping.visa_no %>">   
+                                   </div>
+                                   <div class="form-group">
+                                        <label for="visa_no">Stamping Date</label>
+                                        <input type="date" name = "stamping_date" id = "stamping_date" class = "form-control" value = "<%= typeof form != 'undefined' ? moment(new Date(form.stamping_date)).format('YYYY-MM-DD')  : moment(new Date(stamping.stamping_date)).format('YYYY-MM-DD') %>">   
+                                   </div>
+                                   <div class="form-group">
+                                       <% if(stamping.visa_no) { %>
+                                            <input type="submit" value = "Update" class = "btn btn-success">
+                                        <% } else { %>
+                                            <input type="submit" value = "Save" class = "btn btn-success">
+                                       <% } %>
+                                   </div>
+                                </div>
+                            </div>
+                         </form>
+                    </div>
+                </div>
+       </div>
+   </div>
+<% include ../layouts/admin/footer %>

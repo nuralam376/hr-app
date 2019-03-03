@@ -63,5 +63,21 @@ router.post("/register/:id",auth,[
     sanitizeBody("status").trim().unescape()
 ],upload.any(),stampingController.postStamping);
 
+router.get("/completesearch",auth,stampingController.getCompleteStampingSearch);
+
+router.post("/completesearch",auth,[
+    body("code","Pax is required").not().isEmpty(),
+    sanitizeBody("code").trim().unescape()
+],stampingController.postStampingCompleteSearch);
+
+router.get("/completeregistration/:id",auth,stampingController.getCompleteRegistration);
+
+router.post("/completeregistration/:id",auth,[
+    body("visa_no").not().isEmpty().withMessage("Visa No is required"),
+    body("stamping_date").not().isEmpty().withMessage("Stamping Date is required"),
+    sanitizeBody("visa_no").trim().unescape(),
+    sanitizeBody("stamping_date").trim().unescape().toDate()
+],stampingController.postCompleteStampingRegistration);
+
 
 module.exports = router;
