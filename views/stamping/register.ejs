@@ -4,7 +4,7 @@
                 <div style = "text-align: center">
                         <h1>Search By PAX Code</h1>
                     
-                        <form action="/medical/search" method = "POST">
+                        <form action="/stamping/search" method = "POST">
                             <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
                                 <div class="col-md-offset-4 col-md-4 ">
                                     <div class="form-group">
@@ -31,8 +31,7 @@
                             <a href = "#" class = "btn btn-danger delete-stamping" data-id = "<%= stamping._id %>" data-csrf = "<%= csrfToken %>">Delete</a> 
                             <% } %>
                         </h2>  
-                        <form action="/stamping/register/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
-                            <input type="hidden" name = "pax" value = "<%= pax._id %>">
+                        <form action="/stamping/register/<%= pax._id %>/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
                             <table class = "table">
                                     <thead>
                                         <tr>
@@ -86,7 +85,7 @@
                                             <td>TK <%= mofa.embassy_payment + mofa.health_payment + mofa.type %></td>
                                         </tr>
                                         <tr>
-                                            <th>Police Clearance</th>
+                                            <th>Police Clearance Status</th>
                                             <td><select name="status" id="status">
                                                 <option value="ok"  <%= typeof stamping != 'undefined' && stamping.status == 'ok' ? 'selected' : '' %>>Ok</option>
                                                 <option value="negative"  <%= typeof stamping != 'undefined' && stamping.status == 'negative' ? 'selected' : '' %>>Negative</option>
@@ -94,11 +93,18 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th><labe for = "pc_image">Police Clearance Documents</labe></th>
+                                            <th><label for = "pc_image">Police Clearance Documents</label></th>
                                             <td>
                                                 <input type="file" name = "pc_image" id = "pc_image">
-                                                <img src="" alt="" id = "photo" style = "height:auto;max-width:500px;">
+                                                <img src="" alt="" id = "photo" style = "height:auto;max-width:300px;">
                                             </td>
+                                        </tr>
+                                        <tr>
+                                           
+                                            <th></th>
+                                            <% if(typeof stamping != 'undefined') { %>
+                                                <td><img src="/uploads/stamping/<%= stamping.pc_image %>" alt="<%= stamping.pax %>" id = "photo" style = "height:auto;max-width:300px;"></td>
+                                            <% } %>
                                         </tr>
                                         <tr>
                                             <th></th>

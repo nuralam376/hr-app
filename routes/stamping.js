@@ -1,6 +1,7 @@
 const express = require("express");
 
 const router = express.Router();
+const path = require("path");
 
 /** Stamping Controller */
 const stampingController = require("../controllers/stampingController");
@@ -51,12 +52,16 @@ const {sanitizeBody} = require("express-validator/filter");
 
 router.get("/search",auth,stampingController.getSearch);
 
+router.get("/search/:id",auth,stampingController.registerStamping);
+
 router.post("/search",auth,[
     body("code","Pax is required").not().isEmpty(),
     sanitizeBody("code").trim().unescape()
 ],stampingController.postSearch);
 
-router.post("/stamping/register",auth,[
+router.post("/register/:id",auth,[
     sanitizeBody("status").trim().unescape()
 ],upload.any(),stampingController.postStamping);
+
+
 module.exports = router;
