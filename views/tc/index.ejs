@@ -14,6 +14,7 @@
                                 <th>TC Received</th>
                                 <th>Finger</th>
                                 <th>TC Document</th>
+                                <th>Option</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -23,15 +24,27 @@
                                 <tr>   
                                     <td><a href="/pax/<%= tc.pax.seq_id %>"><%= tc.pax.code %></a></td>
                                     <td><%= tc.pax.name %></td>
-                                    <td><%= tc.status %></td>
-                                    <td><a data-fancybox="gallery" href="uploads/tc/<%= tc.pc_image %>"><img src = "uploads/tc/<%= tc.pc_image %>" height = "50px" width = "50px"></a></td>
-                                    <%if(tc.visa_no) { %>
-                                        <td><%= tc.visa_no %></td>
-                                        <td><%= moment(tc.tc_date).format("ll") %></td>
-                                    <% } else { %>
-                                        <td>-----</td>
-                                        <td>-----</td>
-                                    <% } %>
+                                    <td>
+                                        <% if(tc.tc_received == 1) { %>
+                                            Yes
+                                        <% } else { %>
+                                            NO
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                            <% if(tc.finger == 1) { %>
+                                                Yes
+                                            <% } else { %>
+                                                NO
+                                            <% } %>
+                                    </td>
+                                    <td>
+                                            <% if(tc.tc_pdf) { %>
+                                                <a href="/tc/download/<%= tc._id %>">View TC</a>
+                                            <% } else { %>
+                                                NO PDF
+                                            <% } %>
+                                    </td>
                                     <td><a href = "#" class = "btn btn-danger delete-tc" data-id = "<%= tc._id %>" data-csrf = "<%= csrfToken %>">Delete</a></td>
                                 </tr>
                                 <% }) %>

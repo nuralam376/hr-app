@@ -33,6 +33,10 @@ $(document).ready(function(){
     $(".delete-stamping").on("click",function(e){
         ajaxDelete(e,"stamping");      
     });
+
+    $(".delete-tc").on("click",function(e){
+        ajaxDelete(e,"tc");      
+    });
     
 
     function ajaxDelete(e,route)

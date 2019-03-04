@@ -14,7 +14,7 @@ const multer = require("multer");
 
 /** Initialize Multer storage Variable for file upload */
 const storage = multer.diskStorage({
-    destination : "./public/uploads/stamping",
+    destination : "./public/uploads/tc",
     filename : function(req,file,cb)
     {
         cb(null,file.fieldname + "-" + Date.now() + path.extname(file.originalname));
@@ -60,5 +60,12 @@ router.post("/search",auth,[
     body("code","Pax is required").not().isEmpty(),
     sanitizeBody("code").trim().unescape()
 ],tcController.postSearch);
+
+router.post("/register/:id",auth,upload.any(),tcController.postTC);
+
+router.get("/download/:id",auth,tcController.downloadTC);
+
+router.delete("/delete/:id",auth,tcController.deleteTc);
+
 
 module.exports = router;

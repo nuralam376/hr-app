@@ -28,17 +28,20 @@
                     <div class="card-body">
                         <h2>TC Info </h2>  
                         <form action="/tc/register/<%= pax._id %>/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
-                            
+
                               <div class="form-group">
-                                <input type="checkbox" name = "tc_received" value = "1" id = "tc_received"> 
+                                <input type="checkbox" name = "tc_received" value = "1" id = "tc_received" <%= tc && tc.tc_received == '1' ? 'checked' : '' %>> 
                                 <label for="tc_received">TC Received</label>
                               </div>
+                              <% if(tc.tc_pdf) { %>
+                              <a href="/tc/download/<%= tc._id %>">View TC</a>
+                              <% } %>
                               <div class="form-group">
                                   <label for="tc_pdf">PDF of TC</label>
-                                  <input type="file" name = "pdf_tc" id = "pdf_tc">
+                                  <input type="file" name = "tc_pdf" id = "tc_pdf">
                               </div>
                                 <div class="form-group">
-                                    <input type="checkbox" name = "finger" id = "finger"> 
+                                    <input type="checkbox" name = "finger" id = "finger" value = "1" <%= tc && tc.finger == 1 ? 'checked' : '' %>> 
                                     <label for="finger">Finger</label>
                                 </div>
                                 <div class="form-group">
