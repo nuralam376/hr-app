@@ -96,6 +96,7 @@ const medical = require("./routes/medical");
 const mofa = require("./routes/mofa");
 const stamping = require("./routes/stamping");
 const tc = require("./routes/tc");
+const manpower = require("./routes/manpower");
 
 
 /** Other Routes */
@@ -114,6 +115,7 @@ app.use("/medical",medical);
 app.use("/mofa",mofa);
 app.use("/stamping",stamping);
 app.use("/tc",tc);
+app.use("/manpower",manpower);
 
 app.use((req,res,next) => {
     res.status(404).send("PAGE NOT FOUND");
