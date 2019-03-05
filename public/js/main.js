@@ -116,6 +116,9 @@ $(document).ready(function(){
       $("#pc_image").change(function() {
         readURL(this,"#photo");
       });
+      $("#card_photo").change(function() {
+        readURL(this,"#photo");
+      });
       
       function getZones()
       {

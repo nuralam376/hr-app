@@ -1,0 +1,57 @@
+<% include ../layouts/admin/header %>
+<% include ../includes/search %>
+
+    
+   <div class="row">
+       <div class="col-md-12">
+            <div class="card">
+                    <div class="card-body">
+                     <div class="table-responsive">
+                         <table class = "table">
+                            <thead>
+                                <tr>
+                                    <th>PAX Name</th>
+                                    <th>PAX Number</th>
+                                    <th>Reference</th>
+                                    <th>Group / SL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><%= pax.name %></td>
+                                    <td><%= pax.passport %></td>
+                                    <td><%= pax.supplier.name %></td>
+                                    <td><%= pax.group.group_seq %> / <%= pax.group.group_sl %></td>
+                                </tr>
+                            </tbody>
+                         </table>
+                     </div>
+                      <div class="row">
+                          <div class="col-md-5">
+                            <form action="/manpower/status/<%= manpower._id %>/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
+                                  <div class="form-group">
+                                     <label for="clearance">Clearance Date</label>
+                                     <input type="date" name = "clearance" id = "clearance" class = "form-control" value = "<%= typeof form != 'undefined' ?  moment(new Date(form.clearance)).format('YYYY-MM-DD') :  moment(new Date(manpower.clearance_date)).format('YYYY-MM-DD') %>">
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="card_no">SmartCard No</label>
+                                    <input type="text" name = "card_no" id = "card_no" class = "form-control" value = "<%= typeof form != 'undefined' ? form.card_no : manpower.card_no %>">
+                                 </div>
+                                 <div class="form-group">
+                                    <label for="card_photo">SmartCard Photo</label>
+                                    <input type="file" name = "card_photo" id = "card_photo" class = "form-control">
+                                    <img src="" alt="" style = "max-width : 500px; height : auto" id = "photo">
+                                    <a data-fancybox="gallery" href = "/uploads/manpower/<%= manpower.card_photo %>"><img src="/uploads/manpower/<%= manpower.card_photo %>" alt="" style = "max-width : 500px; height : auto"></a>
+                                 </div> 
+                                <div class="form-group">
+                                    <input type="submit" value = "Save" class = "btn btn-success">
+                                </div>
+                            </form>    
+                          </div>
+                      </div>
+                           
+                    </div>
+                </div>
+       </div>
+   </div>
+<% include ../layouts/admin/footer %>
