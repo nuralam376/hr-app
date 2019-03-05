@@ -1,0 +1,34 @@
+<% include ../layouts/admin/header %>
+
+    <h1 class = "text-center">Flights</h1>
+    <div class="card">
+        <div class="card-body">
+            <h2>All Information</h2>     
+
+            <div class="table-responsive">
+                    <table id="myTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>PAX Code</th>
+                                <th>PAX Name</th>
+                                <th>Option</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          
+                           <% if(flights.length > 0) { %>
+                                <% flights.forEach(flight => { %>
+                                <tr>   
+                                    <td><a href="/pax/<%= flight.pax.seq_id %>"><%= flight.pax.code %></a></td>
+                                    <td><%= flight.pax.name %></td>
+                                    <td><a href = "#" class = "btn btn-danger delete-flight" data-id = "<%= flight._id %>" data-csrf = "<%= csrfToken %>">Delete</a></td>
+                                </tr>
+                                <% }) %>
+                           <% } %>
+                               
+                        </tbody>   
+                    </table>
+            </div>
+        </div>
+    </div>
+<% include ../layouts/admin/footer %>

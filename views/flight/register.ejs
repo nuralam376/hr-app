@@ -1,0 +1,62 @@
+<% include ../layouts/admin/header %>
+<% include ../includes/search %>
+    
+   <div class="row">
+       <div class="col-md-12">
+            <div class="card">
+                    <div class="card-body">
+                        <h2>Flight Info </h2>  
+                        <div class="table-responsive">
+                            <table class = "table">
+                                <thead>
+                                    <tr>
+                                        <th>PAX Name</th>
+                                        <th>PAX No</th>
+                                        <th>Reference</th>
+                                        <th>Group/SL</th>
+                                        <th>Stamping Date</th>
+                                        <th>Manpower Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        <td><%= pax.name %></td>
+                                        <td><%= pax.passport %></td>
+                                        <td><%= pax.supplier.name %></td>
+                                        <td><%= pax.group.group_seq %> / <%= pax.group.group_sl %></td>
+                                        <td><%= moment(stamping.stamping_date).format("ll") %></td>
+                                        <td><%= moment(manpower.clearance_date).format("ll") %></td>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <form action="/flight/requisition/<%= pax._id %>" method = "POST">
+                                    <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
+                                    <div class="form-group">
+                                        <label for="zone">Zone</label>
+                                        <select name="zone" id="zone" class = "form-control">
+                                            <% zones.forEach(zone => { %>
+                                                <option value="<%= zone._id %>"  <% if(pax.group.zone.equals(zone._id)) { %> selected <% } %>><%= zone.name %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">                                        
+                                        <label for="probable_date">Probable Date: </label>
+                                        <input type = "date" id="probable_date" name = "probable_date" class = "form-control" value = "<%= typeof form != 'undefined' ? moment(new Date(form.probable_date)).format('YYYY-MM-DD') : flight ? moment(new Date(flight.probable_date)).format('YYYY-MM-DD') : ''%>">
+                                    </div>
+                                    <div class="form-group">                                        
+                                        <label for="probable_airlines">Probable Airlines: </label>
+                                        <input type = "text" id="probable_airlines" name = "probable_airlines" class = "form-control" value = "<%= typeof form != 'undefined' ? form.probable_airlines : flight ? flight.probable_airlines : ''%>">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" value = "Save" class = "btn btn-success">
+                                    </div>
+                                </form>    
+                            </div>
+                        </div>
+                           
+                    </div>
+                </div>
+       </div>
+   </div>
+<% include ../layouts/admin/footer %>
