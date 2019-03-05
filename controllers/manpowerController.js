@@ -21,7 +21,7 @@ exports.getAllInfos = async(req,res) => {
         let manpowers = await ManpowerModel.find({company : req.user.company}).populate("pax").exec();
 
         res.render("manpower/index",{
-            manpowers : manpowers,
+            manpowers : manpowers.reverse(),
             moment : moment
         });
     }
@@ -343,12 +343,15 @@ exports.postRegisterManpowerStatus = async(req,res) => {
             newManpower.updated_at = Date.now();
             if(forms.card_photo)
             {
-                fs.unlink("./public/uploads/manpower/" + manpower.card_photo, err => {
-                    if(err)
-                    {
-                        console.log(err);
-                    }
-                });
+                if(manpower.ready != 1)
+                {
+                    fs.unlink("./public/uploads/manpower/" + manpower.card_photo, err => {
+                        if(err)
+                        {
+                            console.log(err);
+                        }
+                    });
+                }
                 newManpower.card_photo = forms.card_photo;
             }
             manpowerStatus = await ManpowerModel.updateOne({_id : manpower._id},newManpower);
@@ -375,6 +378,45 @@ exports.postRegisterManpowerStatus = async(req,res) => {
             res.redirect("/manpower/status");
         }
       
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Deletes Manpower Info */
+exports.deleteManpower = async(req,res) => {
+    try
+    {   
+        let query = {_id : req.params.id, company : req.user.company};
+
+        let manpower = await ManpowerModel.findOne(query);
+
+        if(manpower)
+        {
+               
+            fs.unlink("./public/uploads/manpower/"+manpower.card_photo, (err) => {
+                if(err)
+                {
+                    console.log(err);
+                }
+            });
+           
+
+            let manpowerDelete = await ManpowerModel.deleteOne(query);
+
+            if(manpowerDelete)
+            {
+                req.flash("danger","Manpower Deleted");
+                res.redirect("/manpower");
+            }
+            else
+            {
+                req.flash("danger","Something Went Wrong");
+                res.redirect("/manpower");
+            }  
+        }
     }
     catch(err)
     {

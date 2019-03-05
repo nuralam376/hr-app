@@ -79,6 +79,6 @@ router.post("/status/:id",auth,upload.any(),[
     sanitizeBody("card_no").trim().unescape(),
 ],manpowerController.postRegisterManpowerStatus);
 
-
+router.delete("/delete/:id",auth,manpowerController.deleteManpower);
 
 module.exports = router;

@@ -37,6 +37,10 @@ $(document).ready(function(){
     $(".delete-tc").on("click",function(e){
         ajaxDelete(e,"tc");      
     });
+
+    $(".delete-manpower").on("click",function(e){
+        ajaxDelete(e,"manpower");      
+    });
     
 
     function ajaxDelete(e,route)

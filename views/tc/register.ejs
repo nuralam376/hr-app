@@ -33,7 +33,7 @@
                                 <input type="checkbox" name = "tc_received" value = "1" id = "tc_received" <%= tc && tc.tc_received == '1' ? 'checked' : '' %>> 
                                 <label for="tc_received">TC Received</label>
                               </div>
-                              <% if(tc.tc_pdf) { %>
+                              <% if(tc && tc.tc_pdf) { %>
                               <a href="/tc/download/<%= tc._id %>">View TC</a>
                               <% } %>
                               <div class="form-group">
