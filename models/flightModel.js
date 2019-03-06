@@ -36,6 +36,12 @@ const flightSchema = new Schema({
         ref : "User",
         required : true
     },
+    zone : 
+    {
+        type : Schema.Types.ObjectId,
+        ref : "Zone",
+        required : false
+    },
     company : 
     {
         type : Schema.Types.ObjectId,

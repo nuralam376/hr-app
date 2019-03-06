@@ -195,6 +195,7 @@ exports.postRequisition = async(req,res) => {
                 let newFlight = {};
                 newFlight.probable_date = forms.probable_date;
                 newFlight.probable_airlines = forms.probable_airlines;
+                newFlight.zone = forms.zone;
                 newFlight.updated_at = Date.now();
                 flightStatus = await FlightModel.updateOne({_id : flight._id},newFlight);
             }
@@ -203,6 +204,7 @@ exports.postRequisition = async(req,res) => {
                 let newFlight = new FlightModel();
                 newFlight.probable_date = forms.probable_date;
                 newFlight.probable_airlines = forms.probable_airlines;
+                newFlight.zone = forms.zone;
                 newFlight.pax = req.params.id;
                 newFlight.company = req.user.company;
                 flightStatus = await newFlight.save();
@@ -319,7 +321,7 @@ exports.registerReport = async(req,res) => {
             
             let manpower = await ManpowerModel.findOne({pax : pax._id, company: req.user.company}).select("clearance_date card_no").exec();
             let stamping = await StampingModel.findOne({pax : pax._id,company : req.user.company}).select(" stamping_date").exec();
-            let flight = await FlightModel.findOne({pax : pax._id, company : req.user.company}).exec();
+            let flight = await FlightModel.findOne({pax : pax._id, company : req.user.company}).populate("zone").exec();
            /** Finds flight information of the PAX */
            if(flight && flight.probable_date)
            {
@@ -366,7 +368,7 @@ exports.postReport = async(req,res) => {
         let pax = await PAXModel.findOne(query).select("_id name passport supplier group").populate("supplier","_id name").populate("group","_id group_seq group_sl zone").exec();
       
         let manpower = await ManpowerModel.findOne({pax : pax._id, company: req.user.company}).select("clearance_date card_no").exec();
-        let flight = await FlightModel.findOne({pax : pax._id});
+        let flight = await FlightModel.findOne({pax : pax._id}).populate("zone").exec();
         let errors = validationResult(req);
 
         if(flight && flight.probable_date)

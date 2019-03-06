@@ -119,20 +119,21 @@ exports.registerReport = async(req,res) => {
     
         if(pax)
         {
-            let delivery = await DeliveryModel.findOne({pax : pax._id, company: req.user.company}).exec();
-            let flight = await FlightModel.findOne({pax : pax._id, company: req.user.company}).exec();
-            let stamping = await StampingModel.findOne({pax : pax._id,company : req.user.company}).select("stamping_date").exec();
-            let manpower = await ManpowerModel.findOne({pax : pax._id,company : req.user.company}).select("clearance_date").exec();
+           
+            let flight = await FlightModel.findOne({pax : pax._id, company: req.user.company}).populate("zone").exec();
+         
            /** Finds Flight information of the PAX */
            if(flight && flight.flight_date)
            {
-               let flight = await FlightModel.findOne({pax : pax._id});
+                let stamping = await StampingModel.findOne({pax : pax._id,company : req.user.company}).select("stamping_date").exec();
+                let manpower = await ManpowerModel.findOne({pax : pax._id,company : req.user.company}).select("clearance_date").exec();
+                let delivery = await DeliveryModel.findOne({pax : pax._id, company: req.user.company}).exec();
                res.render("delivery/report",{
                    pax : pax,
                    manpower : manpower,
                    stamping : stamping,
-                   action : "/flight/search",
-                   heading : "Flight Requisition",
+                   action : "/delivery/search",
+                   heading : "Delivery Report",
                    moment : moment,
                    flight : flight,
                    delivery : delivery,
@@ -167,7 +168,7 @@ exports.postReport = async(req,res) => {
 
         let query = {_id : req.params.id,company : req.user.company};
         let pax = await PAXModel.findOne(query).select("_id name passport supplier group").populate("supplier","_id name").populate("group","_id group_seq group_sl zone").exec();
-        let flight = await FlightModel.findOne({pax : pax._id});
+        let flight = await FlightModel.findOne({pax : pax._id}).populate("zone").exec();
         let errors = validationResult(req);
         
         if(flight && flight.flight_date)
@@ -182,7 +183,7 @@ exports.postReport = async(req,res) => {
                     pax : pax,
                     manpower : manpower,
                     stamping : stamping,
-                    action : "/delivery/report",
+                    action : "/delivery/search",
                     heading : "Delivery Report",
                     moment : moment,
                     flight : flight,
@@ -223,6 +224,36 @@ exports.postReport = async(req,res) => {
             res.redirect("/delivery/report");
         }
       
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Deletes Delivery Info */
+exports.deleteDelivery = async(req,res) => {
+    try
+    {   
+        let query = {_id : req.params.id, company : req.user.company};
+
+        let delivery = await DeliveryModel.findOne(query);
+
+        if(delivery)
+        {
+            let deliveryDelete = await DeliveryModel.deleteOne(query);
+
+            if(deliveryDelete)
+            {
+                req.flash("danger","Delivery Deleted");
+                res.redirect("/delivery");
+            }
+            else
+            {
+                req.flash("danger","Something Went Wrong");
+                res.redirect("/delivery");
+            }  
+        }
     }
     catch(err)
     {

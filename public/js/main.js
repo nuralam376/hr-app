@@ -46,6 +46,10 @@ $(document).ready(function(){
         ajaxDelete(e,"flight");      
     });
 
+    $(".delete-delivery").on("click",function(e){
+        ajaxDelete(e,"delivery");      
+    });
+
     function ajaxDelete(e,route)
     {
         e.preventDefault();

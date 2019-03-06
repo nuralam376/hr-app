@@ -16,6 +16,7 @@
                                         <th>Group/SL</th>
                                         <th>Stamping Date</th>
                                         <th>Manpower Date</th>
+                                        <th>Zone</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -25,6 +26,7 @@
                                         <td><%= pax.group.group_seq %> / <%= pax.group.group_sl %></td>
                                         <td><%= moment(stamping.stamping_date).format("ll") %></td>
                                         <td><%= moment(manpower.clearance_date).format("ll") %></td>
+                                        <td><%= flight.zone.name %></td>
                                 </tbody>
                             </table>
                         </div>

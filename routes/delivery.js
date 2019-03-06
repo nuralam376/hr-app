@@ -30,5 +30,7 @@ router.post("/report/:id",auth,[
     sanitizeBody("received_by").trim().unescape()
 ],deliveryController.postReport);
 
+router.delete("/delete/:id",auth,deliveryController.deleteDelivery);
+
 
 module.exports = router;

@@ -18,6 +18,7 @@
                                         <th>Manpower Date</th>
                                         <th>Flight Date</th>
                                         <th>Flight Airlines</th>
+                                        <th>Zone</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -29,6 +30,7 @@
                                         <td><%= moment(manpower.clearance_date).format("ll") %></td>
                                         <td><%= moment(flight.flight_date).format("ll") %></td>
                                         <td><%= flight.flight_airlines %></td>
+                                        <td><%= flight.zone.name %></td>
                                 </tbody>
                             </table>
                         </div>
