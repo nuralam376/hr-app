@@ -98,6 +98,7 @@ const stamping = require("./routes/stamping");
 const tc = require("./routes/tc");
 const manpower = require("./routes/manpower");
 const flight = require("./routes/flight");
+const delivery = require("./routes/delivery");
 
 
 /** Other Routes */
@@ -118,6 +119,7 @@ app.use("/stamping",stamping);
 app.use("/tc",tc);
 app.use("/manpower",manpower);
 app.use("/flight",flight);
+app.use("/delivery",delivery);
 
 app.use((req,res,next) => {
     res.status(404).send("PAGE NOT FOUND");

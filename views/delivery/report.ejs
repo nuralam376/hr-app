@@ -1,0 +1,54 @@
+<% include ../layouts/admin/header %>
+<% include ../includes/search %>
+    
+   <div class="row">
+       <div class="col-md-12">
+            <div class="card">
+                    <div class="card-body">
+                        <h2>Delivery Info </h2>  
+                        <div class="table-responsive">
+                            <table class = "table">
+                                <thead>
+                                    <tr>
+                                        <th>PAX Name</th>
+                                        <th>PAX No</th>
+                                        <th>Reference</th>
+                                        <th>Group/SL</th>
+                                        <th>Stamping Date</th>
+                                        <th>Manpower Date</th>
+                                        <th>Flight Date</th>
+                                        <th>Flight Airlines</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        <td><%= pax.name %></td>
+                                        <td><%= pax.passport %></td>
+                                        <td><%= pax.supplier.name %></td>
+                                        <td><%= pax.group.group_seq %> / <%= pax.group.group_sl %></td>
+                                        <td><%= moment(stamping.stamping_date).format("ll") %></td>
+                                        <td><%= moment(manpower.clearance_date).format("ll") %></td>
+                                        <td><%= moment(flight.flight_date).format("ll") %></td>
+                                        <td><%= flight.flight_airlines %></td>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <form action="/delivery/report/<%= pax._id %>" method = "POST">
+                                    <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
+                                    <div class="form-group">                                        
+                                        <label for="received_by">Received By: </label>
+                                        <input type = "text" id="received_by" name = "received_by" class = "form-control" value = "<%= typeof form != 'undefined' ? form.received_by : delivery ? delivery.received_by : ''%>">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" value = "Save" class = "btn btn-success">
+                                    </div>
+                                </form>    
+                            </div>
+                        </div>
+                           
+                    </div>
+                </div>
+       </div>
+   </div>
+<% include ../layouts/admin/footer %>
