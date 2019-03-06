@@ -53,46 +53,56 @@ $(document).ready(function(){
     function ajaxDelete(e,route)
     {
         e.preventDefault();
-
-        if(confirm("Are you Sure?"))
-        {
-            $target = $(e.target);
-            const id = $target.attr("data-id");
-            const csrf = $target.attr("data-csrf");
-          
-            $.ajax({
-                type : "Delete",
-                url : "/"+route+"/delete/" + id,
-                data : 
-                {
-                    _csrf : csrf
+        $.confirm({
+            title: 'Delete Confirmation!',
+            content: 'Are you sure you want to delete it permanently?',
+            type: 'red',
+            buttons: {
+                confirm: function () {
+                    $target = $(e.target);
+                    const id = $target.attr("data-id");
+                    const csrf = $target.attr("data-csrf");
+                
+                    $.ajax({
+                        type : "Delete",
+                        url : "/"+route+"/delete/" + id,
+                        data : 
+                        {
+                            _csrf : csrf
+                        },
+                        success : function(response)
+                        {
+                            console.log(response);
+                            if(route == "medical")
+                            {
+                                window.location.href = "/"+route+"/all";
+                            }
+                            else
+                            {
+                                window.location.href = "/"+route+"";
+                            }
+                        },
+            
+                        error : function(err)
+                        {
+                            if(route == "medical")
+                            {
+                                window.location.href = "/"+route+"/all";
+                            }
+                            else
+                            {
+                                window.location.href = "/"+route+"";
+                            }
+                        }
+                    });
                 },
-                success : function(response)
-                {
-                    console.log(response);
-                    if(route == "medical")
-                    {
-                        window.location.href = "/"+route+"/all";
-                    }
-                    else
-                    {
-                        window.location.href = "/"+route+"";
-                    }
-                },
-    
-                error : function(err)
-                {
-                    if(route == "medical")
-                    {
-                        window.location.href = "/"+route+"/all";
-                    }
-                    else
-                    {
-                        window.location.href = "/"+route+"";
-                    }
+                cancel: function () {
+                    $.alert('Canceled!');
                 }
-            });
-        }   
+               
+            }
+        });
+
     }
 
     function readURL(input,id) {
