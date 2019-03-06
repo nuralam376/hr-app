@@ -357,15 +357,7 @@ exports.postRegisterManpowerStatus = async(req,res) => {
             manpowerStatus = await ManpowerModel.updateOne({_id : manpower._id},newManpower);
             
         }
-        else
-        {
-            let newManpower = new ManpowerModel();
-            newManpower.clearance_date = forms.clearance;
-            newManpower.card_no = forms.card_no;
-            newManpower.card_photo = forms.card_photo;
-            newManpower.updated_at = Date.now();
-            manpowerStatus = await newManpower.save();
-        }
+    
 
         if(manpowerStatus)
         {

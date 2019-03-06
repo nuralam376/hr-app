@@ -9,10 +9,10 @@ const ManpowerModel = require("../models/manpowerModel");
 /** Stamping Model */
 const StampingModel = require("../models/stampingModel");
 
-/** Stamping Model */
+/** Zone Model */
 const ZoneModel = require("../models/zoneModel");
 
-/** Stamping Model */
+/** Group Model */
 const GroupModel = require("../models/groupModel");
 
 /** Validation */
@@ -106,7 +106,7 @@ exports.postSearch = async(req,res) => {
     }
 }
 
-/** Gets Manpower Registration Page */
+/** Gets Flight Registration Page */
 exports.registerRequisition = async(req,res) => {
     try
     {
@@ -153,7 +153,7 @@ exports.registerRequisition = async(req,res) => {
     }
 }
 
-/** Posts Manpower Ready Status */
+/** Posts Flight Requisition Information */
 exports.postRequisition = async(req,res) => {
     try
     {
@@ -233,6 +233,218 @@ exports.postRequisition = async(req,res) => {
             res.redirect("/flight/search");
         }
       
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Search Flight by PAX Code */
+exports.getReportSearch = async(req,res) => {
+    try
+    {
+        res.render("includes/searchPAX",{
+            action : "/flight/report",
+            heading : "Flight Report"
+        });
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Gets PAX Information */
+exports.postReportSearch = async(req,res) => {
+    try
+    {
+        let form = {
+            code : req.body.code
+        };
+
+        const errors = validationResult(req);
+
+        /** Displays Errors */
+        if(!errors.isEmpty())
+        {
+            return res.render("includes/searchPAX",{
+                errors : errors.array(),
+                action : "/flight/report",
+                heading : "Flight Report",
+                form : form
+            });
+        }
+        let query = {code : req.body.code,company : req.user.company};
+        let pax = await PAXModel.findOne(query).exec();
+
+        /** Finds PAX Code */
+        if(pax)
+        {
+            let flight = await FlightModel.findOne({pax : pax._id,company : req.user.company});
+          
+
+            /** Finds Flight information of the PAX */
+            if(flight && flight.probable_date)
+            {
+                res.redirect("/flight/report/"+pax._id);
+            }
+            else
+            {
+                req.flash("error","Flight Information is needed.Go to <a href = '/flight'>Flight</a> Section");
+                res.redirect("/flight/report");
+            }
+        }
+        else
+        {
+            req.flash("error","PAX Not Found");
+            res.redirect("/flight/report");
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Gets Flight Registration Page */
+exports.registerReport = async(req,res) => {
+    try
+    {
+        let query = {_id : req.params.id,company : req.user.company};
+        let pax = await PAXModel.findOne(query).select("_id name passport supplier group").populate("supplier","_id name").populate("group","_id group_seq group_sl zone").exec();
+  
+        if(pax)
+        {
+            
+            let manpower = await ManpowerModel.findOne({pax : pax._id, company: req.user.company}).select("clearance_date card_no").exec();
+            let stamping = await StampingModel.findOne({pax : pax._id,company : req.user.company}).select(" stamping_date").exec();
+            let flight = await FlightModel.findOne({pax : pax._id, company : req.user.company}).exec();
+           /** Finds flight information of the PAX */
+           if(flight && flight.probable_date)
+           {
+               res.render("flight/report",{
+                   pax : pax,
+                   manpower : manpower,
+                   stamping : stamping,
+                   flight : flight,
+                   action : "/flight/report",
+                   heading : "Flight Report",
+                   moment : moment,
+               });
+           }
+           else
+           {
+            req.flash("error","Flight Information is needed.Go to <a href = '/flight'>Flight</a> Section");
+            res.redirect("/flight/report");
+           }
+        }
+        else
+        {
+            req.flash("danger","PAX Not Found");
+            res.redirect("/flight/report");
+        }
+    }
+    catch(err)
+    {
+        console.log(err);
+        res.status(422).send("500,Internal Server Error");
+    }
+}
+
+/** Posts Flight Ready Status */
+exports.postReport = async(req,res) => {
+    try
+    {
+        let forms = {
+            flight_date : req.body.flight_date,
+            flight_airlines : req.body.flight_airlines,
+            price : req.body.price
+        };
+
+        let query = {_id : req.params.id,company : req.user.company};
+        let pax = await PAXModel.findOne(query).select("_id name passport supplier group").populate("supplier","_id name").populate("group","_id group_seq group_sl zone").exec();
+      
+        let manpower = await ManpowerModel.findOne({pax : pax._id, company: req.user.company}).select("clearance_date card_no").exec();
+        let flight = await FlightModel.findOne({pax : pax._id});
+        let errors = validationResult(req);
+
+        if(flight && flight.probable_date)
+        {
+            let stamping = await StampingModel.findOne({pax : pax._id,company : req.user.company}).select(" stamping_date").exec();
+            let flightStatus;
+            if(!errors.isEmpty())
+            {
+                return res.render("flight/report",{
+                    pax : pax,
+                    manpower : manpower,
+                    stamping : stamping,
+                    action : "/flight/report",
+                    heading : "Flight Report",
+                    moment : moment,
+                    flight : flight,
+                    errors : errors.array(),
+                    form : forms
+                });
+            }
+            if(flight)
+            {
+                let newFlight = {};
+                newFlight.flight_date = forms.flight_date;
+                newFlight.flight_airlines = forms.flight_airlines;
+                newFlight.price = forms.price;
+                newFlight.updated_at = Date.now();
+                flightStatus = await FlightModel.updateOne({_id : flight._id},newFlight);
+            }
+        
+
+            if(flightStatus)
+            {
+                req.flash("success","Flight Information saved");
+                res.redirect("/flight/report/"+req.params.id);
+            }
+            else
+            {
+                req.flash("danger","Something went wrong");
+                res.redirect("/flight/report");
+            }
+        }
+        else
+        {
+            req.flash("error","PAX Not Found");
+            res.redirect("/flight/report");
+        }
+      
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+/** Deletes Flight Info */
+exports.deleteFlight = async(req,res) => {
+    try
+    {   
+        let query = {_id : req.params.id, company : req.user.company};
+
+        let flight = await FlightModel.findOne(query);
+
+        if(flight)
+        {
+            let flightDelete = await FlightModel.deleteOne(query);
+
+            if(flightDelete)
+            {
+                req.flash("danger","Flight Deleted");
+                res.redirect("/flight");
+            }
+            else
+            {
+                req.flash("danger","Something Went Wrong");
+                res.redirect("/flight");
+            }  
+        }
     }
     catch(err)
     {

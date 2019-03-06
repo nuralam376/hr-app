@@ -42,6 +42,9 @@ $(document).ready(function(){
         ajaxDelete(e,"manpower");      
     });
     
+    $(".delete-flight").on("click",function(e){
+        ajaxDelete(e,"flight");      
+    });
 
     function ajaxDelete(e,route)
     {
