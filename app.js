@@ -12,22 +12,6 @@ const csrf = require("csurf");
 const csrfProtection = csrf();
 const port = process.env.PORT || 8000;
 
-/** Database Configuration File */
-const config = require("./config/database");
-
-/** Database Configuration Settings */
-mongoose.connect(config.database, {useNewUrlParser : true});
-
-const db = mongoose.connection;
-
-db.once("open",() => {
-    console.log("Connected to MongoDB");
-});
-
-db.on("error",err => {
-    console.log(err);
-});
-
 /** Required middleware */
 app.use(bodyParser.urlencoded({extended : false}));
 app.use(bodyParser.json());
@@ -124,9 +108,20 @@ app.use("/delivery",delivery);
 app.use((req,res,next) => {
     res.status(404).send("PAGE NOT FOUND");
 });
-// Start the server
-app.listen(port,function(){
-    console.log("Server started on port " + port);
+
+// Start the server and Database
+/** Database Configuration File */
+const config = require("./config/database");
+
+const db = mongoose.connection;
+
+db.once("open",() => {
+    console.log("Connected to MongoDB");
+    app.listen(port,function(){
+        console.log("Server started on port " + port);
+    });
 });
 
-
+db.on("error",err => {
+    console.log(err);
+});
