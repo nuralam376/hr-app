@@ -2,13 +2,16 @@
 
 /** Required modules */
 const express = require("express");
+
 const path = require("path");
 const router = express.Router();
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody} = require("express-validator/filter");
-const multer = require("multer");
+const aws = require('aws-sdk')
+const multer = require('multer')
+const multerS3 = require('multer-s3')
 const moment = require("moment");
 
 /** Authetication Check File */
@@ -23,19 +26,34 @@ let CompanyInfoModel = require("../models/companyInfoModel");
 /** Created Events Module */
 const createdEvents = require("../util/events");
 
-/** Initialize Multer storage Variable for file upload */
-const storage = multer.diskStorage({
-    destination : "./public/uploads/admin",
-    filename : function(req,file,cb)
-    {
-        cb(null,file.fieldname + "-" + Date.now() + path.extname(file.originalname));
-    }
+const config = require("../config/s3");
+/** AWS */
+aws.config.update({
+    secretAccessKey: config.secretAccessKey,
+    accessKeyId: config.accessKeyId,
+    region : "ap-south-1"
 });
 
+/** Initialize Multer storage Variable for file upload */
+
+const s3 = new aws.S3();
 
 /** Implements File upload validation */
 const upload = multer({
-    storage : storage,
+    storage : multerS3({
+        s3 : s3,
+        bucket : "hr-app-test",
+        acl: 'public-read',
+        expires : Date.now() + 100,
+        ServerSideEncryption : "AES256",
+        metadata: function (req, file, cb) {
+          cb(null, {fieldName: file.fieldname + "-" + Date.now() + path.extname(file.originalname)});
+        },
+        key: function (req, file, cb) {
+          adminPhoto = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
+          cb(null,req.user.company + "/admins/" + file.fieldname + "-" + Date.now().toString() + path.extname(file.originalname))
+        }
+    }),
     fileFilter : function(req,file,cb){
         checkFileType(req,file,cb)
     }
@@ -325,7 +343,7 @@ router.post("/profile/update",auth,upload.any(),[
     sanitizeBody("address").trim().unescape(),
 ],async(req,res) => {
        try
-       {        
+       {       
             let query = {_id : req.user._id, company : req.user.company}; 
 
             let adminInfo = await AdminModel.findOne(query); // Finds the Admin
@@ -357,10 +375,9 @@ router.post("/profile/update",auth,upload.any(),[
                
                 
                 /** If File exists, then update */
-                if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+                if(typeof adminPhoto !== "undefined" && req.fileValidationError == null)
                 {
-                    if(req.files[0].fieldname == "profile_photo")
-                        forms.profile_photo = req.files[0].filename;
+                    forms.profile_photo = adminPhoto;
                 }
             
 
@@ -379,7 +396,11 @@ router.post("/profile/update",auth,upload.any(),[
                     if(adminInfo.profile_photo !== forms.profile_photo && adminInfo.profile_photo !== "dummy.jpeg")
                     {
                         /** Removes the previous file */
-                        fs.unlink("./public/uploads/admin/" + adminInfo.profile_photo, (err) => {
+                        let params = {
+                            Bucket: "hr-app-test", 
+                            Key: req.user._id + "/admins/" + adminInfo.profile_photo 
+                           };
+                        s3.deleteObject(params,(err,data) => {
                             if(err)
                             {
                                 console.log(err);

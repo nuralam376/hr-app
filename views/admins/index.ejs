@@ -20,12 +20,16 @@
                 </thead>
                 <tbody>
                     <% if(admins) { %>
-                        <% admins.forEach(function(admin) { %>
+                        <% admins.forEach(function(adminInfo) { %>
                             <tr>
-                                <td><a href = "/admin/<%= admin.seq_id %>"><%= admin.seq_id %></a></td>
-                                <td><%= admin.name %></td>
-                                <td><%= admin.email %></td>
-                                <td><a data-fancybox="gallery" href="uploads\admin/<%= admin.profile_photo %>"><img src = "uploads\admin/<%= admin.profile_photo %>" height = "50px" width = "50px"></a></td>
+                                <td><a href = "/admin/<%= adminInfo.seq_id %>"><%= adminInfo.seq_id %></a></td>
+                                <td><%= adminInfo.name %></td>
+                                <td><%= adminInfo.email %></td>
+                                <% if (adminInfo.profile_photo == "dummy.jpeg") { %>
+                                    <td><a data-fancybox="gallery" href="https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= adminInfo.profile_photo %>"><img src = "https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= adminInfo.profile_photo %>" height = "50px" width = "50px"></a></td>
+                                <% } else { %>
+                                    <td><a data-fancybox="gallery" href="https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= adminInfo.company %>/admins/<%= adminInfo.profile_photo %>"><img src = "https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= adminInfo.company %>/admins/<%= adminInfo.profile_photo %>" height = "50px" width = "50px"></a></td>
+                                <% } %>
                             </tr>
                         <% }) %>
                     <% } %>

@@ -25,7 +25,11 @@
             </tr>
             <tr>
                 <th>Profile Photo</th>
-                <td><a data-fancybox="gallery" href="/uploads/admin/<%= adminInfo.profile_photo %>"><img src = "/uploads/admin/<%= adminInfo.profile_photo %>" style = "height:auto;max-width:500px;" id = "photo"></a></td>
+                <% if (adminInfo.profile_photo == "dummy.jpeg") { %>
+                    <td><a data-fancybox="gallery" href="https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= adminInfo.profile_photo %>"><img src = "https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= adminInfo.profile_photo %>" height = "100px" width = "100px"></a></td>
+                <% } else { %>
+                    <td><a data-fancybox="gallery" href="https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= adminInfo.company %>/admins/<%= adminInfo.profile_photo %>"><img src = "https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= adminInfo.company %>/admins/<%= adminInfo.profile_photo %>" height = "300px" width = "500px"></a></td>
+                <% } %>
             </tr>
         </table>
 <% include ../layouts/admin/footer %>
