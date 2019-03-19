@@ -27,7 +27,7 @@
                                 <td><%= supplier.name %></td>
                                 <td><%= supplier.nid %></td>
                                 <td><%= supplier.introducer_name %></td>
-                                <td><a data-fancybox="gallery" href = "uploads\supplier\<%= supplier.profile_photo %>"><img src = "uploads\supplier\<%= supplier.profile_photo %>" height = "50px" width = "50px"></a></td>
+                                <td><a data-fancybox="gallery" href = "https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= supplier.company %>/suppliers/<%= supplier.profile_photo %>"><img src = "https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= supplier.company %>/suppliers/<%= supplier.profile_photo %>" height = "50px" width = "50px"></a></td>
                                 <td><%= moment(supplier.created_at).format("llll")%></td>
                             </tr>
                         <% }) %>

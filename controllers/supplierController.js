@@ -16,9 +16,8 @@ const SupplierModel = require("../models/supplierModel");
 /** Company Info Model Schema */
 let CompanyInfoModel = require("../models/companyInfoModel");
 
-
-
-
+/** Delete S3 Object File */
+const s3DeleteFile = require("../util/deleteS3File");
 
 /** Renders All Suppliers */
 exports.getAllSuppliers = async(req,res) => {
@@ -69,18 +68,17 @@ exports.postSupplierRegistration = async(req,res) => {
             introducer_number : req.body.introducer_number
         };
 
+        let companyInfo = await CompanyInfoModel.findOne({company : req.user.company});
+
         /** Checks if the Supplier uploads any file */
-        if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+        if(typeof supplierProfilePhoto !== "undefined" && req.fileValidationError == null)
         {
-            if(req.files[0].fieldname == "profile_photo")
-                forms.profile_photo = req.files[0].filename;
-            else
-                forms.passport_photo = req.files[0].filename;
+                forms.profile_photo = supplierProfilePhoto;
         }
         
-        if(typeof req.files[1] !== "undefined" && req.files[1].fieldname == "passport_photo" && req.fileValidationError == null)
+        if(typeof supplierPassportPhoto !== "undefined" && req.fileValidationError == null)
         {
-            forms.passport_photo = req.files[1].filename;
+            forms.passport_photo = supplierPassportPhoto;
         }
 
         let errors = validationResult(req);
@@ -90,7 +88,8 @@ exports.postSupplierRegistration = async(req,res) => {
             res.render("supplier/register",{
                 errors : errors.array(),
                 form : forms,
-                fileError : req.fileValidationError
+                fileError : req.fileValidationError,
+                companyInfo : companyInfo
             });
         }
         else if(typeof req.fileValidationError != undefined && req.fileValidationError != null)
@@ -98,7 +97,8 @@ exports.postSupplierRegistration = async(req,res) => {
             res.render("supplier/register",{
                 errors : errors.array(),
                 form : forms,
-                fileError : req.fileValidationError
+                fileError : req.fileValidationError,
+                companyInfo : companyInfo
             });
         }
         else
@@ -180,17 +180,14 @@ exports.updateSupplier = async(req,res) => {
                 forms.profile_photo = newSupplier.profile_photo;
                 forms.passport_photo = newSupplier.passport_photo;
     
-                if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+                if(typeof supplierProfilePhoto !== "undefined" && req.fileValidationError == null)
                 {
-                    if(req.files[0].fieldname == "profile_photo")
-                        forms.profile_photo = req.files[0].filename;
-                    else
-                        forms.passport_photo = req.files[0].filename;
+                        forms.profile_photo = supplierProfilePhoto;
                 }
                 
-                if(typeof req.files[1] !== "undefined" && req.files[1].fieldname == "passport_photo" && req.fileValidationError == null)
+                if(typeof supplierPassportPhoto !== "undefined" && req.fileValidationError == null)
                 {
-                    forms.passport_photo = req.files[1].filename;
+                    forms.passport_photo = supplierPassportPhoto;
                 }
     
                 if(!errors.isEmpty())
@@ -207,21 +204,11 @@ exports.updateSupplier = async(req,res) => {
                 {
                     if(newSupplier.profile_photo !== forms.profile_photo && newSupplier.profile_photo != "dummy.jpeg")
                     {
-                        fs.unlink("./public/uploads/supplier/"+newSupplier.profile_photo, (err) => {
-                             if(err)
-                             {
-                                 console.log(err);
-                             }
-                         });
+                        s3DeleteFile(req,"/suppliers/",newSupplier.profile_photo);
                     }
                     if(newSupplier.passport_photo !== forms.passport_photo && newSupplier.passport_photo != "dummy.jpeg")
                     {
-                        fs.unlink("./public/uploads/supplier/"+newSupplier.passport_photo, (err) => {
-                            if(err)
-                             {
-                                 console.log(err);
-                             }
-                         });
+                        s3DeleteFile(req,"/suppliers/",newSupplier.passport_photo);
                     }
     
                     let supplier = {};
@@ -278,21 +265,11 @@ exports.deleteSupplier = async(req,res) => {
                 /** Removes the old files */
             if(supplier.profile_photo != "dummy.jpeg")
             {
-                fs.unlink("./public/uploads/supplier/"+supplier.profile_photo, (err) => {
-                    if(err)
-                    {
-                        console.log(err);
-                    }
-                });
+                s3DeleteFile(req,"/suppliers/",supplier.profile_photo);
             }
             if(supplier.passport_photo != "dummy.jpeg")
             {
-                fs.unlink("./public/uploads/supplier/"+supplier.passport_photo, (err) => {
-                    if(err)
-                        {
-                            console.log(err);
-                        }
-                    });
+                s3DeleteFile(req,"/suppliers/",supplier.passport_photo);
             }
 
             let supplierDelete = await SupplierModel.deleteOne(query);
@@ -473,3 +450,4 @@ exports.downloadSuppliersSticker = async(req,res) => {
     }
 
 }; 
+

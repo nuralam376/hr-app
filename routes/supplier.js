@@ -13,22 +13,46 @@ const auth = require("../config/auth");
 /** Dashboard Controller */
 const SupplierController = require("../controllers/supplierController");
 
-const multer = require("multer");
-
+const aws = require('aws-sdk');
+const multer = require('multer');
+const multerS3 = require('multer-s3');
+const config = require("../config/s3");
+/** AWS */
+aws.config.update({
+    secretAccessKey: config.secretAccessKey,
+    accessKeyId: config.accessKeyId,
+    region : "ap-south-1"
+});
 
 /** Initialize Multer storage Variable for file upload */
-const storage = multer.diskStorage({
-    destination : "./public/uploads/supplier",
-    filename : (req,file,cb) => 
-    {
-        cb(null,file.fieldname + "-" + Date.now() + path.extname(file.originalname));
-    }
-});
+
+const s3 = new aws.S3();
 
 /** Implements File upload validation */
 const upload = multer({
-    storage : storage,
-    fileFilter : (req,file,cb) => {
+    storage : multerS3({
+        s3 : s3,
+        bucket : "hr-app-test",
+        acl: 'public-read',
+        expires : Date.now() + 100,
+        ServerSideEncryption : "AES256",
+        metadata: function (req, file, cb) {
+          cb(null, {fieldName: file.fieldname + "-" + Date.now() + path.extname(file.originalname)});
+        },
+        key: function (req, file, cb) {
+          if(file.fieldname == "profile_photo")
+          {
+              supplierProfilePhoto = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
+              cb(null,req.user.company + "/suppliers/" + supplierProfilePhoto)
+          }
+          else
+          {
+            supplierPassportPhoto = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
+            cb(null,req.user.company + "/suppliers/" + supplierPassportPhoto)
+        }
+        }
+    }),
+    fileFilter : function(req,file,cb){
         checkFileType(req,file,cb)
     }
 });
@@ -38,7 +62,6 @@ const upload = multer({
  * Checks Whether the file is an image or not
  * 
  */
-
 function checkFileType(req,file,cb)
 {
     let ext = path.extname(file.originalname);
