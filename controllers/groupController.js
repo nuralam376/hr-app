@@ -10,7 +10,17 @@ const ZoneModel = require("../models/zoneModel");
 
 const moment = require("moment-timezone");
 const fs = require("fs");
+const aws = require("aws-sdk");
 
+const config = require("../config/s3");
+/** AWS */
+aws.config.update({
+    secretAccessKey: config.secretAccessKey,
+    accessKeyId: config.accessKeyId,
+    region : "ap-south-1"
+});
+
+const s3 = new aws.S3();
 /** Validation Configuration */
 const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody} = require("express-validator/filter");
@@ -68,11 +78,11 @@ exports.postGroupRegistration = async(req,res) => {
             amount : req.body.amount,
             occupation : req.body.occupation
         };
-       /** Checks whetere any file is uploaded */
-       if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+
+       /** Checks whether any file is uploaded */
+       if(enjazitPhoto !== "undefined" && req.fileValidationError == null)
        {
-           if(req.files[0].fieldname == "enjazit_image")
-               forms.enjazit_image = req.files[0].filename;
+               forms.enjazit_image = enjazitPhoto;
        }
         let errors = validationResult(req);
         let group_sl = await CompanyInfoModel.findOne({company : req.user.company});
@@ -143,10 +153,9 @@ exports.updateGroup = async(req,res) => {
             forms.enjazit_image = group.enjazit_image;
             
             /** Checks whetere any file is uploaded */
-            if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+            if(typeof enjazitPhoto !== "undefined" && req.fileValidationError == null)
             {
-                if(req.files[0].fieldname == "enjazit_image")
-                    forms.enjazit_image = req.files[0].filename;
+                    forms.enjazit_image = enjazitPhoto;
             }
             if(!errors.isEmpty())
             {
@@ -161,7 +170,12 @@ exports.updateGroup = async(req,res) => {
             {
                 if(group.enjazit_image !== forms.enjazit_image)
                 {
-                    fs.unlink("./public/uploads/enjazit/"+group.enjazit_image, (err) => {
+                    /** Removes the previous file */
+                    let params = {
+                        Bucket: "hr-app-test", 
+                        Key: req.user.company + "/groups/" + group.enjazit_image
+                    };
+                    s3.deleteObject(params,(err,data) => {
                         if(err)
                         {
                             console.log(err);
@@ -194,16 +208,17 @@ exports.deleteGroup = async(req,res) => {
 
         if(group)
         {
-                /** Removes the old files */
-            if(group.enjazit_image != "dummy.jpeg")
-            {
-                fs.unlink("./public/uploads/enjazit/"+group.enjazit_image, (err) => {
-                    if(err)
-                    {
-                        console.log(err);
-                    }
-                });
-            }
+            /** Removes the previous file */
+            let params = {
+                Bucket: "hr-app-test", 
+                Key: req.user.company + "/groups/" + group.enjazit_image
+            };
+            s3.deleteObject(params,(err,data) => {
+                if(err)
+                {
+                    console.log(err);
+                }
+            });
 
             let groupDelete = await GroupModel.deleteOne(query);
 
@@ -288,7 +303,7 @@ const groupSave = async(req,res,forms) =>
 
         let companyInfo = {};
         companyInfo.group = forms.group_seq;
-        await CompanyInfoModel.update({company : req.user.company}, companyInfo);
+        await CompanyInfoModel.updateOne({company : req.user.company}, companyInfo);
 
         let groupSave = await group.save(); // Saves group data
 

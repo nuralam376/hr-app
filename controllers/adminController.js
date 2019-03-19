@@ -9,9 +9,9 @@ const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody} = require("express-validator/filter");
-const aws = require('aws-sdk')
-const multer = require('multer')
-const multerS3 = require('multer-s3')
+const aws = require('aws-sdk');
+const multer = require('multer');
+const multerS3 = require('multer-s3');
 const moment = require("moment");
 
 /** Authetication Check File */
@@ -51,7 +51,7 @@ const upload = multer({
         },
         key: function (req, file, cb) {
           adminPhoto = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
-          cb(null,req.user.company + "/admins/" + file.fieldname + "-" + Date.now().toString() + path.extname(file.originalname))
+          cb(null,req.user.company + "/admins/" + adminPhoto)
         }
     }),
     fileFilter : function(req,file,cb){
@@ -398,7 +398,7 @@ router.post("/profile/update",auth,upload.any(),[
                         /** Removes the previous file */
                         let params = {
                             Bucket: "hr-app-test", 
-                            Key: req.user._id + "/admins/" + adminInfo.profile_photo 
+                            Key: req.user.company + "/admins/" + adminInfo.profile_photo 
                            };
                         s3.deleteObject(params,(err,data) => {
                             if(err)
