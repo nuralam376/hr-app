@@ -23,7 +23,8 @@ let ZoneModel = require("../models/zoneModel");
 /** Company Info Model Schema */
 let CompanyInfoModel = require("../models/companyInfoModel");
 
-
+/** S3 Delete File */
+const s3DeleteFile = require("../util/deleteS3File");
 
 /**
  * Shows All users
@@ -102,17 +103,14 @@ exports.postRegistration  = async(req,res) => {
         };
 
         /** Checks if the user uploads any file */
-        if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+        if(typeof paxProfilePhoto !== "undefined" && req.fileValidationError == null)
         {
-            if(req.files[0].fieldname == "profile_photo")
-                forms.profile_photo = req.files[0].filename;
-            else
-                forms.passport_photo = req.files[0].filename;
+             forms.profile_photo = paxProfilePhoto;
         }
         
-        if(typeof req.files[1] !== "undefined" && req.files[1].fieldname == "passport_photo" && req.fileValidationError == null)
+        if(typeof paxPassportPhoto !== "undefined" && req.fileValidationError == null)
         {
-            forms.passport_photo = req.files[1].filename;
+            forms.passport_photo = paxPassportPhoto;
         }
 
             let suppliers = await SupplierModel.find({company : req.user.company}).exec();
@@ -253,29 +251,21 @@ exports.updateUser = async(req,res) => {
         }
 
         /** Checks whether the user updates the picture */
-        if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+        if(typeof paxProfilePhoto !== "undefined" && req.fileValidationError == null)
         {
-            if(req.files[0].fieldname == "profile_photo")
-                forms.profile_photo = req.files[0].filename;
-            else if (req.files[0].fieldname == "passport_photo")
-                forms.passport_photo = req.files[0].filename;
-            else if(req.files[0].fieldname == "experience_image")
-                forms.experience_image = req.files[0].filename;
+            forms.profile_photo = paxProfilePhoto;
         }
         
-        if(typeof req.files[1] !== "undefined" && req.files[1].fieldname == "passport_photo" && req.fileValidationError == null)
+        if(typeof paxPassportPhoto !== "undefined" && req.fileValidationError == null)
         {
-            forms.passport_photo = req.files[1].filename;
+            forms.passport_photo = paxPassportPhoto;
+            console.log(paxPassportPhoto);
         }
-        else if(typeof req.files[1] !== "undefined" && req.files[1].fieldname == "experience_image" && req.fileValidationError == null)
+        if(typeof paxExperienceImage !== "undefined" && req.fileValidationError == null)
         {
-            forms.experience_image = req.files[1].filename;
+            forms.experience_image = paxExperienceImage
         }
 
-        if(typeof req.files[2] !== "undefined" && req.files[2].fieldname == "experience_image" && req.fileValidationError == null)
-        {
-            forms.experience_image = req.files[2].filename;
-        }
     
         if(!errors.isEmpty())
         {
@@ -295,30 +285,15 @@ exports.updateUser = async(req,res) => {
             /** Removes the old files */
             if(newUser.profile_photo !== forms.profile_photo && newUser.profile_photo != "dummy.jpeg")
             {
-                fs.unlink("./public/uploads/user/"+newUser.profile_photo, (err) => {
-                    if(err)
-                    {
-                        console.log(err);
-                    }
-                });
+                s3DeleteFile(req,"/pax/"+newUser.code, newUser.profile_photo);
             }
             if(newUser.passport_photo !== forms.passport_photo && newUser.passport_photo != "dummy.jpeg")
             {
-                fs.unlink("./public/uploads/user/"+newUser.passport_photo, (err) => {
-                    if(err)
-                        {
-                            console.log(err);
-                        }
-                    });
+                s3DeleteFile(req,"/pax/"+newUser.code, newUser.passport_photo);
             }
             if(newUser.experience_image !== forms.experience_image && newUser.experience_image != null)
             {
-                fs.unlink("./public/uploads/user/"+newUser.experience_image, (err) => {
-                    if(err)
-                        {
-                            console.log(err);
-                        }
-                    });
+                s3DeleteFile(req,"/pax/"+newUser.code, newUser.experience_image);
             }
 
            await userUpdate(req,res,forms,query,newUser,suppliers,groups);
@@ -352,30 +327,15 @@ exports.deleteUser = async(req,res) => {
                 /** Removes the old files */
             if(user.profile_photo != "dummy.jpeg")
             {
-                fs.unlink("./public/uploads/user/"+user.profile_photo, (err) => {
-                    if(err)
-                    {
-                        console.log(err);
-                    }
-                });
+                s3DeleteFile(req,"/pax/"+user.code, user.profile_photo);
             }
             if(user.passport_photo != "dummy.jpeg")
             {
-                fs.unlink("./public/uploads/user/"+user.passport_photo, (err) => {
-                    if(err)
-                        {
-                            console.log(err);
-                        }
-                    });
+                s3DeleteFile(req,"/pax/"+user.code, user.passport_photo);
             }
             if(user.experience_image)
             {
-                fs.unlink("./public/uploads/user/"+user.experience_image, (err) => {
-                    if(err)
-                        {
-                            console.log(err);
-                        }
-                    });
+                s3DeleteFile(req,"/pax/"+user.code, user.experience_image);
             }
 
             let userDelete = await UserModel.deleteOne(query);
@@ -533,9 +493,9 @@ const saveNewUser = async(req,res,forms,suppliers,groups,companyInfo) => {
            
             /** Checks if the user uploads any experience file */
             
-            if(typeof req.files[2] !== "undefined" && req.files[2].fieldname == "experience_image" && req.fileValidationError == null)
+            if(typeof paxExperienceImage !== "undefined" && req.fileValidationError == null)
             {
-                forms.experience_image = req.files[2].filename;
+                forms.experience_image = paxExperienceImage;
             }
             else
             {
@@ -653,7 +613,6 @@ const userUpdate = async(req,res,forms,query,newUser,suppliers,groups) => {
         user.experience_month = forms.experience_month;
         user.experience_day = forms.experience_day;
 
-        console.log(user);
 
      await createdEvents(req,user,req.params.id,"user");
      let userUpdatedData = await UserModel.updateOne(query,user);
