@@ -28,6 +28,7 @@
                     <div class="card-body">
                         <h2>Stamping Info </h2>  
                         <form action="/stamping/register/<%= pax._id %>/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
+                            <input type="hidden" name = "code" value = "<%= pax.code %>">
                             <table class = "table">
                                     <thead>
                                         <tr>
@@ -99,7 +100,7 @@
                                            
                                             <th></th>
                                             <% if(typeof stamping != 'undefined') { %>
-                                                <td><a data-fancybox="gallery" href = "/uploads/stamping/<%= stamping.pc_image %>"><img src="/uploads/stamping/<%= stamping.pc_image %>" alt="<%= stamping.pax %>" id = "photo" style = "height:auto;max-width:300px;"></a></td>
+                                                <td><a data-fancybox="gallery" href = "https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= stamping.company %>/pax/<%= pax.code %>/stamping/<%= stamping.pc_image%>"><img src="https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= stamping.company %>/pax/<%= pax.code %>/stamping/<%= stamping.pc_image%>" alt="<%= stamping.pax %>" id = "photo" style = "height:auto;max-width:300px;"></a></td>
                                             <% } %>
                                         </tr>
                                         <tr>

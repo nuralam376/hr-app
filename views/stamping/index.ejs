@@ -26,7 +26,7 @@
                                     <td><a href="/pax/<%= stamping.pax.seq_id %>"><%= stamping.pax.code %></a></td>
                                     <td><%= stamping.pax.name %></td>
                                     <td><%= stamping.status %></td>
-                                    <td><a data-fancybox="gallery" href="uploads/stamping/<%= stamping.pc_image %>"><img src = "uploads/stamping/<%= stamping.pc_image %>" height = "50px" width = "50px"></a></td>
+                                    <td><a data-fancybox="gallery" href="https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= stamping.company %>/pax/<%= stamping.pax.code %>/stamping/<%= stamping.pc_image%>"><img src = "https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= stamping.company %>/pax/<%= stamping.pax.code %>/stamping/<%= stamping.pc_image%>" height = "50px" width = "50px"></a></td>
                                     <%if(stamping.visa_no) { %>
                                         <td><%= stamping.visa_no %></td>
                                         <td><%= moment(stamping.stamping_date).format("ll") %></td>

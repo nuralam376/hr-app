@@ -6,10 +6,15 @@ const StampingModel = require("../models/stampingModel");
 /** Mofa Model */
 const MofaModel = require("../models/mofaModel");
 
+
+/** S3 Delete File */
+const s3DeleteFile = require("../util/deleteS3File");
+
 /** Validation */
 const {validationResult} = require("express-validator/check");
 
 const moment = require("moment-timezone");
+
 
 const fs = require("fs");
 
@@ -17,7 +22,7 @@ const fs = require("fs");
 exports.getAllInfos = async(req,res) => {
     try
     {
-        let stampings = await StampingModel.find({company : req.user.company}).populate("pax").exec();
+        let stampings = await StampingModel.find({company : req.user.company}).sort({created_at : -1}).populate("pax").exec();
 
         res.render("stamping/index",{
             stampings : stampings,
@@ -143,10 +148,10 @@ exports.postStamping = async(req,res) => {
         let mofa = await MofaModel.findOne({pax : pax._id,company : req.user.company}).populate("group").exec();
         let stamping = await StampingModel.findOne({pax : pax._id,company : req.user.company}) || undefined;
         /** Checks whetere any file is uploaded */
-        if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+        if(typeof paxPcImage !== "undefined" && req.fileValidationError == null)
         {
-            if(req.files[0].fieldname == "pc_image")
-                forms.pc_image = req.files[0].filename;
+            
+            forms.pc_image = paxPcImage;
      
 
             if(pax)
@@ -158,12 +163,7 @@ exports.postStamping = async(req,res) => {
                     newStamping.status = forms.status;
                     newStamping.pc_image = forms.pc_image;
                     /** Removes the old file */
-                    fs.unlink("./public/uploads/stamping/" + stamping.pc_image, err => {
-                        if(err)
-                        {
-                            console.log(err);
-                        }
-                    });
+                    s3DeleteFile(req,"/pax/"+pax.code+"/stamping/", stamping.pc_image);
                     stampingStatus = await StampingModel.updateOne({_id : stamping._id},newStamping);
                 }
                 else
@@ -343,18 +343,12 @@ exports.deleteStamping = async(req,res) => {
     {
         let query = {_id : req.params.id, company : req.user.company}; 
 
-        let stamping = await StampingModel.findOne(query);
+        let stamping = await StampingModel.findOne(query).populate("pax","code");
 
         if(stamping)
         {
             
-            fs.unlink("./public/uploads/stamping/"+stamping.pc_image, (err) => {
-                if(err)
-                {
-                    console.log(err);
-                }
-            });
-            
+            s3DeleteFile(req,"/pax/"+stamping.pax.code+"/stamping/", stamping.pc_image);
 
             let stampingDelete = await StampingModel.deleteOne(query);
 

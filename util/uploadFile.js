@@ -55,6 +55,11 @@ const upload =
                     paxMedicalUnfitSlip = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
                     cb(null,req.user.company + "/pax/" + paxCode +"/medical/"+ paxMedicalUnfitSlip)
                 } 
+                if(file.fieldname == "pc_image")
+                {
+                    paxPcImage = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
+                    cb(null,req.user.company + "/pax/" + paxCode +"/stamping/"+ paxPcImage)
+                } 
             }
         }),
         fileFilter : function(req,file,cb){
