@@ -31,7 +31,7 @@
             </tr>
             <tr>
                 <th>Birth Date</th>
-                <td><%= moment(newUser.birth_date).format("llll") %></td>
+                <td><%= moment(newUser.birth_date).format("ll") %></td>
             </tr>
             <tr>
                 <th>Blood Group</th>
@@ -51,11 +51,11 @@
             </tr>
             <tr>
                 <th>Date of issue</th>
-                <td><%= newUser.issue %></td>
+                <td><%= moment(newUser.issue).format("ll") %></td>
             </tr>
             <tr>
                 <th>Date of Expiry</th>
-                <td><%= newUser.expiry %></td>
+                <td><%= moment(newUser.expiry).format("ll") %></td>
             </tr>
             <tr>
                 <th>Present Address</th>

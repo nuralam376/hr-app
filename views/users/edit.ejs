@@ -2,6 +2,7 @@
     <h1>Code : <%= newUser.code %></h1> 
     
     <form action = "/pax/update/<%= newUser._id %>/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
+        <input type="hidden" name = "code" value = "<%= newUser.code %>">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">

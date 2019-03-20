@@ -34,7 +34,7 @@ const s3DeleteFile = require("../util/deleteS3File");
 exports.getAllUsers= async(req,res) => {
     try 
     {
-        let users = await UserModel.find({company : req.user.company}).populate("supplier").populate("group"); // Finds the Users of the Logged in Admin's Company
+        let users = await UserModel.find({company : req.user.company}).sort({created_at : -1}).populate("supplier").populate("group"); // Finds the Users of the Logged in Admin's Company
         
         if(users)
         {
@@ -259,7 +259,6 @@ exports.updateUser = async(req,res) => {
         if(typeof paxPassportPhoto !== "undefined" && req.fileValidationError == null)
         {
             forms.passport_photo = paxPassportPhoto;
-            console.log(paxPassportPhoto);
         }
         if(typeof paxExperienceImage !== "undefined" && req.fileValidationError == null)
         {
@@ -285,15 +284,15 @@ exports.updateUser = async(req,res) => {
             /** Removes the old files */
             if(newUser.profile_photo !== forms.profile_photo && newUser.profile_photo != "dummy.jpeg")
             {
-                s3DeleteFile(req,"/pax/"+newUser.code, newUser.profile_photo);
+                s3DeleteFile(req,"/pax/"+newUser.code+"/", newUser.profile_photo);
             }
             if(newUser.passport_photo !== forms.passport_photo && newUser.passport_photo != "dummy.jpeg")
             {
-                s3DeleteFile(req,"/pax/"+newUser.code, newUser.passport_photo);
+                s3DeleteFile(req,"/pax/"+newUser.code+"/", newUser.passport_photo);
             }
             if(newUser.experience_image !== forms.experience_image && newUser.experience_image != null)
             {
-                s3DeleteFile(req,"/pax/"+newUser.code, newUser.experience_image);
+                s3DeleteFile(req,"/pax/"+newUser.code+"/", newUser.experience_image);
             }
 
            await userUpdate(req,res,forms,query,newUser,suppliers,groups);
@@ -327,15 +326,15 @@ exports.deleteUser = async(req,res) => {
                 /** Removes the old files */
             if(user.profile_photo != "dummy.jpeg")
             {
-                s3DeleteFile(req,"/pax/"+user.code, user.profile_photo);
+                s3DeleteFile(req,"/pax/"+user.code+"/", user.profile_photo);
             }
             if(user.passport_photo != "dummy.jpeg")
             {
-                s3DeleteFile(req,"/pax/"+user.code, user.passport_photo);
+                s3DeleteFile(req,"/pax/"+user.code+"/", user.passport_photo);
             }
             if(user.experience_image)
             {
-                s3DeleteFile(req,"/pax/"+user.code, user.experience_image);
+                s3DeleteFile(req,"/pax/"+user.code+"/", user.experience_image);
             }
 
             let userDelete = await UserModel.deleteOne(query);
@@ -612,6 +611,7 @@ const userUpdate = async(req,res,forms,query,newUser,suppliers,groups) => {
         user.experience_year = forms.experience_year;
         user.experience_month = forms.experience_month;
         user.experience_day = forms.experience_day;
+        user.updated_at = Date.now();
 
 
      await createdEvents(req,user,req.params.id,"user");

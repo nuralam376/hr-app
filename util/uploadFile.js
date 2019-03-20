@@ -4,9 +4,6 @@ const multerS3 = require('multer-s3');
 const path = require("path");
 const config = require("../config/s3");
 
-const CompanyInfo = require("../models/companyInfoModel");
-
-
 /** AWS */
 aws.config.update({
     secretAccessKey: config.secretAccessKey,
@@ -31,32 +28,24 @@ const upload =
             cb(null, {fieldName: file.fieldname + "-" + Date.now() + path.extname(file.originalname)});
             },
             key: function (req, file, cb) {
-               const companyData = CompanyInfo.findOne({company : req.user.company}).then(data => {
-                    let paxCode;
-                    if(file.fieldname == "profile_photo")
-                    {
-                        paxProfilePhoto = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
-                        paxCode = data.user + 1;
-                        cb(null,req.user.company + "/pax/" + paxCode +"/"+ paxProfilePhoto)
-                    }
-                    if(file.fieldname == "passport_photo")
-                    {
-                        paxPassportPhoto = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
-                        paxCode = data.user + 1;
-                        cb(null,req.user.company + "/pax/" + paxCode + "/"+ paxPassportPhoto)
-                    }
-                    if(file.fieldname == "experience_image")
-                    {
-                        paxExperienceImage = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
-                        paxCode = data.user + 1;
-                        cb(null,req.user.company + "/pax/" + paxCode +"/"+ paxExperienceImage)
-                    }
-               }).catch(err => {
-                   if(err)
-                   {
-                       console.log(err);
-                   }
-               });
+                let paxCode = req.body.code;
+              
+                if(file.fieldname == "profile_photo")
+                {
+                    paxProfilePhoto = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
+                    cb(null,req.user.company + "/pax/" + paxCode +"/"+ paxProfilePhoto)
+                }
+                if(file.fieldname == "passport_photo")
+                {
+                    paxPassportPhoto = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
+                    cb(null,req.user.company + "/pax/" + paxCode + "/"+ paxPassportPhoto)
+                }
+                if(file.fieldname == "experience_image")
+                {
+                    paxExperienceImage = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
+                    cb(null,req.user.company + "/pax/" + paxCode +"/"+ paxExperienceImage)
+                }
+                 
             }
         }),
         fileFilter : function(req,file,cb){
