@@ -929,7 +929,7 @@ exports.printApplication = async(req,res) => {
         {
             let medicalApplication = require("../util/medicalApplication");
 
-            medicalApplication(req,res,pax);
+            medicalApplication(res,pax);
         }
         else
         {
