@@ -26,6 +26,8 @@ let CompanyInfoModel = require("../models/companyInfoModel");
 /** S3 Delete File */
 const s3DeleteFile = require("../util/deleteS3File");
 
+
+
 /**
  * Shows All users
  * 
@@ -35,7 +37,7 @@ exports.getAllUsers= async(req,res) => {
     try 
     {
         let users = await UserModel.find({company : req.user.company}).sort({created_at : -1}).populate("supplier").populate("group"); // Finds the Users of the Logged in Admin's Company
-        
+      
         if(users)
         {
             res.render("users/index",{
@@ -440,6 +442,7 @@ exports.getUser = async(req,res) => {
         let query = {seq_id : req.params.id, company : req.user.company};
 
         let user = await UserModel.findOne(query).populate("supplier").populate("group").exec();
+        
         res.render("users/view",{
             newUser : user,
             moment : moment

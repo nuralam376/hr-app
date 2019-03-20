@@ -45,7 +45,16 @@ const upload =
                     paxExperienceImage = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
                     cb(null,req.user.company + "/pax/" + paxCode +"/"+ paxExperienceImage)
                 }
-                 
+                if(file.fieldname == "slip")
+                {
+                    paxMedicalSlip = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
+                    cb(null,req.user.company + "/pax/" + paxCode +"/medical/"+ paxMedicalSlip)
+                }
+                if(file.fieldname == "unfit_slip")
+                {
+                    paxMedicalUnfitSlip = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
+                    cb(null,req.user.company + "/pax/" + paxCode +"/medical/"+ paxMedicalUnfitSlip)
+                } 
             }
         }),
         fileFilter : function(req,file,cb){

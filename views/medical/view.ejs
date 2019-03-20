@@ -36,7 +36,7 @@
                 </tr>
                 <tr>
                     <th>Medical Slip</th>
-                    <td><a data-fancybox="gallery" href = "/uploads/medical/<%= medical.medical_slip %>"><img src="/uploads/medical/<%= medical.medical_slip %>" alt="" style = "max-width : 500px; height : auto"></a></td>
+                    <td><a data-fancybox="gallery" href = "https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= medical.company %>/pax/<%= pax.code %>/medical/<%= medical.medical_slip %>"><img src="https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= medical.company %>/pax/<%= pax.code %>/medical/<%= medical.medical_slip %>" alt="" style = "max-width : 500px; height : auto"></a></td>
                 </tr>
             <%  } if(medical.status) { %>
                 <tr>
@@ -54,7 +54,7 @@
                     </tr>
                     <tr>
                         <th>Unfit Medical Slip</th>
-                        <td><a data-fancybox = "gallery" href="/uploads/medical/<%= medical.unfit_slip %>"><img src="/uploads/medical/<%= medical.unfit_slip %>" alt="" style = "height : auto; max-width : 300px;"></a></td>
+                        <td><a data-fancybox = "gallery" href="https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= medical.company %>/pax/<%= pax.code %>/medical/<%= medical.unfit_slip %>"><img src="https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= medical.company %>/pax/<%= pax.code %>/medical/<%= medical.unfit_slip %>" alt="" style = "height : auto; max-width : 300px;"></a></td>
                     </tr>
                 <% } if(medical.status == 'interview') { %>
                     <tr>

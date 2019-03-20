@@ -9,6 +9,10 @@ let PAXModel = require("../models/userModel");
 /** User/PAX Controller */
 let GroupModel = require("../models/groupModel");
 
+
+/** S3 Delete File */
+const s3DeleteFile = require("../util/deleteS3File");
+
 /** Validation Configuration */
 const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody} = require("express-validator/filter");
@@ -166,10 +170,10 @@ exports.postMedicalRegistration = async(req,res) => {
         else
         {
              /** Checks uploaded file */
-            if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+            if(typeof paxMedicalSlip !== "undefined" && req.fileValidationError == null)
             {
-                if(req.files[0].fieldname == "slip")
-                    forms.medical_slip = req.files[0].filename;
+                
+                forms.medical_slip = paxMedicalSlip;
 
                 /** Saves Medical Data */
                 let newMedical = {};
@@ -436,10 +440,10 @@ exports.postMedicalReportInfo = async(req,res) => {
             {
                 newMedical.status = "unfit";
                  /** Checks uploaded file */
-                if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+                if(typeof paxMedicalUnfitSlip !== "undefined" && req.fileValidationError == null)
                 {
-                    if(req.files[0].fieldname == "unfit_slip")
-                        forms.unfit_slip = req.files[0].filename;
+                    
+                    forms.unfit_slip = paxMedicalUnfitSlip;
                     
                     newMedical.unfit_slip = forms.unfit_slip;
                 }
@@ -491,7 +495,7 @@ exports.postMedicalReportInfo = async(req,res) => {
                     });
                 }
             }  
-            newMedical.expiry = forms.expiry;
+            newMedical.medical_expiry = forms.expiry;
             let medicalUpdate = await MedicalModel.updateOne({company : req.user.company,pax : pax._id},newMedical);
 
             if(medicalUpdate)
@@ -516,7 +520,7 @@ exports.postMedicalReportInfo = async(req,res) => {
 exports.allMedicals = async(req,res) => {
     try
     {
-        let medicals = await MedicalModel.find({company : req.user.company}).populate("group").populate("pax");
+        let medicals = await MedicalModel.find({company : req.user.company}).sort({created_at : -1}).populate("group").populate("pax");
 
         res.render("medical/index",{
             medicals : medicals,
@@ -536,28 +540,18 @@ exports.deleteMedicalInfo = async(req,res) => {
     {
         let query = {_id : req.params.id, company : req.user.company}; 
 
-        let medical = await MedicalModel.findOne(query);
+        let medical = await MedicalModel.findOne(query).populate("pax","code");
 
         if(medical)
         {
                 /** Removes the slips */
             if(medical.medical_slip)
             {
-                fs.unlink("./public/uploads/medical/"+medical.medical_slip, err => {
-                    if(err)
-                    {
-                        console.log(err);
-                    }
-                });
+                s3DeleteFile(req,"/pax/"+medical.pax.code+"/medical/", medical.medical_slip);
             }
             if(medical.unfit_slip)
             {
-                fs.unlink("./public/uploads/medical/"+medical.medical_slip, err => {
-                    if(err)
-                        {
-                            console.log(err);
-                        }
-                    });
+                s3DeleteFile(req,"/pax/"+medical.pax.code+"/medical/", medical.unfit_slip);
             }
 
             let medicalDelete = await MedicalModel.deleteOne(query);
@@ -667,20 +661,15 @@ exports.updateMedicalCenterInfo = async(req,res) => {
             forms.medical_slip = medical.medical_slip;
 
             /** Checks whetere any file is uploaded */
-            if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+            if(typeof paxMedicalSlip !== "undefined" && req.fileValidationError == null)
             {
-                if(req.files[0].fieldname == "slip")
-                    forms.medical_slip = req.files[0].filename;
+                forms.medical_slip = paxMedicalSlip;
             }
 
             if(medical.medical_slip !== forms.medical_slip)
             {
-                fs.unlink("./public/uploads/medical/"+medical.medical_slip, (err) => {
-                    if(err)
-                    {
-                        console.log(err);
-                    }
-                });
+                s3DeleteFile(req,"/pax/"+medical.pax.code+"/medical/", medical.medical_slip);
+
             }
             let newMedical = {};
             newMedical.center_name = forms.center;
@@ -770,24 +759,30 @@ exports.updateMedicalReportInfo = async(req,res) => {
             if(forms.status == "fit")
             {
                 newMedical.status = "fit";
+                newMedical.interview_date = undefined;
+                if(medical.unfit_slip)
+                {
+                    newMedical.unfit_reason = undefined;
+                    newMedical.unfit_slip = undefined;
+                    s3DeleteFile(req,"/pax/"+pax.code+"/medical/", medical.unfit_slip);
+
+                }
             }
             else if(forms.status == "unfit")
             {
                 newMedical.status = "unfit";
+                newMedical.interview_date = undefined;
                  /** Checks uploaded file */
-                if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+                if(typeof paxMedicalUnfitSlip !== "undefined" && req.fileValidationError == null)
                 {
-                    if(req.files[0].fieldname == "unfit_slip")
-                        forms.unfit_slip = req.files[0].filename;
-                    
+                   
+                    forms.unfit_slip = paxMedicalUnfitSlip;
+                   
                     if(medical.unfit_slip)
                     {
-                        fs.unlink("./public/uploads/medical/"+medical.unfit_slip, err => {
-                            if(err)
-                            {
-                                console.log(err);
-                            }
-                        });
+                       
+                        s3DeleteFile(req,"/pax/"+pax.code+"/medical/", medical.unfit_slip);
+
                     }
                     newMedical.unfit_slip = forms.unfit_slip;
                 }
@@ -831,6 +826,13 @@ exports.updateMedicalReportInfo = async(req,res) => {
                 {
                     forms.interview = req.body.interview;
                     newMedical.interview_date = req.body.interview;
+                    if(medical.unfit_slip)
+                    {
+                        newMedical.unfit_reason = undefined;
+                        newMedical.unfit_slip = undefined;
+                        s3DeleteFile(req,"/pax/"+pax.code+"/medical/", medical.unfit_slip);
+    
+                    }
                 }
                 else
                 {
