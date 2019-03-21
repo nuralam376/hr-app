@@ -60,10 +60,21 @@ const upload =
                     paxPcImage = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
                     cb(null,req.user.company + "/pax/" + paxCode +"/stamping/"+ paxPcImage)
                 } 
+                if(file.fieldname == "tc_pdf")
+                {
+                    paxTcPdf = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
+                    cb(null,req.user.company + "/pax/" + paxCode +"/tc/"+ paxTcPdf)
+                } 
             }
         }),
         fileFilter : function(req,file,cb){
-            checkFileType(req,file,cb)
+            if(file.fieldname != "tc_pdf")
+            {
+                checkFileType(req,file,cb);
+            }
+            else {
+                checkPDF(req,file,cb);
+            }
         }
     });
 
@@ -78,6 +89,17 @@ function checkFileType(req,file,cb)
     let ext = path.extname(file.originalname);
     let size = file.size;
     if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
+         req.fileValidationError = "Forbidden extension";
+         return cb(null, false, req.fileValidationError);
+   }
+   cb(null, true);
+}
+
+function checkPDF(req,file,cb)
+{
+    let ext = path.extname(file.originalname);
+    let size = file.size;
+    if (ext !== '.pdf') {
          req.fileValidationError = "Forbidden extension";
          return cb(null, false, req.fileValidationError);
    }

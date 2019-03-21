@@ -26,9 +26,9 @@
        <div class="col-md-12">
             <div class="card">
                     <div class="card-body">
-                        <h2>TC Info </h2>  
+                        <h2>TC Info - <%= pax.code %></h2>  
                         <form action="/tc/register/<%= pax._id %>/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
-
+                                <input type="hidden" name = "code" value = "<%= pax.code %>">
                               <div class="form-group">
                                 <input type="checkbox" name = "tc_received" value = "1" id = "tc_received" <%= tc && tc.tc_received == '1' ? 'checked' : '' %>> 
                                 <label for="tc_received">TC Received</label>

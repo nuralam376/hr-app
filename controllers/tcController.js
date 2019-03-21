@@ -9,7 +9,24 @@ const TCModel = require("../models/tcModel");
 /** Validation */
 const {validationResult} = require("express-validator/check");
 
+/** S3 Delete File */
+const s3DeleteFile = require("../util/deleteS3File");
+
 const moment = require("moment-timezone");
+
+const config = require("../config/s3");
+
+const aws = require("aws-sdk");
+/** AWS */
+aws.config.update({
+    secretAccessKey: config.secretAccessKey,
+    accessKeyId: config.accessKeyId,
+    region : "ap-south-1"
+});
+
+/** Initialize Multer storage Variable for file upload */
+
+const s3 = new aws.S3();
 
 const fs = require("fs");
 const path = require("path");
@@ -18,10 +35,10 @@ const path = require("path");
 exports.getAllInfos = async(req,res) => {
     try
     {
-        let tcs = await TCModel.find({company : req.user.company}).populate("pax").exec();
+        let tcs = await TCModel.find({company : req.user.company}).sort({created_at : -1}).populate("pax").exec();
 
         res.render("tc/index",{
-            tcs : tcs.reverse(),
+            tcs : tcs,
             moment : moment
         });
     }
@@ -153,10 +170,9 @@ exports.postTC = async(req,res) => {
             });   
         }
         /** Checks whether any file is uploaded */
-        if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+        if(typeof paxTcPdf !== "undefined" && req.fileValidationError == null)
         {
-            if(req.files[0].fieldname == "tc_pdf")
-                forms.tc_pdf = req.files[0].filename;
+            forms.tc_pdf = paxTcPdf;
         }
 
         if(pax && stamping.stamping_date)
@@ -172,12 +188,7 @@ exports.postTC = async(req,res) => {
                 if(tc.tc_pdf)
                 {
                     /** Removes the old file */
-                    fs.unlink("./public/uploads/tc/" + tc.tc_pdf, err => {
-                        if(err)
-                        {
-                            console.log(err);
-                        }
-                    });
+                    s3DeleteFile(req,"/pax/"+pax.code+"/tc/", tc.tc_pdf);
                 }
                 tcStatus = await TCModel.updateOne({_id : tc._id},newTc);
             }
@@ -220,14 +231,16 @@ exports.postTC = async(req,res) => {
 exports.downloadTC = async(req,res) => {
     try
     {
-        let tc = await TCModel.findById(req.params.id).exec();
+        let tc = await TCModel.findById(req.params.id).populate("pax","code").exec();
 
         if(tc)
         {
-            let file = path.join(__dirname, '../public/uploads/tc/'+tc.tc_pdf);
-            res.setHeader('Content-disposition', 'attachment; filename=' + tc.tc_pdf);
-            res.setHeader('Content-type', "application/pdf");
-            res.download(file); // Set disposition and send it.
+            let params = {
+                Bucket: "hr-app-test", 
+                Key: tc.company + "/pax/" + tc.pax.code + "/tc/" + tc.tc_pdf
+            };
+            var fileStream = s3.getObject(params).createReadStream();
+            fileStream.pipe(res);
         }
         else
         {
@@ -247,19 +260,14 @@ exports.deleteTc = async(req,res) => {
     {
         let query = {_id : req.params.id, company : req.user.company}; 
 
-        let tc = await TCModel.findOne(query);
+        let tc = await TCModel.findOne(query).populate("pax","code");
 
         if(tc)
         {
             if(tc.tc_pdf)
             {
 
-                fs.unlink("./public/uploads/tc/"+tc.tc_pdf, (err) => {
-                    if(err)
-                    {
-                        console.log(err);
-                    }
-                });
+                s3DeleteFile(req,"/pax/"+tc.pax.code+"/tc/", tc.tc_pdf);
             }
             
 

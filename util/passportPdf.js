@@ -11,8 +11,6 @@ aws.config.update({
     region : "ap-south-1"
 });
 
-/** Initialize Multer storage Variable for file upload */
-
 const s3 = new aws.S3();
 pdfMake.vfs = vfsFonts.pdfMake.vfs;
 
