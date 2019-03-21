@@ -6,6 +6,8 @@ const TCModel = require("../models/tcModel");
 /** TC Model */
 const ManpowerModel = require("../models/manpowerModel");
 
+/** S3 Delete File */
+const s3DeleteFile = require("../util/deleteS3File");
 
 /** Validation */
 const {validationResult} = require("express-validator/check");
@@ -301,10 +303,9 @@ exports.postRegisterManpowerStatus = async(req,res) => {
         let errors = validationResult(req);
         let fileError;
         /** Checks Whether any file is uploaded */
-        if(typeof req.files[0] !== "undefined" && req.fileValidationError == null)
+        if(typeof paxManpower !== "undefined" && req.fileValidationError == null)
         {
-            if(req.files[0].fieldname == "card_photo")
-                forms.card_photo = req.files[0].filename;
+            forms.card_photo = paxManpower;
         }
 
         if(!manpower.card_photo && !forms.card_photo)
@@ -343,15 +344,10 @@ exports.postRegisterManpowerStatus = async(req,res) => {
             newManpower.updated_at = Date.now();
             if(forms.card_photo)
             {
-                if(manpower.ready != 1)
-                {
-                    fs.unlink("./public/uploads/manpower/" + manpower.card_photo, err => {
-                        if(err)
-                        {
-                            console.log(err);
-                        }
-                    });
-                }
+              
+                if(forms.card_photo != manpower.card_photo)
+                    s3DeleteFile(req,"/pax/"+pax.code+"/manpower/", manpower.card_photo);
+    
                 newManpower.card_photo = forms.card_photo;
             }
             manpowerStatus = await ManpowerModel.updateOne({_id : manpower._id},newManpower);
@@ -383,17 +379,12 @@ exports.deleteManpower = async(req,res) => {
     {   
         let query = {_id : req.params.id, company : req.user.company};
 
-        let manpower = await ManpowerModel.findOne(query);
+        let manpower = await ManpowerModel.findOne(query).populate("pax","code").exec();
 
         if(manpower)
         {
                
-            fs.unlink("./public/uploads/manpower/"+manpower.card_photo, (err) => {
-                if(err)
-                {
-                    console.log(err);
-                }
-            });
+            s3DeleteFile(req,"/pax/"+manpower.pax.code+"/manpower/", manpower.card_photo);
            
 
             let manpowerDelete = await ManpowerModel.deleteOne(query);

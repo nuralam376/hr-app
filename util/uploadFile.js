@@ -65,6 +65,11 @@ const upload =
                     paxTcPdf = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
                     cb(null,req.user.company + "/pax/" + paxCode +"/tc/"+ paxTcPdf)
                 } 
+                if(file.fieldname == "card_photo")
+                {
+                    paxManpower = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
+                    cb(null,req.user.company + "/pax/" + paxCode +"/manpower/"+ paxManpower)
+                } 
             }
         }),
         fileFilter : function(req,file,cb){

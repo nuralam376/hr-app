@@ -35,7 +35,7 @@
                                     <% if(manpower.card_no) { %>
                                         <td><%= moment(manpower.clearance_date).format("ll") %></td>
                                         <td><%= manpower.card_no %></td>
-                                        <td>  <a data-fancybox="gallery" href = "/uploads/manpower/<%= manpower.card_photo %>"><img src="/uploads/manpower/<%= manpower.card_photo %>" alt="" style = "max-width : 50px; height : 50px"></a></td>
+                                        <td>  <a data-fancybox="gallery" href = "https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= manpower.company %>/pax/<%= manpower.pax.code %>/manpower/<%= manpower.card_photo %>"><img src="https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= manpower.company %>/pax/<%= manpower.pax.code %>/manpower/<%= manpower.card_photo %>" alt="" style = "max-width : 50px; height : 50px"></a></td>
                                     <% } else { %>
                                         <td>------</td>
                                         <td>------</td>
