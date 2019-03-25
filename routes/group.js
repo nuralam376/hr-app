@@ -101,6 +101,8 @@ router.post("/update/:id",auth,upload.any(),[
     sanitizeBody("occupation").trim().unescape(),
 ],GroupController.updateGroup);
 router.delete("/delete/:id",auth,GroupController.deleteGroup);
+
+router.get("/getGroupImage/:image",auth,GroupController.getGroupImage);
 router.get("/:id",auth,GroupController.getGroup);
 
 module.exports = router;

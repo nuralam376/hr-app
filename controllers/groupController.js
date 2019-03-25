@@ -373,3 +373,30 @@ const groupUpdate = async(req,res,forms) =>
             res.redirect("/group");
         }
 }
+
+/** Gets Group Image */
+exports.getGroupImage = async(req,res) => {
+    try
+    {
+        let image = req.params.image;
+        let group = await GroupModel.findOne({enjazit_image : image});
+
+
+        var getParams = {
+            Bucket: 'hr-app-test', 
+            Key: group.company + "/groups/"+image
+        }
+        
+        const response = await s3.getObject(getParams, function(err, data) {
+            // Handle any error and exit
+            if (err)
+                return err;
+        }).promise(); 
+
+      console.log(response);
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
