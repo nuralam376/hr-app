@@ -381,22 +381,20 @@ exports.getGroupImage = async(req,res) => {
         let image = req.params.image;
         let group = await GroupModel.findOne({enjazit_image : image});
 
-
-        var getParams = {
+        let params = {
             Bucket: 'hr-app-test', 
-            Key: group.company + "/groups/"+image
+            Key: group.company + "/groups/"+image,
+            Expires: 60
         }
         
-        const response = await s3.getObject(getParams, function(err, data) {
-            // Handle any error and exit
-            if (err)
-                return err;
-        }).promise(); 
-
-      console.log(response);
+        let url = s3.getSignedUrl('getObject', params); 
+        res.statusCode = 302;
+        res.setHeader('Location', url);
+        res.end();
     }
     catch(err)
     {
         console.log(err);
     }
 }
+
