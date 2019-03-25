@@ -1,29 +1,7 @@
-const mongoose = require("mongoose");
-const config = require("../config/database");
-const db = mongoose.connection;
+const db = require("../config/database");
 const AdminModel = require("../models/AdminModel");
 
-beforeAll(() => {
-    /** Database Configuration File */
-    db.once("open",function(){
-        console.log("Connected to MongoDB");
-
-    });
-    db.on("error",function(err){
-        console.log("error");
-    });
-})
-
-
-afterAll(() => {
-    db.close();
-})
-
-
-
-
-
-describe("Cheks Admin Model Data", () => {
+describe("Checks Admin Model Data", () => {
     test("should add admin data", async() => {
         let admin = new AdminModel({
             name : "Abcd",
