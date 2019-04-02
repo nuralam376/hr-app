@@ -39,11 +39,20 @@ exports.getAllUsers= async(req,res) => {
     try 
     {
         let users = await UserModel.find({company : req.user.company}).sort({created_at : -1}).populate("supplier").populate("group"); // Finds the Users of the Logged in Admin's Company
+
+        let newUsers = users.map(user => {
+            
+            let url = s3GetFile(req,"/pax/"+user.code+"/",user.profile_photo);
+
+            user["imageUrl"] = url;
+
+            return user;
+        });
       
         if(users)
         {
             res.render("users/index",{
-                users : users,
+                users : newUsers,
                 moment : moment
             });
         }
@@ -176,11 +185,19 @@ exports.editUser = async(req,res) => {
           
           if(user)
           {
+            let profilePhotoUrl = s3GetFile(req,"/pax/"+user.code+"/",user.profile_photo);
+            let passportPhotoUrl = s3GetFile(req,"/pax/"+user.code+"/",user.passport_photo);
+            let experiencePhotoUrl = s3GetFile(req,"/pax/"+user.code+"/",user.experience_image);
+
+
             res.render("users/edit",{
                 newUser : user,
                 suppliers : suppliers,
                 groups : groups,
-                moment : moment
+                moment : moment,
+                profilePhotoUrl : profilePhotoUrl,
+                passportPhotoUrl : passportPhotoUrl,
+                experiencePhotoUrl : experiencePhotoUrl
             });
         }
         else
@@ -239,6 +256,10 @@ exports.updateUser = async(req,res) => {
         let suppliers = await SupplierModel.find({company : req.user.company});
         let groups = await GroupModel.find({company : req.user.company});
 
+        let profilePhotoUrl = s3GetFile(req,"/pax/"+newUser.code+"/",newUser.profile_photo);
+        let passportPhotoUrl = s3GetFile(req,"/pax/"+newUser.code+"/",newUser.passport_photo);
+        let experiencePhotoUrl = s3GetFile(req,"/pax/"+newUser.code+"/",newUser.experience_image);
+
         let errors = validationResult(req);
         forms.profile_photo = newUser.profile_photo;
         forms.passport_photo = newUser.passport_photo;
@@ -279,7 +300,10 @@ exports.updateUser = async(req,res) => {
                 fileError : req.fileValidationError,
                 suppliers : suppliers,
                 groups : groups,
-                moment : moment
+                moment : moment,
+                profilePhotoUrl : profilePhotoUrl,
+                passportPhotoUrl : passportPhotoUrl,
+                experiencePhotoUrl : experiencePhotoUrl
             });
             
         }
@@ -444,10 +468,17 @@ exports.getUser = async(req,res) => {
         let query = {seq_id : req.params.id, company : req.user.company};
 
         let user = await UserModel.findOne(query).populate("supplier").populate("group").exec();
+
+        let profilePhotoUrl = s3GetFile(req,"/pax/"+user.code+"/",user.profile_photo);
+        let passportPhotoUrl = s3GetFile(req,"/pax/"+user.code+"/",user.passport_photo);
+        let experiencePhotoUrl = s3GetFile(req,"/pax/"+user.code+"/",user.experience_image);
         
         res.render("users/view",{
             newUser : user,
-            moment : moment
+            moment : moment,
+            profilePhotoUrl : profilePhotoUrl,
+            passportPhotoUrl : passportPhotoUrl,
+            experiencePhotoUrl : experiencePhotoUrl
         });
     }
     catch(error)
