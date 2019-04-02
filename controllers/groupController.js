@@ -116,10 +116,19 @@ exports.editGroup = async(req,res) => {
         let id = req.params.id;
         let group = await GroupModel.findOne({_id : id, company : req.user.company}).populate("zone");
 
+        let params = {
+            Bucket: 'hr-app-test', 
+            Key: group.company + "/groups/"+group.enjazit_image,
+            Expires: 60
+        }
+        
+        let url = s3.getSignedUrl('getObject', params); 
+
         if(group)
         {
             res.render("group/edit",{
-                group : group
+                group : group,
+                imageUrl : url
             });
         }
     }
@@ -157,13 +166,24 @@ exports.updateGroup = async(req,res) => {
             {
                     forms.enjazit_image = enjazitPhoto;
             }
+
+            let params = {
+                Bucket: 'hr-app-test', 
+                Key: group.company + "/groups/"+group.enjazit_image,
+                Expires: 60,
+                ResponseCacheControl: 'no-cache',
+            }
+            
+            let url = s3.getSignedUrl('getObject', params); 
+
             if(!errors.isEmpty())
             {
                 res.render("group/edit",{
                     errors : errors.array(),
                     form : forms,
                     group : group,
-                    fileError : req.fileValidationError
+                    fileError : req.fileValidationError,
+                    imageUrl : url
                 });
             }
             else
@@ -248,11 +268,20 @@ exports.getGroup = async(req,res) => {
         let id = req.params.id;
 
         let group = await GroupModel.findOne({_id : id, company : req.user.company}).populate("zone");
+        let params = {
+            Bucket: 'hr-app-test', 
+            Key: group.company + "/groups/"+group.enjazit_image,
+            Expires: 60,
+            ResponseCacheControl: 'no-cache',
+        }
+        
+        let url = s3.getSignedUrl('getObject', params); 
 
         if(group)
         {
             res.render("group/view",{
-                group : group
+                group : group,
+                imageUrl : url
             });
         }
         else
@@ -384,7 +413,8 @@ exports.getGroupImage = async(req,res) => {
         let params = {
             Bucket: 'hr-app-test', 
             Key: group.company + "/groups/"+image,
-            Expires: 60
+            Expires: 60,
+            ResponseCacheControl: 'no-cache',
         }
         
         let url = s3.getSignedUrl('getObject', params); 
