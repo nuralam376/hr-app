@@ -35,7 +35,7 @@
                     <tr>
                         <td><%= medical.center_name %></td>
                         <td><%= moment(medical.issue).format("llll") %></td>
-                        <td><a data-fancybox="gallery" href="https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= medical.company %>/pax/<%= pax.code %>/medical/<%= medical.medical_slip %>"><img src="https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= medical.company %>/pax/<%= pax.code %>/medical/<%= medical.medical_slip %>" alt="" style = "max-width : 500px; height : 100px" ></a></td>
+                        <td><a data-fancybox="gallery" href="<%= medicalSlipUrl %>"><img src="<%= medicalSlipUrl %>" alt="" style = "max-width : 500px; height : 100px" ></a></td>
                     </tr>
                 </table>
             <% }else {  %>    
@@ -78,7 +78,7 @@
                                         <label for="slip">Medical Slip</label>
                                         <input type="file" name = "slip" id = "slip" class = "form-control"> 
                                         <img src="" alt="" style = "max-width : 500px; height : auto" id = "photo">
-                                        <img src="https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= medical.company %>/pax/<%= pax.code %>/medical/<%= medical.medical_slip %>" alt="" style = "max-width : 500px; height : auto">
+                                        <img src="<%= medicalSlipUrl %>" alt="" style = "max-width : 500px; height : auto">
                                     </div>
                                     <div class="form-group">
                                         <label for="issue">Medical Issue Date</label>

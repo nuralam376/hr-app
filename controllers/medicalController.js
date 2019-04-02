@@ -258,12 +258,15 @@ exports.getMedicalPAXInfoForCenter = async(req,res) => {
 
             if(medical && medical.group)
             {
+                let medicalSlipUrl = s3GetFile(req,"/pax/"+pax.code+"/medical/",medical.medical_slip);
+
                 res.render("medical/information",{
                     pax : pax,
                     medical : medical,
                     groups : groups,
                     postUrl : "/center",
-                    moment : moment
+                    moment : moment,
+                    medicalSlipUrl : medicalSlipUrl
                 });
             }
             else
@@ -371,12 +374,22 @@ exports.getMedicalPAXInfoForReport = async(req,res) => {
 
             if(medical && medical.group && medical.medical_slip)
             {
+                let medicalSlipUrl = s3GetFile(req,"/pax/"+pax.code+"/medical/",medical.medical_slip);
+                let medicalUnfitSlipUrl;
+
+                if(medical.status == "unfit")
+                    medicalUnfitSlipUrl = s3GetFile(req,"/pax/"+pax.code+"/medical/",medical.unfit_slip);
+                else
+                  medicalUnfitSlipUrl = null;
+
                 res.render("medical/report",{
                     pax : pax,
                     medical : medical,
                     groups : groups,
                     postUrl : "/report",
-                    moment : moment
+                    moment : moment,
+                    medicalSlipUrl : medicalSlipUrl,
+                    medicalUnfitSlipUrl : medicalUnfitSlipUrl
                 });
             }
             else if(medical && medical.group)
@@ -588,10 +601,21 @@ exports.getMedicalInfo = async(req,res) => {
         if(medical)
         {
             let pax = await PAXModel.findOne({company : req.user.company, code : medical.pax.code}).populate("supplier");
+            let medicalSlipUrl = s3GetFile(req,"/pax/"+pax.code+"/medical/",medical.medical_slip);
+            let medicalUnfitSlipUrl;
+
+            if(medical.status == "unfit")
+                medicalUnfitSlipUrl = s3GetFile(req,"/pax/"+pax.code+"/medical/",medical.unfit_slip);
+            else
+              medicalUnfitSlipUrl = null;
+
+
             res.render("medical/view",{
                 medical : medical,
                 pax : pax,
-                moment : moment
+                moment : moment,
+                medicalSlipUrl : medicalSlipUrl,
+                medicalUnfitSlipUrl : medicalUnfitSlipUrl
             });
         }
         else
@@ -617,13 +641,15 @@ exports.editMedicalCenterInfo = async(req,res) => {
 
         if(medical)
         {
-                    
+            let medicalSlipUrl = s3GetFile(req,"/pax/"+pax.code+"/medical/",medical.medical_slip);
+
             res.render("medical/information",{
                 postUrl : "/center",
                 editMedical : true,
                 medical : medical,
                 pax : pax,
-                moment : moment
+                moment : moment,
+                medicalSlipUrl : medicalSlipUrl
             });
         }
     }
@@ -647,7 +673,10 @@ exports.updateMedicalCenterInfo = async(req,res) => {
 
         let medical = await MedicalModel.findOne({company : req.user.company,_id : req.params.id}).populate("group").populate("pax");
         let pax = await PAXModel.findOne({company : req.user.company, _id : medical.pax._id}).populate("supplier");
+        let medicalSlipUrl = s3GetFile(req,"/pax/"+pax.code+"/medical/",medical.medical_slip);
+
         let errors = validationResult(req);
+
 
         if(!errors.isEmpty())
         {
@@ -656,7 +685,8 @@ exports.updateMedicalCenterInfo = async(req,res) => {
                 editMedical : true,
                 medical : medical,
                 pax : pax,
-                moment : moment
+                moment : moment,
+                medicalSlipUrl : medicalSlipUrl
             });
         }
         else
@@ -711,13 +741,23 @@ exports.editMedicalReportInfo = async(req,res) => {
 
         if(medical)
         {
-                    
+            let medicalSlipUrl = s3GetFile(req,"/pax/"+pax.code+"/medical/",medical.medical_slip);
+
+            let medicalUnfitSlipUrl;
+
+            if(medical.status == "unfit")
+                medicalUnfitSlipUrl = s3GetFile(req,"/pax/"+pax.code+"/medical/",medical.unfit_slip);
+            else
+              medicalUnfitSlipUrl = null;
+        
             res.render("medical/report",{
                 postUrl : "/center",
                 editReport : true,
                 medical : medical,
                 pax : pax,
-                moment : moment
+                moment : moment,
+                medicalSlipUrl : medicalSlipUrl,
+                medicalUnfitSlipUrl : medicalUnfitSlipUrl
             });
         }
     }
@@ -742,6 +782,13 @@ exports.updateMedicalReportInfo = async(req,res) => {
         let medical = await MedicalModel.findOne(query).populate("group");
         let pax = await PAXModel.findOne({_id : medical.pax}).populate("supplier");
         let errors = validationResult(req);
+        let medicalSlipUrl = s3GetFile(req,"/pax/"+pax.code+"/medical/",medical.medical_slip);
+        let medicalUnfitSlipUrl;
+
+        if(medical.status == "unfit")
+            medicalUnfitSlipUrl = s3GetFile(req,"/pax/"+pax.code+"/medical/",medical.unfit_slip);
+        else
+            medicalUnfitSlipUrl = null;
 
         if(!errors.isEmpty())
         {
@@ -752,7 +799,9 @@ exports.updateMedicalReportInfo = async(req,res) => {
                 medical : medical,
                 moment : moment,
                 form : forms,
-                editReport : true
+                editReport : true,
+                medicalSlipUrl : medicalSlipUrl,
+                medicalUnfitSlipUrl : medicalUnfitSlipUrl
             });
         }
         else
@@ -800,7 +849,9 @@ exports.updateMedicalReportInfo = async(req,res) => {
                             medical : medical,
                             moment : moment,
                             form : forms,
-                            editReport : true
+                            editReport : true,
+                            medicalSlipUrl : medicalSlipUrl,
+                            medicalUnfitSlipUrl : medicalUnfitSlipUrl
                         });
                     }    
                 }
@@ -818,7 +869,9 @@ exports.updateMedicalReportInfo = async(req,res) => {
                         medical : medical,
                         moment : moment,
                         form : forms,
-                        editReport : true
+                        editReport : true,
+                        medicalSlipUrl : medicalSlipUrl,
+                        medicalUnfitSlipUrl : medicalUnfitSlipUrl
                     });
                 }
             }  
@@ -846,7 +899,9 @@ exports.updateMedicalReportInfo = async(req,res) => {
                         medical : medical,
                         moment : moment,
                         form : forms,
-                        editReport : true
+                        editReport : true,
+                        medicalSlipUrl : medicalSlipUrl,
+                        medicalUnfitSlipUrl : medicalUnfitSlipUrl
                     });
                 }
             }  
