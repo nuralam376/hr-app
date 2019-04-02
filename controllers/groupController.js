@@ -21,6 +21,10 @@ aws.config.update({
 });
 
 const s3 = new aws.S3();
+
+/** S3 Delete File */
+const s3GetFile = require("../util/getS3File");
+
 /** Validation Configuration */
 const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody} = require("express-validator/filter");
@@ -29,12 +33,21 @@ const {sanitizeBody} = require("express-validator/filter");
 exports.getAllGroups = async(req,res) => {
     try 
     {
-        let groups = await GroupModel.find({company : req.user.company}).populate("zone"); 
+        let groups = await GroupModel.find({company : req.user.company}).sort({created_at : -1}).populate("zone").exec(); 
+
+        let newGroups = groups.map(group => {
+            
+            let url = s3GetFile(req,"/groups/",group.enjazit_image);
+
+            group["imageUrl"] = url;
+
+            return group;
+        });
 
         if(groups)
         {
             res.render("group/index",{
-                groups : groups.reverse(),
+                groups : newGroups,
                 moment : moment
             });
         }
@@ -115,14 +128,8 @@ exports.editGroup = async(req,res) => {
     {
         let id = req.params.id;
         let group = await GroupModel.findOne({_id : id, company : req.user.company}).populate("zone");
-
-        let params = {
-            Bucket: 'hr-app-test', 
-            Key: group.company + "/groups/"+group.enjazit_image,
-            Expires: 60
-        }
-        
-        let url = s3.getSignedUrl('getObject', params); 
+    
+        let url = s3GetFile(req,"/groups/",group.enjazit_image); 
 
         if(group)
         {
@@ -166,15 +173,8 @@ exports.updateGroup = async(req,res) => {
             {
                     forms.enjazit_image = enjazitPhoto;
             }
-
-            let params = {
-                Bucket: 'hr-app-test', 
-                Key: group.company + "/groups/"+group.enjazit_image,
-                Expires: 60,
-                ResponseCacheControl: 'no-cache',
-            }
             
-            let url = s3.getSignedUrl('getObject', params); 
+            let url = s3GetFile(req,"/groups/",group.enjazit_image); 
 
             if(!errors.isEmpty())
             {
@@ -268,14 +268,8 @@ exports.getGroup = async(req,res) => {
         let id = req.params.id;
 
         let group = await GroupModel.findOne({_id : id, company : req.user.company}).populate("zone");
-        let params = {
-            Bucket: 'hr-app-test', 
-            Key: group.company + "/groups/"+group.enjazit_image,
-            Expires: 60,
-            ResponseCacheControl: 'no-cache',
-        }
         
-        let url = s3.getSignedUrl('getObject', params); 
+        let url = s3GetFile(req,"/groups/",group.enjazit_image); 
 
         if(group)
         {
