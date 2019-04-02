@@ -19,14 +19,25 @@ let CompanyInfoModel = require("../models/companyInfoModel");
 /** Delete S3 Object File */
 const s3DeleteFile = require("../util/deleteS3File");
 
+/** S3 Get File */
+const s3GetFile = require("../util/getS3File");
+
 /** Renders All Suppliers */
 exports.getAllSuppliers = async(req,res) => {
     try 
     {
-        let suppliers = await SupplierModel.find({company : req.user.company});
+        let suppliers = await SupplierModel.find({company : req.user.company}).sort({created_at : -1});
+        let newSuppliers = suppliers.map(supplier => {
+            
+            let url = s3GetFile(req,"/suppliers/",supplier.profile_photo);
+
+            supplier["imageUrl"] = url;
+
+            return supplier;
+        });
 
         res.render("supplier/index",{
-            suppliers : suppliers.reverse(),
+            suppliers : newSuppliers,
             moment : moment,
         });
     }
@@ -128,11 +139,17 @@ exports.editSupplier = async(req,res) => {
         let query = {seq_id : req.params.id, company : req.user.company}; 
     
         let supplier = await SupplierModel.findOne(query); // Find the logged in Admin's Company Supplier
+        let profilePhotoUrl = s3GetFile(req,"/suppliers/",supplier.profile_photo);
+        let passportPhotoUrl = s3GetFile(req,"/suppliers/",supplier.passport_photo);
+
         
         if(supplier)
         {
             res.render("supplier/edit",{
                 supplier : supplier,
+                profilePhotoUrl : profilePhotoUrl,
+                passportPhotoUrl : passportPhotoUrl
+
             });
         }
         else
@@ -174,6 +191,10 @@ exports.updateSupplier = async(req,res) => {
 
             let newSupplier = await SupplierModel.findOne(query);
 
+            let profilePhotoUrl = s3GetFile(req,"/suppliers/",supplier.profile_photo);
+            let passportPhotoUrl = s3GetFile(req,"/suppliers/",supplier.passport_photo);
+
+
             if(newSupplier)
             {
                 let errors = validationResult(req);
@@ -196,7 +217,9 @@ exports.updateSupplier = async(req,res) => {
                     res.render("supplier/edit",{
                         errors : errors.array(),
                         supplier : newSupplier,
-                        fileError : req.fileValidationError
+                        fileError : req.fileValidationError,
+                        profilePhotoUrl : profilePhotoUrl,
+                        passportPhotoUrl : passportPhotoUrl
                     });
                   
                 }
@@ -303,9 +326,11 @@ exports.suppliersTimeline = async(req,res) => {
         let query = {seq_id : req.params.id};
 
         let supplier = await SupplierModel.findOne(query);
+
+        
         res.render("supplier/timeline",{
             newSupplier : supplier,
-            moment : moment
+            moment : moment,
         });
     }
     catch(error)
@@ -325,11 +350,18 @@ exports.getSupplier = async(req,res) => {
     try{
         let query = {seq_id : req.params.id,company : req.user.company};
         let supplier = await SupplierModel.findOne(query).exec();
+
+        let profilePhotoUrl = s3GetFile(req,"/suppliers/",supplier.profile_photo);
+        let passportPhotoUrl = s3GetFile(req,"/suppliers/",supplier.passport_photo);
+        
         if(supplier)
         {
             res.render("supplier/view",{
-                supplier : supplier
+                supplier : supplier,
+                profilePhotoUrl : profilePhotoUrl,
+                passportPhotoUrl : passportPhotoUrl
             });
+           
         }    
         else
         {

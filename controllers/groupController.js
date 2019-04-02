@@ -22,7 +22,7 @@ aws.config.update({
 
 const s3 = new aws.S3();
 
-/** S3 Delete File */
+/** S3 Get File */
 const s3GetFile = require("../util/getS3File");
 
 /** Validation Configuration */

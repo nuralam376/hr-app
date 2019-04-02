@@ -9,6 +9,9 @@ const ManpowerModel = require("../models/manpowerModel");
 /** S3 Delete File */
 const s3DeleteFile = require("../util/deleteS3File");
 
+/** S3 Get File */
+const s3GetFile = require("../util/getS3File");
+
 /** Validation */
 const {validationResult} = require("express-validator/check");
 

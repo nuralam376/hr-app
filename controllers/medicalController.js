@@ -13,6 +13,9 @@ let GroupModel = require("../models/groupModel");
 /** S3 Delete File */
 const s3DeleteFile = require("../util/deleteS3File");
 
+/** S3 Get File */
+const s3GetFile = require("../util/getS3File");
+
 /** Validation Configuration */
 const {check,validationResult} = require("express-validator/check");
 const {sanitizeBody} = require("express-validator/filter");

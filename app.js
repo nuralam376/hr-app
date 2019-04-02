@@ -15,6 +15,9 @@ const port = process.env.PORT || 8000;
 const aws = require("aws-sdk");
 const keys = require("./config/s3");
 
+/** Gets S3 File */
+const s3GetFile = require("./util/getS3File");
+
 const s3 = new aws.S3({
      accessKeyId : keys.accessKeyId,
      secretAccessKey : keys.secretAccessKey
@@ -43,6 +46,8 @@ app.use(function(req,res,next){
     res.locals.msg = null;
     res.locals.messages = require('express-messages')(req, res);
     res.locals.admin = req.user || null;
+    if(req.user)
+        res.locals.adminImageUrl = s3GetFile(req,"/admins/",req.user.profile_photo);
     res.locals.fileError = null;
     res.locals.csrfToken = req.csrfToken();
     next();
