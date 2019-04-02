@@ -28,8 +28,17 @@ exports.getAllInfos = async(req,res) => {
     {
         let stampings = await StampingModel.find({company : req.user.company}).sort({created_at : -1}).populate("pax").exec();
 
+        let newStampings = stampings.map(stamping => {
+            
+            let url = s3GetFile(req,"/pax/"+stamping.pax.code+"/stamping/",stamping.pc_image);
+
+            stamping["imageUrl"] = url;
+
+            return stamping;
+        });
+
         res.render("stamping/index",{
-            stampings : stampings,
+            stampings : newStampings,
             moment : moment
         });
     }
@@ -115,10 +124,14 @@ exports.registerStamping = async(req,res) => {
            /** Finds MOFA information of the PAX */
            if(mofa && mofa.e_number)
            {
+                let url = s3GetFile(req,"/pax/"+pax.code+"/stamping/",stamping.pc_image);
+               
+
                res.render("stamping/register",{
                    pax : pax,
                    stamping : stamping,
-                   mofa : mofa
+                   mofa : mofa,
+                   imageUrl : url
                });
            }
            else
