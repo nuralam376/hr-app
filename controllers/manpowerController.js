@@ -23,10 +23,19 @@ const fs = require("fs");
 exports.getAllInfos = async(req,res) => {
     try
     {
-        let manpowers = await ManpowerModel.find({company : req.user.company}).populate("pax").exec();
+        let manpowers = await ManpowerModel.find({company : req.user.company}).sort({created_at : -1}).populate("pax").exec();
+
+        let newManpowers = manpowers.map(manpower => {
+            
+            let url = s3GetFile(req,"/pax/"+manpower.pax.code+"/manpower/",manpower.card_photo);
+
+            manpower["imageUrl"] = url;
+
+            return manpower;
+        });
 
         res.render("manpower/index",{
-            manpowers : manpowers.reverse(),
+            manpowers : newManpowers,
             moment : moment
         });
     }
@@ -270,12 +279,15 @@ exports.getRegisterManpowerStatus = async(req,res) => {
            if(manpower)
            {
                let pax = await PAXModel.findOne({_id : manpower.pax, company : req.user.company}).populate("supplier").populate("group").exec();
+               let url = s3GetFile(req,"/pax/"+pax.code+"/manpower/",manpower.card_photo);
+
                res.render("manpower/status",{
                    manpower : manpower,
                    pax : pax,
                    action : "/manpower/status",
                    heading  : "Status after Manpower",
-                   moment : moment
+                   moment : moment,
+                   imageUrl : url
                });
            }
            else
@@ -303,6 +315,8 @@ exports.postRegisterManpowerStatus = async(req,res) => {
         let query = {_id : req.params.id,company : req.user.company};
         let manpower = await ManpowerModel.findOne(query);
         let pax = await PAXModel.findOne({_id : manpower.pax,company : req.user.company}).populate("supplier").populate("group").exec();
+        let url = s3GetFile(req,"/pax/"+pax.code+"/manpower/",manpower.card_photo);
+
         let errors = validationResult(req);
         let fileError;
         /** Checks Whether any file is uploaded */
@@ -330,7 +344,8 @@ exports.postRegisterManpowerStatus = async(req,res) => {
                 errors : errors.array(),
                 fileError : fileError,
                 form : forms,
-                moment : moment
+                moment : moment,
+                imageUrl : url
             });
         }
         

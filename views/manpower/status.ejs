@@ -44,7 +44,7 @@
                                     <label for="card_photo">SmartCard Photo</label>
                                     <input type="file" name = "card_photo" id = "card_photo" class = "form-control">
                                     <img src="" alt="" style = "max-width : 500px; height : auto" id = "photo">
-                                    <a data-fancybox="gallery" href = "https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= manpower.company %>/pax/<%= pax.code %>/manpower/<%= manpower.card_photo %>"><img src="https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= manpower.company %>/pax/<%= pax.code %>/manpower/<%= manpower.card_photo %>" alt="" style = "max-width : 500px; height : auto"></a>
+                                    <a data-fancybox="gallery" href = "<%= imageUrl %>"><img src="<%= imageUrl %>" alt="" style = "max-width : 500px; height : auto"></a>
                                  </div> 
                                 <div class="form-group">
                                     <input type="submit" value = "Save" class = "btn btn-success">
