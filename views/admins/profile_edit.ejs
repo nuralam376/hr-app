@@ -22,11 +22,9 @@
                 <div class="form-group">
                     <label for="profile_photo">Profile Photo</label>
                         <input type = "file" name = "profile_photo" id = "profile_photo">
-                        <% if (adminInfo.profile_photo == "dummy.jpeg") { %>
-                            <a data-fancybox="gallery" href="https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= adminInfo.profile_photo %>"><img src = "https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= adminInfo.profile_photo %>" style = "height:auto; max-width:100%;" id = "photo"></a>
-                      <% } else { %>
-                        <a data-fancybox="gallery" href="https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= adminInfo.company %>/admins/<%= adminInfo.profile_photo %>"><img src = "https://s3.ap-south-1.amazonaws.com/hr-app-test/<%= adminInfo.company %>/admins/<%= adminInfo.profile_photo %>" style = "height:auto; max-width:100%;" id = "photo"></a>
-                      <% } %>
+                       
+                        <a data-fancybox="gallery" href="<%= adminImageUrl %>"><img src = "<%= adminImageUrl %>" style = "height:auto; max-width:100%;" id = "photo"></a>
+                     
                         
                 </div>
             </div>

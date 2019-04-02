@@ -88,13 +88,21 @@ router.get("/",auth,isSuperAdmin,async(req,res) => {
     try
     {
         
-        let admins = await AdminModel.find({company : req.user.company, isSuperAdmin : false}); // Find All Admins of the logged in admin's company 
+        let admins = await AdminModel.find({company : req.user.company, isSuperAdmin : false}).sort({created_at : -1}); // Find All Admins of the logged in admin's company 
 
         //If Admin found
         if(admins)
         {
+            let newAdmins = admins.map(admin => {
+                
+                let url = s3GetFile(req,"/admins/",admin.profile_photo);
+    
+                admin["imageUrl"] = url;
+    
+                return admin;
+            });
             res.render("admins/index",{
-                admins : admins
+                admins : newAdmins
             });
         }
         
@@ -277,6 +285,7 @@ router.get("/profile/edit",auth,async(req,res) => {
         // If Admin exists
         if(adminInfo)
         {
+
             res.render("admins/profile_edit",{
                 adminInfo : adminInfo
             });
@@ -312,6 +321,7 @@ router.get("/edit/:id",auth,isSuperAdmin,async(req,res) => {
         // If Admin exists
         if(adminInfo)
         {
+            
             res.render("admins/edit",{
                 adminInfo : adminInfo
             });
@@ -625,8 +635,11 @@ router.get("/:id",auth,isSuperAdmin,async(req,res) => {
         // If Admin exists
         if(adminInfo)
         {
+            let url = s3GetFile(req,"/admins/",adminInfo.profile_photo); 
+
             res.render("admins/view",{
-                adminInfo : adminInfo
+                adminInfo : adminInfo,
+                imageUrl : url
             });
         }
         else
