@@ -12,9 +12,13 @@ exports.getDashboard = async(req,res) => {
     try{
         let totalSupplier = await SupplierModel.countDocuments();
         let totalUser = await UserModel.countDocuments();
+
+        
+
+    
         res.render("dashboard",{
             totaluser : totalUser,
-            totalSupplier : totalSupplier,
+            totalSupplier : totalSupplier
         });
     }
     catch(err){
@@ -23,3 +27,41 @@ exports.getDashboard = async(req,res) => {
     
 }
 
+
+exports.getChartData = async(req,res) => {
+    try
+    {
+        let totalPAX = await UserModel.aggregate([
+            {
+                $project : {
+                    _id : 0,
+                    created_at : 1,
+                    code : 1
+                }
+            },
+            {
+                $group : {
+                    _id : {
+                        create : {
+                            $month : "$created_at"
+                        },
+                    },
+                    total : {
+                        $sum : 1
+                    }
+                }
+            },
+            {
+                $sort : {
+                    "_id.create" : 1
+                }
+            }
+        ]);
+
+        return res.jsonp(totalPAX);
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
