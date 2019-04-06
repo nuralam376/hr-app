@@ -33,13 +33,6 @@ exports.getChartData = async(req,res) => {
     {
         let totalPAX = await UserModel.aggregate([
             {
-                $project : {
-                    _id : 0,
-                    created_at : 1,
-                    code : 1
-                }
-            },
-            {
                 $group : {
                     _id : {
                         create : {
@@ -49,11 +42,6 @@ exports.getChartData = async(req,res) => {
                     total : {
                         $sum : 1
                     }
-                }
-            },
-            {
-                $sort : {
-                    "_id.create" : 1
                 }
             }
         ]);

@@ -44,7 +44,7 @@
           </div>
           <!-- ./col -->
          <canvas id = "myChart"></canvas>
-           
+       
            
           </div>
         
@@ -72,8 +72,8 @@
             {
               let dataArray = [];
               
-              response.map(data => {
-                dataArray[data._id.create - 1] = data.total;
+              response.map(pax => {
+                dataArray[pax._id.create - 1] = pax.total;
               });
 
               let massPopChart = new Chart(myChart, {
@@ -129,7 +129,7 @@
 
             error : function(err)
             {
-               alert(err);
+               console.log(err);
             }
         });
             
