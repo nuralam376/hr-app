@@ -229,99 +229,109 @@ $(document).ready(function() {
 
   $("#status").on("click", showDiv);
 
-  $.ajax({
-    type: "GET",
-    url: "/dashboard/data",
-    success: function(response) {
-      let paxData = getChartData(response.totalPAX);
-      let supplierData = getChartData(response.totalSupplier);
-      let groupData = getChartData(response.totalGroup);
-      let config = {
-        type: "line",
-        data: {
-          labels: [
-            "January",
-            "February",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December"
-          ],
-          datasets: [
-            {
-              label: "PAX",
-              fill: false,
-              borderColor: "#3e95cd",
-              data: paxData
-            },
-            {
-              label: "Supplier",
-              fill: false,
-              borderColor: "green",
-              data: supplierData
-            },
-            {
-              label: "Group",
-              fill: false,
-              borderColor: "yellow",
-              data: groupData
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          title: {
-            display: true,
-            text: "Total Registered - " + new Date().getFullYear()
-          },
-          tooltips: {
-            mode: "index",
-            intersect: false
-          },
-          hover: {
-            mode: "nearest",
-            intersect: true
-          },
-          scales: {
-            xAxes: [
-              {
-                display: true,
-                scaleLabel: {
-                  display: true,
-                  labelString: "Month"
-                }
-              }
+  function showChart(chartType) {
+    $.ajax({
+      type: "GET",
+      url: "/dashboard/data",
+      success: function(response) {
+        let paxData = getChartData(response.totalPAX);
+        let supplierData = getChartData(response.totalSupplier);
+        let groupData = getChartData(response.totalGroup);
+
+        let config = {
+          type: chartType,
+          data: {
+            labels: [
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December"
             ],
-            yAxes: [
+            datasets: [
               {
-                display: true,
-                scaleLabel: {
-                  display: true,
-                  labelString: "Value"
-                },
-                ticks: {
-                  reverse: false,
-                  stepSize: 1
-                }
+                label: "PAX",
+                fill: false,
+                borderColor: "#3e95cd",
+                backgroundColor: "#3e95cd",
+                data: paxData
+              },
+              {
+                label: "Supplier",
+                fill: false,
+                borderColor: "green",
+                backgroundColor: "green",
+                data: supplierData
+              },
+              {
+                label: "Group",
+                fill: false,
+                borderColor: "yellow",
+                backgroundColor: "yellow",
+                data: groupData
               }
             ]
+          },
+          options: {
+            responsive: true,
+            title: {
+              display: true,
+              text: "Total Registered - " + new Date().getFullYear()
+            },
+            tooltips: {
+              mode: "index",
+              intersect: false
+            },
+            hover: {
+              mode: "nearest",
+              intersect: true
+            },
+            scales: {
+              xAxes: [
+                {
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: "Month"
+                  }
+                }
+              ],
+              yAxes: [
+                {
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: "Value"
+                  },
+                  ticks: {
+                    reverse: false,
+                    stepSize: 1
+                  }
+                }
+              ]
+            }
           }
-        }
-      };
+        };
 
-      var ctx = document.getElementById("lineChart").getContext("2d");
-      new Chart(ctx, config);
-    },
-    error: function(err) {
-      console.log(err);
-    }
-  });
+        var ctx = document.getElementById("lineChart").getContext("2d");
+        if (window.chartType != undefined) window.chartType.destroy();
+
+        window.chartType = new Chart(ctx, config);
+      },
+      error: function(err) {
+        console.log(err);
+      }
+    });
+  }
+
+  showChart("line");
 
   function getChartData(responseData) {
     let chartData = [];
@@ -335,4 +345,8 @@ $(document).ready(function() {
 
     return chartData;
   }
+
+  $(".box-title").on("click", function() {
+    showChart($(this).attr("data-id"));
+  });
 });
