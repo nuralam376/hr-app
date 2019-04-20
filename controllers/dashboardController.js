@@ -1,8 +1,11 @@
 /** Supplier Model Schema */
 const SupplierModel = require("../models/supplierModel");
 
-/** Supplier Model Schema */
+/** PAX Model Schema */
 const UserModel = require("../models/userModel");
+
+/** Group Model Schema */
+const GroupModel = require("../models/groupModel");
 
 /** Gets S3 File */
 const s3GetFile = require("../util/getS3File");
@@ -25,10 +28,12 @@ exports.getChartData = async (req, res) => {
   try {
     let totalPAX = await getChartResult(UserModel);
     let totalSupplier = await getChartResult(SupplierModel);
+    let totalGroup = await getChartResult(GroupModel);
 
     let totals = {
       totalPAX,
-      totalSupplier
+      totalSupplier,
+      totalGroup
     };
 
     return res.jsonp(totals);

@@ -235,6 +235,7 @@ $(document).ready(function() {
     success: function(response) {
       let paxData = getChartData(response.totalPAX);
       let supplierData = getChartData(response.totalSupplier);
+      let groupData = getChartData(response.totalGroup);
       let config = {
         type: "line",
         data: {
@@ -264,6 +265,12 @@ $(document).ready(function() {
               fill: false,
               borderColor: "green",
               data: supplierData
+            },
+            {
+              label: "Group",
+              fill: false,
+              borderColor: "yellow",
+              data: groupData
             }
           ]
         },
