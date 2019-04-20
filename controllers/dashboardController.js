@@ -31,9 +31,9 @@ exports.getChartData = async (req, res) => {
     let totalGroup = await getChartResult(GroupModel);
 
     let totals = {
-      totalPAX,
-      totalSupplier,
-      totalGroup
+      totalPAX: totalPAX,
+      totalSupplier: totalSupplier,
+      totalGroup: totalGroup
     };
 
     return res.jsonp(totals);
