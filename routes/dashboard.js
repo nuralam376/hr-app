@@ -12,8 +12,8 @@ const dashboardController = require("../controllers/dashboardController");
 
 /** Shows Company Details in Admin Dashboard */
 
-router.get("/",auth, dashboardController.getDashboard);
+router.get("/", auth, dashboardController.getDashboard);
 
-router.get("/data",auth, dashboardController.getChartData);
+router.get("/chartdata", auth, dashboardController.getChartAjaxData);
 
 module.exports = router;

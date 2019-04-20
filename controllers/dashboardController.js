@@ -24,11 +24,11 @@ exports.getDashboard = async (req, res) => {
   }
 };
 
-exports.getChartData = async (req, res) => {
+exports.getChartAjaxData = async (req, res) => {
   try {
-    let totalPAX = await getChartResult(UserModel);
-    let totalSupplier = await getChartResult(SupplierModel);
-    let totalGroup = await getChartResult(GroupModel);
+    let totalPAX = await getChartTotalResult(UserModel);
+    let totalSupplier = await getChartTotalResult(SupplierModel);
+    let totalGroup = await getChartTotalResult(GroupModel);
 
     let totals = {
       totalPAX: totalPAX,
@@ -42,7 +42,7 @@ exports.getChartData = async (req, res) => {
   }
 };
 
-const getChartResult = async Model => {
+const getChartTotalResult = async Model => {
   try {
     let total = await Model.aggregate([
       {

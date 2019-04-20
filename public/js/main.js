@@ -232,7 +232,7 @@ $(document).ready(function() {
   function showChart(chartType) {
     $.ajax({
       type: "GET",
-      url: "/dashboard/data",
+      url: "/dashboard/chartdata",
       success: function(response) {
         let paxData = getChartData(response.totalPAX);
         let supplierData = getChartData(response.totalSupplier);
