@@ -248,7 +248,7 @@ router.post("/register",auth,isSuperAdmin,[
 router.get("/profile",auth,async(req,res) => {
     try{
 
-        let query = {_id : req.user._id}; // Admin Object Id 
+        let query = {_id : req.user._id,company : req.user.company}; // Admin Object Id 
 
         let adminInfo = await AdminModel.findOne(query); // Finds Admin 
 
@@ -603,7 +603,7 @@ router.delete("/delete/:id",auth,isSuperAdmin,async(req,res) => {
 
 router.get("/timeline/:id",auth,async(req,res) => {
     try{
-        let query = {seq_id : req.params.id};
+        let query = {seq_id : req.params.id,company : req.user.company};
 
         let admin = await AdminModel.findOne(query);
         res.render("admins/timeline",{

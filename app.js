@@ -46,8 +46,10 @@ app.use(function(req,res,next){
     res.locals.msg = null;
     res.locals.messages = require('express-messages')(req, res);
     res.locals.admin = req.user || null;
-    if(req.user)
+    if(req.user && req.user.profile_photo != "dummy.jpeg")
         res.locals.adminImageUrl = s3GetFile(req,"/admins/",req.user.profile_photo);
+    else
+        res.locals.adminImageUrl = "/images/dummy.jpg";
     res.locals.fileError = null;
     res.locals.csrfToken = req.csrfToken();
     next();

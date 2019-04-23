@@ -323,7 +323,7 @@ exports.deleteSupplier = async(req,res) => {
 
 exports.suppliersTimeline = async(req,res) => {
     try{
-        let query = {seq_id : req.params.id};
+        let query = {seq_id : req.params.id,company : req.user.company};
 
         let supplier = await SupplierModel.findOne(query);
 

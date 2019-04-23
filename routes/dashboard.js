@@ -16,4 +16,6 @@ router.get("/", auth, dashboardController.getDashboard);
 
 router.get("/chartdata", auth, dashboardController.getChartAjaxData);
 
+router.get("/paxstatus", auth, dashboardController.getChartPaxData);
+
 module.exports = router;

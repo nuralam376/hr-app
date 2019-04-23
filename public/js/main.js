@@ -259,11 +259,11 @@ $(document).ready(function() {
               ],
               datasets: [
                 {
-                  label: "PAX",
+                  label: "Group",
                   fill: false,
-                  borderColor: "#3e95cd",
-                  backgroundColor: "#3e95cd",
-                  data: paxData
+                  borderColor: "purple",
+                  backgroundColor: "purple",
+                  data: groupData
                 },
                 {
                   label: "Supplier",
@@ -273,11 +273,11 @@ $(document).ready(function() {
                   data: supplierData
                 },
                 {
-                  label: "Group",
+                  label: "PAX",
                   fill: false,
-                  borderColor: "yellow",
-                  backgroundColor: "yellow",
-                  data: groupData
+                  borderColor: "#3e95cd",
+                  backgroundColor: "#3e95cd",
+                  data: paxData
                 }
               ]
             },
@@ -310,11 +310,11 @@ $(document).ready(function() {
                     display: true,
                     scaleLabel: {
                       display: true,
-                      labelString: "Value"
+                      labelString: "Counts"
                     },
                     ticks: {
                       reverse: false,
-                      stepSize: 1
+                      stepSize: 10
                     }
                   }
                 ]
@@ -350,6 +350,85 @@ $(document).ready(function() {
 
     $(".box-title").on("click", function() {
       showChart($(this).attr("data-id"));
+    });
+
+    $.ajax({
+      type: "GET",
+      url: "/dashboard/paxstatus",
+      dataType: "json",
+      success: function(response) {
+        let config = {
+          type: "line",
+          data: {
+            labels: [
+              "Medical",
+              "MOFA",
+              "Stamping",
+              "TC",
+              "Manpower",
+              "Flights",
+              "Delivery Report"
+            ],
+            datasets: [
+              {
+                label: "Total",
+                fill: false,
+                borderColor: "cyan",
+                backgroundColor: "cyan",
+                data: response,
+                pointRadius: 5,
+                pointHoverRadius: 10,
+                showLine: false 
+              },
+            ]
+          },
+          options: {
+            responsive: true,
+            title: {
+              display: true,
+              text: "Total Counts of PAX Stages"
+            },
+            tooltips: {
+              mode: "index",
+              intersect: false
+            },
+            hover: {
+              mode: "nearest",
+              intersect: true
+            },
+            scales: {
+              xAxes: [
+                {
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: "PAX Stage"
+                  }
+                }
+              ],
+              yAxes: [
+                {
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: "Counts"
+                  },
+                  ticks: {
+                    reverse: false,
+                    stepSize: 10
+                  }
+                }
+              ]
+            }
+          }
+        };
+
+        var ctx = document.getElementById("barchart").getContext("2d");
+        new Chart(ctx, config);
+      },
+      error: function(err) {
+        console.log(err);
+      }
     });
   });
 });
