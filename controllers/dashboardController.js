@@ -110,13 +110,13 @@ const getChartTotalResult = async (req,Model) => {
 exports.getChartPaxData = async(req,res) => {
   try
   {
-    let totalMedical = await MedicalModel.find({company : req.user.company}).countDocuments();
-    let totalMOFA = await MofaModel.find({company : req.user.company}).countDocuments();
-    let totalStamping = await StampingModel.find({company : req.user.company}).countDocuments();
-    let totalTC = await TCModel.find({company : req.user.company}).countDocuments();
-    let totalManpower = await ManpowerModel.find({company : req.user.company}).countDocuments();
-    let totalFlight = await FlightModel.find({company : req.user.company}).countDocuments();
-    let totalDelivery = await DeliveryModel.find({company : req.user.company}).countDocuments();
+    let totalMedical = await MedicalModel.find({company : req.user.company}).countDocuments() || 0;
+    let totalMOFA = await MofaModel.find({company : req.user.company}).countDocuments() || 0;
+    let totalStamping = await StampingModel.find({company : req.user.company}).countDocuments() || 0;
+    let totalTC = await TCModel.find({company : req.user.company}).countDocuments() || 0;
+    let totalManpower = await ManpowerModel.find({company : req.user.company}).countDocuments() || 0;
+    let totalFlight = await FlightModel.find({company : req.user.company}).countDocuments() || 0;
+    let totalDelivery = await DeliveryModel.find({company : req.user.company}).countDocuments() || 0;
 
     let totals = [totalMedical, totalMOFA, totalStamping, totalTC, totalManpower, totalFlight, totalDelivery];
 
