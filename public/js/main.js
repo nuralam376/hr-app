@@ -378,8 +378,8 @@ $(document).ready(function() {
                 data: response,
                 pointRadius: 5,
                 pointHoverRadius: 10,
-                showLine: false 
-              },
+                showLine: false
+              }
             ]
           },
           options: {

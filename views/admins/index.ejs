@@ -1,38 +1,57 @@
 <% include ../layouts/admin/header %>
 
-    <h1 class = "text-center">User Home</h1>
-    <div class="card">
-        <div class="card-body">
-            <h2>All Admins</h2>     
-            <div class="pull-right">
-                <a href="/admin/register" class = "btn btn-primary">Create New Admin</a>
-            </div>   
-            <br><br>
-
-            <table id="myTable" class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Photo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if(admins) { %>
-                        <% admins.forEach(function(adminInfo) { %>
-                            <tr>
-                                <td><a href = "/admin/<%= adminInfo.seq_id %>"><%= adminInfo.seq_id %></a></td>
-                                <td><%= adminInfo.name %></td>
-                                <td><%= adminInfo.email %></td>
-                                
-                                <td><a data-fancybox="gallery" href="<%= adminImageUrl %>"><img src = "<%= adminImageUrl %>" alt = "No Pic" height = "50px" width = "50px"></a></td>
-                               
-                            </tr>
-                        <% }) %>
-                    <% } %>
-                 </tbody>   
-            </table>
-        </div>
+<h1 class="text-center">User Home</h1>
+<div class="card">
+  <div class="card-body">
+    <h2>All Admins</h2>
+    <div class="pull-right">
+      <a href="/admin/register" class="btn btn-primary">Create New Admin</a>
     </div>
+    <br /><br />
+
+    <table id="myTable" class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Photo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if(admins) { %> <% admins.forEach(function(adminInfo) { %>
+        <tr>
+          <td>
+            <a href="/admin/<%= adminInfo.seq_id %>"><%= adminInfo.seq_id %></a>
+          </td>
+          <td><%= adminInfo.name %></td>
+          <td><%= adminInfo.email %></td>
+
+          <% if (adminInfo.profile_photo == "dummy.jpeg") { %>
+          <td>
+            <a data-fancybox="gallery" href="/images/dummy.jpg"
+              ><img
+                src="/images/dummy.jpg"
+                alt="No Pic"
+                height="50px"
+                width="50px"
+            /></a>
+          </td>
+          <% } else { %>
+          <td>
+            <a data-fancybox="gallery" href="<%= adminInfo.imageUrl %>"
+              ><img
+                src="<%= adminInfo.imageUrl %>"
+                alt="No Pic"
+                height="50px"
+                width="50px"
+            /></a>
+          </td>
+          <% } %>
+        </tr>
+        <% }) %> <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
 <% include ../layouts/admin/footer %>
