@@ -32,6 +32,7 @@
     <th>Completed Stage</th>
     <td><%= status.completedStage %></td>
   </tr>
+  <% if(status.nextStage != "None") { %>
   <tr>
     <th>Next Stage</th>
     <td>
@@ -40,6 +41,7 @@
       >
     </td>
   </tr>
+  <% } %>
   <tr>
     <th>Name</th>
     <td><%= newUser.name %></td>

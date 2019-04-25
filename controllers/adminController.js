@@ -206,7 +206,9 @@ router.post(
         contact: req.body.contact,
         address: req.body.address,
         pass: req.body.pass,
-        profile_photo: "dummy.jpeg"
+        profile_photo: "dummy.jpeg",
+        created_at: Date.now(),
+        updated_at: Date.now()
       };
 
       let errors = validationResult(req);
@@ -227,6 +229,8 @@ router.post(
         admin.profile_photo = forms.profile_photo;
         admin.password = forms.pass;
         admin.company = req.user.company;
+        admin.created_at = forms.created_at;
+        admin.updated_at = forms.updated_at;
 
         /** Encrypted the Admin Password */
 
@@ -404,7 +408,8 @@ router.post(
           name: req.body.name,
           email: req.body.email,
           contact: req.body.contact,
-          address: req.body.address
+          address: req.body.address,
+          updated_at: Date.now()
         };
         forms.profile_photo = adminInfo.profile_photo;
 
@@ -461,7 +466,7 @@ router.post(
           newAdmin.address = forms.address;
           newAdmin.profile_photo = forms.profile_photo;
           newAdmin.company = req.user.company;
-          newAdmin.updated_at = Date.now();
+          newAdmin.updated_at = forms.updated_at;
 
           if (req.user.isSuperAdmin) {
             newAdmin.isSuperAdmin = true;
@@ -546,7 +551,8 @@ router.post(
           name: req.body.name,
           email: req.body.email,
           contact: req.body.contact,
-          address: req.body.address
+          address: req.body.address,
+          updated_at: Date.now()
         };
         forms.profile_photo = adminInfo.profile_photo;
 
@@ -579,7 +585,7 @@ router.post(
           newAdmin.address = forms.address;
           newAdmin.profile_photo = forms.profile_photo;
           newAdmin.company = req.user.company;
-          newAdmin.updated_at = Date.now();
+          newAdmin.updated_at = forms.updated_at;
 
           await createdEvents(req, newAdmin, req.params.id, "admin");
           let adminUpdate = await AdminModel.updateOne(query, newAdmin); // Update the Admin's Info
