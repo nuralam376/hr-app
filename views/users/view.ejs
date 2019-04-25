@@ -1,96 +1,149 @@
 <% include ../layouts/admin/header %>
-    <h1>Code : <%= newUser.code %>
-        <div class="pull-right">
-            <a href = "/pax/timeline/<%= newUser.seq_id %>" class = "btn btn-primary">Show Timeline</a>
-            <a href = "/pax/sticker/<%= newUser.seq_id %>" class = "btn btn-warning">Generate Sticker</a>
-            <a href = "/pax/edit/<%= newUser.seq_id %>" class = "btn btn-info">Edit</a>
-            <a href = "#" class = "btn btn-danger delete-user" data-id = "<%= newUser._id %>" data-csrf = "<%= csrfToken %>">Delete</a>
-        </div>
-    </h1>    
-   
-    <table class = "table table-bordered">
-            <tr>
-                <th>Profile created at</th>
-                <td><%= moment(newUser.created_at).format("llll") %></td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td><%= newUser.name %></td>
-            </tr>
-            <tr>
-                <th>Father Name</th>
-                <td><%= newUser.father %></td>
-            </tr>
-            <tr>
-                <th>Mother Name</th>
-                <td><%= newUser.mother %></td>
-            </tr>
-            <tr>
-                <th>Contact</th>
-                <td><%= newUser.contact %></td>
-            </tr>
-            <tr>
-                <th>Birth Date</th>
-                <td><%= moment(newUser.birth_date).format("ll") %></td>
-            </tr>
-            <tr>
-                <th>Blood Group</th>
-                <td><%= newUser.blood_group %></td>
-            </tr>
-            <tr>
-                <th>Gender</th>
-                <td><%= newUser.gender %></td>
-            </tr>
-            <tr>
-                <th>National ID</th>
-                <td><%= newUser.nid %></td>
-            </tr>
-            <tr>
-                <th>Passport ID</th>
-                <td><%= newUser.passport %></td>
-            </tr>
-            <tr>
-                <th>Date of issue</th>
-                <td><%= moment(newUser.issue).format("ll") %></td>
-            </tr>
-            <tr>
-                <th>Date of Expiry</th>
-                <td><%= moment(newUser.expiry).format("ll") %></td>
-            </tr>
-            <tr>
-                <th>Present Address</th>
-                <td><%= newUser.present_address %></td>
-            </tr>
-            <tr>
-                <th>Present Address</th>
-                <td><%= newUser.present_address %></td>
-            </tr>
-            <tr>
-                <th>Supplier</th>
-                <td><%= newUser.supplier.name %></td>
-            </tr>
-            <tr>
-                <th>Group</th>
-                <td><%= newUser.group.group_seq %> / <%= newUser.group.group_sl %></td>
-            </tr>
-            <% if (newUser.experience_year || newUser.experience_month || newUser.experience_day) { %>
-                <tr>
-                    <th>Experience</th>
-                    <td><%= newUser.experience_year %> year, <%= newUser.experience_month %> months, <%= newUser.experience_day %> days,</td>
-                </tr>
-                <tr>
-                        <th>Experience Image</th>
-                        <td><a data-fancybox="gallery" href = "<%= experiencePhotoUrl %> %>"><img src="<%= experiencePhotoUrl %>" alt="" style = "height : auto; max-width : 400px;"></a></td>
-                    </tr>
-             <% } %>   
-             
-            <tr>
-                <th>Profile Photo</th>
-                <td><a data-fancybox="gallery" href = "<%= profilePhotoUrl %>"><img src="<%= profilePhotoUrl %>" alt="" style = "height : auto; max-width : 400px;"></a></td>
-            </tr>
-            <tr>
-                <th>Passport Photo</th>
-                <td><a data-fancybox="gallery" href = "<%= passportPhotoUrl %>"><img src="<%= passportPhotoUrl %>" alt="" style = "height : auto; max-width : 400px;"></a></td>
-            </tr>
-        </table>
+<h1>
+  Code : <%= newUser.code %>
+  <div class="pull-right">
+    <a href="/pax/timeline/<%= newUser.seq_id %>" class="btn btn-primary"
+      >Show Timeline</a
+    >
+    <a href="/pax/sticker/<%= newUser.seq_id %>" class="btn btn-warning"
+      >Generate Sticker</a
+    >
+    <a href="/pax/edit/<%= newUser.seq_id %>" class="btn btn-info">Edit</a>
+    <a
+      href="#"
+      class="btn btn-danger delete-user"
+      data-id="<%= newUser._id %>"
+      data-csrf="<%= csrfToken %>"
+      >Delete</a
+    >
+  </div>
+</h1>
+
+<table class="table table-bordered">
+  <tr>
+    <th>Profile created at</th>
+    <td><%= moment(newUser.created_at).format("llll") %></td>
+  </tr>
+  <tr>
+    <th>PAX Code</th>
+    <td><%= newUser.code %></td>
+  </tr>
+  <tr>
+    <th>Completed Stage</th>
+    <td><%= status.completedStage %></td>
+  </tr>
+  <tr>
+    <th>Next Stage</th>
+    <td>
+      <a href="/<%= status.nextStage.toLowerCase() %>"
+        ><%= status.nextStage %></a
+      >
+    </td>
+  </tr>
+  <tr>
+    <th>Name</th>
+    <td><%= newUser.name %></td>
+  </tr>
+  <tr>
+    <th>Father Name</th>
+    <td><%= newUser.father %></td>
+  </tr>
+  <tr>
+    <th>Mother Name</th>
+    <td><%= newUser.mother %></td>
+  </tr>
+  <tr>
+    <th>Contact</th>
+    <td><%= newUser.contact %></td>
+  </tr>
+  <tr>
+    <th>Birth Date</th>
+    <td><%= moment(newUser.birth_date).format("ll") %></td>
+  </tr>
+  <tr>
+    <th>Blood Group</th>
+    <td><%= newUser.blood_group %></td>
+  </tr>
+  <tr>
+    <th>Gender</th>
+    <td><%= newUser.gender %></td>
+  </tr>
+  <tr>
+    <th>National ID</th>
+    <td><%= newUser.nid %></td>
+  </tr>
+  <tr>
+    <th>Passport ID</th>
+    <td><%= newUser.passport %></td>
+  </tr>
+  <tr>
+    <th>Date of issue</th>
+    <td><%= moment(newUser.issue).format("ll") %></td>
+  </tr>
+  <tr>
+    <th>Date of Expiry</th>
+    <td><%= moment(newUser.expiry).format("ll") %></td>
+  </tr>
+  <tr>
+    <th>Present Address</th>
+    <td><%= newUser.present_address %></td>
+  </tr>
+  <tr>
+    <th>Present Address</th>
+    <td><%= newUser.present_address %></td>
+  </tr>
+  <tr>
+    <th>Supplier</th>
+    <td><%= newUser.supplier.name %></td>
+  </tr>
+  <tr>
+    <th>Group</th>
+    <td><%= newUser.group.group_seq %> / <%= newUser.group.group_sl %></td>
+  </tr>
+  <% if (newUser.experience_year || newUser.experience_month ||
+  newUser.experience_day) { %>
+  <tr>
+    <th>Experience</th>
+    <td>
+      <%= newUser.experience_year %> year, <%= newUser.experience_month %>
+      months, <%= newUser.experience_day %> days,
+    </td>
+  </tr>
+  <tr>
+    <th>Experience Image</th>
+    <td>
+      <a data-fancybox="gallery" href="<%= experiencePhotoUrl %> %>"
+        ><img
+          src="<%= experiencePhotoUrl %>"
+          alt=""
+          style="height : auto; max-width : 400px;"
+      /></a>
+    </td>
+  </tr>
+  <% } %>
+
+  <tr>
+    <th>Profile Photo</th>
+    <td>
+      <a data-fancybox="gallery" href="<%= profilePhotoUrl %>"
+        ><img
+          src="<%= profilePhotoUrl %>"
+          alt=""
+          style="height : auto; max-width : 400px;"
+      /></a>
+    </td>
+  </tr>
+  <tr>
+    <th>Passport Photo</th>
+    <td>
+      <a data-fancybox="gallery" href="<%= passportPhotoUrl %>"
+        ><img
+          src="<%= passportPhotoUrl %>"
+          alt=""
+          style="height : auto; max-width : 400px;"
+      /></a>
+    </td>
+  </tr>
+</table>
+
 <% include ../layouts/admin/footer %>

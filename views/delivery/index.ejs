@@ -1,36 +1,45 @@
 <% include ../layouts/admin/header %>
 
-    <h1 class = "text-center">Flights</h1>
-    <div class="card">
-        <div class="card-body">
-            <h2>All Information</h2>     
+<h1 class="text-center">Delivery</h1>
+<div class="card">
+  <div class="card-body">
+    <h2>All Information</h2>
 
-            <div class="table-responsive">
-                    <table id="myTable" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>PAX Code</th>
-                                <th>PAX Name</th>
-                                <th>Received By</th>
-                                <th>Option</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                          
-                           <% if(deliveries.length > 0) { %>
-                                <% deliveries.forEach(delivery => { %>
-                                <tr>   
-                                    <td><a href="/pax/<%= delivery.pax.seq_id %>"><%= delivery.pax.code %></a></td>
-                                    <td><%= delivery.pax.name %></td>
-                                    <td><%= delivery.received_by %></td>
-                                    <td><a href = "#" class = "btn btn-danger delete-delivery" data-id = "<%= delivery._id %>" data-csrf = "<%= csrfToken %>">Delete</a></td>
-                                </tr>
-                                <% }) %>
-                           <% } %>
-                               
-                        </tbody>   
-                    </table>
-            </div>
-        </div>
+    <div class="table-responsive">
+      <table id="myTable" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>PAX Code</th>
+            <th>PAX Name</th>
+            <th>Received By</th>
+            <th>Option</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if(deliveries.length > 0) { %> <% deliveries.forEach(delivery => {
+          %>
+          <tr>
+            <td>
+              <a href="/pax/<%= delivery.pax.seq_id %>"
+                ><%= delivery.pax.code %></a
+              >
+            </td>
+            <td><%= delivery.pax.name %></td>
+            <td><%= delivery.received_by %></td>
+            <td>
+              <a
+                href="#"
+                class="btn btn-danger delete-delivery"
+                data-id="<%= delivery._id %>"
+                data-csrf="<%= csrfToken %>"
+                >Delete</a
+              >
+            </td>
+          </tr>
+          <% }) %> <% } %>
+        </tbody>
+      </table>
     </div>
+  </div>
+</div>
 <% include ../layouts/admin/footer %>
