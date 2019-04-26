@@ -355,7 +355,18 @@ exports.updateUser = async (req, res) => {
         );
       }
 
-      await userUpdate(req, res, forms, query, newUser, suppliers, groups);
+      await userUpdate(
+        req,
+        res,
+        forms,
+        query,
+        newUser,
+        suppliers,
+        groups,
+        profilePhotoUrl,
+        passportPhotoUrl,
+        experiencePhotoUrl
+      );
     }
   } catch (error) {
     console.log(error);
@@ -536,6 +547,7 @@ const saveNewUser = async (req, res, forms, suppliers, groups, companyInfo) => {
   user.supplier = forms.supplier;
   user.company = req.user.company;
   user.created_at = Date.now();
+  user.updated_at = Date.now();
   /** Checks if both the images are exists */
   if (forms.profile_photo && forms.passport_photo) {
     user.profile_photo = forms.profile_photo;
@@ -572,7 +584,8 @@ const saveNewUser = async (req, res, forms, suppliers, groups, companyInfo) => {
     let userStatus = {
       type: "profile_created",
       display_name: "Profile Created",
-      description: `${req.user.name} created profile of ${user.name}`
+      description: `${req.user.name} created profile of ${user.name}`,
+      time: Date.now()
     };
 
     user.events.push(userStatus);
@@ -617,7 +630,10 @@ const userUpdate = async (
   query,
   newUser,
   suppliers,
-  groups
+  groups,
+  profilePhotoUrl,
+  passportPhotoUrl,
+  experiencePhotoUrl
 ) => {
   /** Saves the User Input Data */
   let user = {};
@@ -658,7 +674,10 @@ const userUpdate = async (
         suppliers: suppliers,
         fileError: "Experience Image is required",
         groups: groups,
-        moment: moment
+        moment: moment,
+        profilePhotoUrl: profilePhotoUrl,
+        passportPhotoUrl: passportPhotoUrl,
+        experiencePhotoUrl: experiencePhotoUrl
       });
     }
   }
