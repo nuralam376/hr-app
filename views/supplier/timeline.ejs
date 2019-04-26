@@ -1,24 +1,26 @@
 <% include ../layouts/admin/header %>
 <div class="container mt-xs-5 mb-xs-5">
-	<div class="row">
-		<div class="col-md-6 col-md-offset-3">
-            <h4>Supplier TimeLine</h4>
-            <%if (newSupplier.events.length > 0){ %>
-                
-                <ul class="timeline">
-                <% newSupplier.events.reverse().forEach(supplier => { %>
-                    <li>
-                        <a href="javascript:void(0)"><%= supplier.display_name %></a>
-                        <a href="javascript:void(0)" class="pull-right"><%= moment(supplier.time).format('llll'); %></a>
-                        <p><%= supplier.description %></p>
-                    </li>
-                <% }); %>    
-                </ul>
-            <% } else { %>
-                <h1>No Events</h1>
-            <% } %>
-		</div>
-	</div>
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <h4>Supplier TimeLine</h4>
+      <%if (newSupplier.events.length > 0){ %>
+
+      <ul class="timeline">
+        <% newSupplier.events.reverse().forEach(supplier => { %>
+        <li>
+          <a href="javascript:void(0)"><%= supplier.display_name %></a>
+          <a href="javascript:void(0)" class="pull-right"
+            ><%= moment(supplier.time).format('llll'); %></a
+          >
+          <p><%= supplier.description %></p>
+        </li>
+        <% }); %>
+      </ul>
+      <% } else { %>
+      <h1>No Events</h1>
+      <% } %>
+    </div>
+  </div>
 </div>
 
 <% include ../layouts/admin/footer %>
