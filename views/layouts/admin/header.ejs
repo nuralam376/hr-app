@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,8 +13,8 @@
   <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="/bower_components/Ionicons/css/ionicons.min.css">
-   <!-- DataTables -->
-   <link rel="stylesheet" href="/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="/dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -23,145 +24,147 @@
   <link rel="stylesheet" href="/resources/demos/style.css">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.6/dist/jquery.fancybox.min.css" />
- 
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 
 
   <link rel="stylesheet" href="/css/style.css">
 
- 
+
   <!-- Google Font -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
-<!-- Site wrapper -->
-<div class="wrapper">
 
-  <header class="main-header">
-    <!-- Logo -->
-    <a href="/" class="logo">
-      <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>HR</b>-APP</span>
-      <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>HR</b>-APP</span>
-    </a>
-    <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top">
-      <!-- Sidebar toggle button-->
-      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
+<body class="hold-transition skin-blue fixed sidebar-mini">
+  <!-- Site wrapper -->
+  <div class="wrapper">
+
+    <header class="main-header">
+      <!-- Logo -->
+      <a href="/" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><b>HR</b>-APP</span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><b>HR</b>-APP</span>
       </a>
+      <!-- Header Navbar: style can be found in header.less -->
+      <nav class="navbar navbar-static-top">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
 
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-         
-          <!-- User Account: style can be found in dropdown.less -->
-          <li class="dropdown user user-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <% if (admin.profile_photo == "dummy.jpeg") { %>
-                  <img src = "<%= adminImageUrl %>" class="user-image" alt="User Image">
-            <% } else { %>
-                <img src = "<%= adminImageUrl %>" class="user-image" alt="User Image">
-            <% } %>
-              <span class="hidden-xs"> <%= admin.name %></span>
-            </a>
-            <ul class="dropdown-menu">
-              <!-- User image -->
-              <li class="user-header">
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <% if (admin.profile_photo == "dummy.jpeg") { %>
-                  <img src = "<%= adminImageUrl %>" class="img-circle" >
-            <% } else { %>
-                <img src = "<%= adminImageUrl %>" height = "50px" width = "50px">
-            <% } %>
-                <p>
-                  <%= admin.name %>
-                  <!-- <small>Member since Nov. 2012</small> -->
-                </p>
-              </li>
-             
+                <img src="<%= adminImageUrl %>" class="user-image" alt="User Image">
+                <% } else { %>
+                <img src="<%= adminImageUrl %>" class="user-image" alt="User Image">
+                <% } %>
+                <span class="hidden-xs"> <%= admin.name %></span>
+              </a>
+              <ul class="dropdown-menu">
+                <!-- User image -->
+                <li class="user-header">
+                  <% if (admin.profile_photo == "dummy.jpeg") { %>
+                  <img src="<%= adminImageUrl %>" class="img-circle">
+                  <% } else { %>
+                  <img src="<%= adminImageUrl %>" height="50px" width="50px">
+                  <% } %>
+                  <p>
+                    <%= admin.name %>
+                    <!-- <small>Member since Nov. 2012</small> -->
+                  </p>
+                </li>
+
                 <!-- /.row -->
-            
-              <!-- Menu Footer-->
-              <li class="user-footer">
-                <div class="pull-left">
-                  <a href="/admin/profile" class="btn btn-default btn-flat">Profile</a>
-                </div>
-                <div class="pull-right">
-                  <a href="/login/logout" class="btn btn-default btn-flat">Sign out</a>
-                </div>
-              </li>
+
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                  <div class="pull-left">
+                    <a href="/admin/profile" class="btn btn-default btn-flat">Profile</a>
+                  </div>
+                  <div class="pull-right">
+                    <a href="/login/logout" class="btn btn-default btn-flat">Sign out</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <!-- =============================================== -->
+
+    <!-- Left side column. contains the sidebar -->
+    <aside class="main-sidebar">
+      <!-- sidebar: style can be found in sidebar.less -->
+      <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+          <div class="pull-left image">
+            <% if (admin.profile_photo == "dummy.jpeg") { %>
+            <img src="<%= adminImageUrl %>" height="50px" width="50px">
+            <% } else { %>
+            <img src="<%= adminImageUrl %>" height="50px" width="50px">
+            <% } %>
+          </div>
+          <div class="pull-left info">
+            <p><%= admin.name %></p>
+
+          </div>
+        </div>
+
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu" data-widget="tree">
+          <li class="header">MAIN NAVIGATION</li>
+          <li>
+            <a href="/dashboard">
+              <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="/company">
+              <i class="fa fa-industry"></i> <span>Company</span>
+            </a>
+          </li>
+          <% if(admin.isSuperAdmin) { %>
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-user-plus"></i> <span>Admins</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-right pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="/admin"><i class="fa fa-circle-o"></i>All Admins</a></li>
+              <li><a href="/admin/register"><i class="fa fa-circle-o"></i>Add New Admin</a></li>
             </ul>
           </li>
-         
-        </ul>
-      </div>
-    </nav>
-  </header>
-
-  <!-- =============================================== -->
-
-  <!-- Left side column. contains the sidebar -->
-  <aside class="main-sidebar">
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-      <!-- Sidebar user panel -->
-      <div class="user-panel">
-        <div class="pull-left image">
-          <% if (admin.profile_photo == "dummy.jpeg") { %>
-            <img src = "<%= adminImageUrl %>" height = "50px" width = "50px">
-      <% } else { %>
-          <img src = "<%= adminImageUrl %>" height = "50px" width = "50px">
-      <% } %>
-        </div>
-        <div class="pull-left info">
-          <p><%= admin.name %></p>
-        
-        </div>
-      </div>
-  
-      <!-- sidebar menu: : style can be found in sidebar.less -->
-      <ul class="sidebar-menu" data-widget="tree">
-        <li class="header">MAIN NAVIGATION</li>        
-        <li>
-          <a href="/dashboard">
-            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-          </a>
-        </li>
-        <li>
-          <a href="/company">
-            <i class="fa fa-industry"></i> <span>Company</span>
-          </a>
-        </li>
-        <% if(admin.isSuperAdmin) { %>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-user-plus"></i> <span>Admins</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-right pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="/admin"><i class="fa fa-circle-o"></i>All Admins</a></li>
-            <li><a href="/admin/register"><i class="fa fa-circle-o"></i>Add New Admin</a></li>
-          </ul>
-        </li>
-        <% } %>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-building"></i> <span>Zones</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-right pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="/zone"><i class="fa fa-circle-o"></i>All zones</a></li>
-            <li><a href="/zone/register"><i class="fa fa-circle-o"></i>Add New Zone</a></li>
-          </ul>
-        </li>
-        <li class="treeview">
+          <% } %>
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-building"></i> <span>Zones</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-right pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="/zone"><i class="fa fa-circle-o"></i>All zones</a></li>
+              <li><a href="/zone/register"><i class="fa fa-circle-o"></i>Add New Zone</a></li>
+            </ul>
+          </li>
+          <li class="treeview">
             <a href="#">
               <i class="fa fa-globe"></i> <span>Groups</span>
               <span class="pull-right-container">
@@ -174,44 +177,44 @@
             </ul>
           </li>
           <li class="treeview">
-              <a href="#">
-                <i class="fa fa-users"></i> <span>Suppliers</span>
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-right pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="/supplier"><i class="fa fa-circle-o"></i>All Suppliers</a></li>
-                <li><a href="/supplier/register"><i class="fa fa-circle-o"></i>Add New Supplier</a></li>
-              </ul>
-            </li>  
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-user-circle"></i> <span>PAX</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-right pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="/pax"><i class="fa fa-circle-o"></i>All PAX</a></li>
-            <li><a href="/pax/register"><i class="fa fa-circle-o"></i>Add New PAX</a></li>
-          </ul>
-        </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-ambulance"></i> <span>Medical</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-right pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="/medical/all"><i class="fa fa-circle-o"></i>All Medicals</a></li>
-            <li><a href="/medical"><i class="fa fa-circle-o"></i>Medical Group</a></li>
-            <li><a href="/medical/register/center"><i class="fa fa-circle-o"></i>Medical Center</a></li>
-            <li><a href="/medical/report"><i class="fa fa-circle-o"></i>Medical Report</a></li>
-          </ul>
-        </li>
-        <li class="treeview">
+            <a href="#">
+              <i class="fa fa-users"></i> <span>Suppliers</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-right pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="/supplier"><i class="fa fa-circle-o"></i>All Suppliers</a></li>
+              <li><a href="/supplier/register"><i class="fa fa-circle-o"></i>Add New Supplier</a></li>
+            </ul>
+          </li>
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-user-circle"></i> <span>PAX</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-right pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="/pax"><i class="fa fa-circle-o"></i>All PAX</a></li>
+              <li><a href="/pax/register"><i class="fa fa-circle-o"></i>Add New PAX</a></li>
+            </ul>
+          </li>
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-ambulance"></i> <span>Medical</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-right pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="/medical/all"><i class="fa fa-circle-o"></i>All Medicals</a></li>
+              <li><a href="/medical"><i class="fa fa-circle-o"></i>Medical Group</a></li>
+              <li><a href="/medical/register/center"><i class="fa fa-circle-o"></i>Medical Center</a></li>
+              <li><a href="/medical/report"><i class="fa fa-circle-o"></i>Medical Report</a></li>
+            </ul>
+          </li>
+          <li class="treeview">
             <a href="#">
               <i class="fa fa-money"></i> <span>MOFA</span>
               <span class="pull-right-container">
@@ -219,91 +222,91 @@
               </span>
             </a>
             <ul class="treeview-menu">
-                <li><a href="/mofa"><i class="fa fa-circle-o"></i>MOFA Info</a></li>
-                <li><a href="/mofa/search"><i class="fa fa-circle-o"></i>MOFA Registration</a></li>
+              <li><a href="/mofa"><i class="fa fa-circle-o"></i>MOFA Info</a></li>
+              <li><a href="/mofa/search"><i class="fa fa-circle-o"></i>MOFA Registration</a></li>
             </ul>
           </li>
           <li class="treeview">
-              <a href="#">
-                <i class="fa fa-vcard"></i> <span>Stamping</span>
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-right pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                  <li><a href="/stamping"><i class="fa fa-circle-o"></i>All Infos</a></li>
-                  <li><a href="/stamping/search"><i class="fa fa-circle-o"></i>Stamping Registration</a></li>
-                  <li><a href="/stamping/completesearch"><i class="fa fa-circle-o"></i>After Stamping</a></li>
-              </ul>
-            </li>
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-certificate"></i> <span>Training Certificate</span>
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-right pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                  <li><a href="/tc"><i class="fa fa-circle-o"></i>All TC</a></li>
-                  <li><a href="/tc/search"><i class="fa fa-circle-o"></i>TC Registration</a></li>
-              </ul>
-            </li>
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-address-book-o"></i> <span>Manpower</span>
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-right pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                  <li><a href="/manpower"><i class="fa fa-circle-o"></i>All Manpower</a></li>
-                  <li><a href="/manpower/search"><i class="fa fa-circle-o"></i>Ready for manpower</a></li>
-                  <li><a href="/manpower/status"><i class="fa fa-circle-o"></i>Status after manpower</a></li>
-              </ul>
-            </li>
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-plane"></i> <span>Flights</span>
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-right pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                  <li><a href="/flight"><i class="fa fa-circle-o"></i>All Flights</a></li>
-                  <li><a href="/flight/search"><i class="fa fa-circle-o"></i>Flight Requisition</a></li>
-                  <li><a href="/flight/report"><i class="fa fa-circle-o"></i>Flight Report</a></li>
-              </ul>
-            </li>
-            <li class="treeview">
-                <a href="#">
-                  <i class="fa fa-check-square-o"></i> <span>Delivery Report</span>
-                  <span class="pull-right-container">
-                    <i class="fa fa-angle-right pull-right"></i>
-                  </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="/delivery"><i class="fa fa-circle-o"></i>All deliveries</a></li>
-                    <li><a href="/delivery/search"><i class="fa fa-circle-o"></i>Delivery Report</a></li>
-                </ul>
-              </li>
-      </ul>
-    </section>
-    <!-- /.sidebar -->
-    
-  </aside>
+            <a href="#">
+              <i class="fa fa-vcard"></i> <span>Stamping</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-right pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="/stamping"><i class="fa fa-circle-o"></i>All Infos</a></li>
+              <li><a href="/stamping/search"><i class="fa fa-circle-o"></i>Stamping Registration</a></li>
+              <li><a href="/stamping/completesearch"><i class="fa fa-circle-o"></i>After Stamping</a></li>
+            </ul>
+          </li>
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-certificate"></i> <span>Training Certificate</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-right pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="/tc"><i class="fa fa-circle-o"></i>All TC</a></li>
+              <li><a href="/tc/search"><i class="fa fa-circle-o"></i>TC Registration</a></li>
+            </ul>
+          </li>
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-address-book-o"></i> <span>Manpower</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-right pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="/manpower"><i class="fa fa-circle-o"></i>All Manpower</a></li>
+              <li><a href="/manpower/search"><i class="fa fa-circle-o"></i>Ready for manpower</a></li>
+              <li><a href="/manpower/status"><i class="fa fa-circle-o"></i>Status after manpower</a></li>
+            </ul>
+          </li>
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-plane"></i> <span>Flights</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-right pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="/flight"><i class="fa fa-circle-o"></i>All Flights</a></li>
+              <li><a href="/flight/search"><i class="fa fa-circle-o"></i>Flight Requisition</a></li>
+              <li><a href="/flight/report"><i class="fa fa-circle-o"></i>Flight Report</a></li>
+            </ul>
+          </li>
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-check-square-o"></i> <span>Delivery Report</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-right pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="/delivery"><i class="fa fa-circle-o"></i>All deliveries</a></li>
+              <li><a href="/delivery/search"><i class="fa fa-circle-o"></i>Delivery Report</a></li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+      <!-- /.sidebar -->
 
-  <!-- =============================================== -->
+    </aside>
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    
-        <!-- Main content -->
-        <section class="content">  
-            <% include ../../includes/messages %>
-            <%- messages('includes/express-messages', locals) %>
-            <% if(fileError) { %>
-                <div class = "alert alert-danger">
-                    <%= fileError %>
-                </div>
-            <% } %>
+    <!-- =============================================== -->
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+
+      <!-- Main content -->
+      <section class="content">
+        <% include ../../includes/messages %>
+        <%- messages('includes/express-messages', locals) %>
+        <% if(fileError) { %>
+        <div class="alert alert-danger">
+          <%= fileError %>
+        </div>
+        <% } %>
