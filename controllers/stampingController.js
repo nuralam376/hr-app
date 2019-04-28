@@ -15,7 +15,7 @@ const s3GetFile = require("../util/getS3File");
 
 
 /** Validation */
-const {validationResult} = require("express-validator/check");
+const { validationResult } = require("express-validator/check");
 
 const moment = require("moment-timezone");
 
@@ -23,168 +23,150 @@ const moment = require("moment-timezone");
 const fs = require("fs");
 
 /** Gets All Infos */
-exports.getAllInfos = async(req,res) => {
-    try
-    {
-        let stampings = await StampingModel.find({company : req.user.company}).sort({created_at : -1}).populate("pax").exec();
+exports.getAllInfos = async (req, res) => {
+    try {
+        let stampings = await StampingModel.find({ company: req.user.company }).sort({ created_at: -1 }).populate("pax").exec();
 
         let newStampings = stampings.map(stamping => {
-            
-            let url = s3GetFile(req,"/pax/"+stamping.pax.code+"/stamping/",stamping.pc_image);
+
+            let url = s3GetFile(req, "/pax/" + stamping.pax.code + "/stamping/", stamping.pc_image);
 
             stamping["imageUrl"] = url;
 
             return stamping;
         });
 
-        res.render("stamping/index",{
-            stampings : newStampings,
-            moment : moment
+        res.render("stamping/index", {
+            stampings: newStampings,
+            moment: moment
         });
     }
-    catch(err)
-    {
+    catch (err) {
         console.log(err);
     }
 }
 
 /** Search Stamping by PAX Code */
-exports.getSearch = async(req,res) => {
-    try
-    {
+exports.getSearch = async (req, res) => {
+    try {
         res.render("stamping/searchPAX");
     }
-    catch(err)
-    {
+    catch (err) {
         console.log(err);
     }
 }
 
 /** Gets PAX Information */
-exports.postSearch = async(req,res) => {
-    try
-    {
+exports.postSearch = async (req, res) => {
+    try {
         let form = {
-            code : req.body.code
+            code: req.body.code
         };
 
         const errors = validationResult(req);
 
         /** Displays Errors */
-        if(!errors.isEmpty())
-        {
-            return res.render("stamping/searchPAX",{
-                errors : errors.array(),
-                form : form
+        if (!errors.isEmpty()) {
+            return res.render("stamping/searchPAX", {
+                errors: errors.array(),
+                form: form
             });
         }
-        let query = {code : req.body.code,company : req.user.company};
+        let query = { code: req.body.code, company: req.user.company };
         let pax = await PAXModel.findOne(query).populate("supplier").exec();
 
         /** Finds PAX Code */
-        if(pax)
-        {
-            let mofa = await MofaModel.findOne({pax : pax._id,company : req.user.company}).populate("group").exec();
-          
+        if (pax) {
+            let mofa = await MofaModel.findOne({ pax: pax._id, company: req.user.company }).populate("group").exec();
+
 
             /** Finds MOFA information of the PAX */
-            if(mofa && mofa.e_number)
-            {
-                res.redirect("/stamping/search/"+pax._id);
+            if (mofa && mofa.e_number) {
+                res.redirect("/stamping/search/" + pax._id);
             }
-            else
-            {
-                req.flash("error","MOFA Information is needed.Go to <a href = '/mofa'>MOFA</a> Section");
+            else {
+                req.flash("error", "MOFA Information is needed.Go to <a href = '/mofa'>MOFA</a> Section");
                 res.redirect("/stamping/search");
             }
         }
-        else
-        {
-            req.flash("error","PAX Not Found");
+        else {
+            req.flash("error", "PAX Not Found");
             res.redirect("/stamping/search");
         }
     }
-    catch(err)
-    {
+    catch (err) {
         console.log(err);
     }
 }
 
 /** Gets Stamping Registration Page */
-exports.registerStamping = async(req,res) => {
-    try
-    {
-        let query = {_id : req.params.id,company : req.user.company};
+exports.registerStamping = async (req, res) => {
+    try {
+        let query = { _id: req.params.id, company: req.user.company };
         let pax = await PAXModel.findOne(query).populate("supplier").exec();
 
-        if(pax)
-        {
-            let mofa = await MofaModel.findOne({pax : pax._id,company : req.user.company}).populate("group").exec();
-            let stamping = await StampingModel.findOne({pax : pax._id,company : req.user.company}) || undefined;
-           /** Finds MOFA information of the PAX */
-           if(mofa && mofa.e_number)
-           {
-                let url = s3GetFile(req,"/pax/"+pax.code+"/stamping/",stamping.pc_image);
-               
+        if (pax) {
+            let mofa = await MofaModel.findOne({ pax: pax._id, company: req.user.company }).populate("group").exec();
+            let stamping = await StampingModel.findOne({ pax: pax._id, company: req.user.company }) || undefined;
+            /** Finds MOFA information of the PAX */
+            if (mofa && mofa.e_number) {
+                let url;
+                if (stamping && stamping.pc_image)
+                    url = s3GetFile(req, "/pax/" + pax.code + "/stamping/", stamping.pc_image);
+                else
+                    url = null;
 
-               res.render("stamping/register",{
-                   pax : pax,
-                   stamping : stamping,
-                   mofa : mofa,
-                   imageUrl : url
-               });
-           }
-           else
-           {
-            req.flash("error","MOFA Information is needed.Go to <a href = '/mofa'>MOFA</a> Section");
-            res.redirect("/stamping/search");
-           }
+
+                res.render("stamping/register", {
+                    pax: pax,
+                    stamping: stamping,
+                    mofa: mofa,
+                    imageUrl: url
+                });
+            }
+            else {
+                req.flash("error", "MOFA Information is needed.Go to <a href = '/mofa'>MOFA</a> Section");
+                res.redirect("/stamping/search");
+            }
         }
-        else
-        {
-            req.flash("danger","PAX Not Found");
+        else {
+            req.flash("danger", "PAX Not Found");
             res.redirect("/stamping/search");
         }
     }
-    catch(err)
-    {
+    catch (err) {
         console.log(err);
         res.status(422).send("500,Internal Server Error");
     }
 }
 
 /** Posts Stamping Registration */
-exports.postStamping = async(req,res) => {
-    try
-    {
+exports.postStamping = async (req, res) => {
+    try {
         let forms = {
-            status : req.body.status
+            status: req.body.status
         };
-        let query = {_id : req.params.id,company : req.user.company};
+        let query = { _id: req.params.id, company: req.user.company };
         let pax = await PAXModel.findOne(query).populate("supplier").exec();
-        let mofa = await MofaModel.findOne({pax : pax._id,company : req.user.company}).populate("group").exec();
-        let stamping = await StampingModel.findOne({pax : pax._id,company : req.user.company}) || undefined;
+        let mofa = await MofaModel.findOne({ pax: pax._id, company: req.user.company }).populate("group").exec();
+        let stamping = await StampingModel.findOne({ pax: pax._id, company: req.user.company }) || undefined;
         /** Checks whetere any file is uploaded */
-        if(typeof paxPcImage !== "undefined" && req.fileValidationError == null)
-        {
-            
-            forms.pc_image = paxPcImage;
-     
+        if (typeof paxPcImage !== "undefined" && req.fileValidationError == null) {
 
-            if(pax)
-            {
+            forms.pc_image = paxPcImage;
+
+
+            if (pax) {
                 let stampingStatus;
-                if(stamping)
-                {
+                if (stamping) {
                     let newStamping = {};
                     newStamping.status = forms.status;
                     newStamping.pc_image = forms.pc_image;
                     /** Removes the old file */
-                    s3DeleteFile(req,"/pax/"+pax.code+"/stamping/", stamping.pc_image);
-                    stampingStatus = await StampingModel.updateOne({_id : stamping._id},newStamping);
+                    s3DeleteFile(req, "/pax/" + pax.code + "/stamping/", stamping.pc_image);
+                    stampingStatus = await StampingModel.updateOne({ _id: stamping._id }, newStamping);
                 }
-                else
-                {
+                else {
                     let newStamping = new StampingModel();
                     newStamping.status = forms.status;
                     newStamping.pc_image = forms.pc_image;
@@ -193,139 +175,119 @@ exports.postStamping = async(req,res) => {
                     stampingStatus = await newStamping.save();
                 }
 
-                if(stampingStatus)
-                {
-                    req.flash("success","Stamping Information saved");
-                    res.redirect("/stamping/search/"+req.params.id);
+                if (stampingStatus) {
+                    req.flash("success", "Stamping Information saved");
+                    res.redirect("/stamping/search/" + req.params.id);
                 }
-                else
-                {
-                    req.flash("danger","Something went wrong");
+                else {
+                    req.flash("danger", "Something went wrong");
                     res.redirect("/medical/search");
                 }
             }
-            else
-            {
-                req.flash("error","PAX Not Found");
+            else {
+                req.flash("error", "PAX Not Found");
                 res.redirect("/stamping/search");
             }
         }
-        else
-        {
-            res.render("stamping/register",{
-                pax : pax,
-                mofa : mofa,
-                stamping : stamping,
-                fileError : "Image is required"
+        else {
+            res.render("stamping/register", {
+                pax: pax,
+                mofa: mofa,
+                stamping: stamping,
+                fileError: "Image is required"
             });
         }
     }
-    catch(err)
-    {
+    catch (err) {
         console.log(err);
     }
 }
 
 /** Gets Stamping Complete Page */
-exports.getCompleteStampingSearch = async(req,res) => {
-    try
-    {
+exports.getCompleteStampingSearch = async (req, res) => {
+    try {
         res.render("stamping/afterStampingSearch");
     }
-    catch(err)
-    {
+    catch (err) {
         console.log(err);
     }
 }
 
 /** Posts Complete Stamping Search */
-exports.postStampingCompleteSearch = async(req,res) => {
-    try
-    {
+exports.postStampingCompleteSearch = async (req, res) => {
+    try {
         let form = {
-            code : req.body.code
+            code: req.body.code
         };
-        let query = {code : req.body.code, company : req.user.company};
+        let query = { code: req.body.code, company: req.user.company };
         let pax = await PAXModel.findOne(query).exec();
-        if(pax)
-        {
-            let stamping = await StampingModel.findOne({pax : pax._id}).exec();
-           
-            if(stamping)
-            {
-               res.redirect("/stamping/completeregistration/" + stamping._id);
+        if (pax) {
+            let stamping = await StampingModel.findOne({ pax: pax._id }).exec();
+
+            if (stamping) {
+                res.redirect("/stamping/completeregistration/" + stamping._id);
             }
-            else
-            {
-                req.flash("danger","Stamping Information is needed. Go to <a href = '/stamping/search'>Stamping</a> section");
+            else {
+                req.flash("danger", "Stamping Information is needed. Go to <a href = '/stamping/search'>Stamping</a> section");
                 res.redirect("/stamping/completesearch");
             }
         }
-        else
-        {
-            req.flash("danger","PAX Not Found");
+        else {
+            req.flash("danger", "PAX Not Found");
             res.redirect("/stamping/completesearch");
         }
     }
-    catch(err)
-    {
+    catch (err) {
         console.log(err);
     }
 }
 
 /** Gets Stamping Complete Registration Page */
-exports.getCompleteRegistration = async(req,res) => {
-    try
-    {
-        let query  = {_id : req.params.id,company : req.user.company};
-        let stamping  = await StampingModel.findById(query).populate("pax").exec();
-        let mofa = await MofaModel.findOne({pax : stamping.pax._id}).populate("pax").populate("group").exec();
-        if(stamping)
-        {
-            res.render("stamping/afterStampingRegistration",{
-                stamping : stamping,
-                mofa : mofa,
-                moment : moment
+exports.getCompleteRegistration = async (req, res) => {
+    try {
+        let query = { _id: req.params.id, company: req.user.company };
+        let stamping = await StampingModel.findById(query).populate("pax").exec();
+        let mofa = await MofaModel.findOne({ pax: stamping.pax._id }).populate("pax").populate("group").exec();
+        if (stamping) {
+            res.render("stamping/afterStampingRegistration", {
+                stamping: stamping,
+                mofa: mofa,
+                moment: moment
             });
         }
-        else
-        {
-            req.flash("danger","Stamping Not Found");
+        else {
+            req.flash("danger", "Stamping Not Found");
             res.redirect("/stamping/completesearch");
         }
     }
-    catch(err)
-    {
+    catch (err) {
         console.log(err);
     }
 }
 
 /** Posts Complete Stamping Registrtation */
-exports.postCompleteStampingRegistration = async(req,res) => {
-    try
-    {
+exports.postCompleteStampingRegistration = async (req, res) => {
+    try {
         let form = {
-            visa_no : req.body.visa_no,
-            stamping_date : req.body.stamping_date
+            visa_no: req.body.visa_no,
+            stamping_date: req.body.stamping_date
         };
 
         let errors = validationResult(req);
-        
-        let query = {_id : req.params.id, company : req.user.company};
+
+        let query = { _id: req.params.id, company: req.user.company };
         let stamping = await StampingModel.findOne(query).populate("pax").exec();
-        let mofa = await MofaModel.findOne({pax : stamping.pax._id}).populate("group").exec();
-        if(!errors.isEmpty())
-        {
-            res.render("stamping/afterStampingRegistration",{
-                stamping : stamping,
-                mofa :mofa,
-                errors : errors.array(),
-                form : form,
-                moment : moment
+        let mofa = await MofaModel.findOne({ pax: stamping.pax._id }).populate("group").exec();
+        if (!errors.isEmpty()) {
+            res.render("stamping/afterStampingRegistration", {
+                stamping: stamping,
+                mofa: mofa,
+                errors: errors.array(),
+                form: form,
+                moment: moment
             });
         }
-        else
-        {
+        else {
             let stampingStatus;
 
             // Updates Stamping Information
@@ -333,56 +295,48 @@ exports.postCompleteStampingRegistration = async(req,res) => {
             newStamping.visa_no = form.visa_no;
             newStamping.stamping_date = form.stamping_date;
             newStamping.updated_at = Date.now();
-            stampingStatus = await StampingModel.updateOne({_id : stamping._id},newStamping);
+            stampingStatus = await StampingModel.updateOne({ _id: stamping._id }, newStamping);
 
 
-            if(stampingStatus)
-            {
-                req.flash("success","Stamping information has been updated");
-                res.redirect("/stamping/completeregistration/"+stamping._id);
+            if (stampingStatus) {
+                req.flash("success", "Stamping information has been updated");
+                res.redirect("/stamping/completeregistration/" + stamping._id);
             }
-            else
-            {
-                req.flash("danger","Something went wrong");
+            else {
+                req.flash("danger", "Something went wrong");
                 res.redirect("/stamping/completesearch");
             }
         }
     }
-    catch(err)
-    {
+    catch (err) {
         console.log(err);
     }
 }
 
 /** Deletes Stamping Data */
-exports.deleteStamping = async(req,res) => {
-    try
-    {
-        let query = {_id : req.params.id, company : req.user.company}; 
+exports.deleteStamping = async (req, res) => {
+    try {
+        let query = { _id: req.params.id, company: req.user.company };
 
-        let stamping = await StampingModel.findOne(query).populate("pax","code");
+        let stamping = await StampingModel.findOne(query).populate("pax", "code");
 
-        if(stamping)
-        {
-            
-            s3DeleteFile(req,"/pax/"+stamping.pax.code+"/stamping/", stamping.pc_image);
+        if (stamping) {
+
+            s3DeleteFile(req, "/pax/" + stamping.pax.code + "/stamping/", stamping.pc_image);
 
             let stampingDelete = await StampingModel.deleteOne(query);
 
-            if(stampingDelete)
-            {
-                req.flash("danger","Stamping Deleted");
+            if (stampingDelete) {
+                req.flash("danger", "Stamping Deleted");
                 res.redirect("/stamping");
             }
-            else
-            {
-                req.flash("danger","Something Went Wrong");
+            else {
+                req.flash("danger", "Something Went Wrong");
                 res.redirect("/stamping");
-            }  
+            }
         }
     }
-    catch(err)
-    {
+    catch (err) {
         console.log(err);
     }
 }

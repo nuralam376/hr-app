@@ -32,6 +32,7 @@ const { sanitizeBody } = require("express-validator/filter");
 /** Gets All groups */
 exports.getAllGroups = async (req, res) => {
   try {
+    // console.log(moment.tz.guess());
     let groups = await GroupModel.find({ company: req.user.company })
       .sort({ created_at: -1 })
       .populate("zone")
@@ -272,7 +273,7 @@ const groupSave = async (req, res, forms) => {
     group.company = req.user.company;
     group.occupation = forms.occupation;
     group.enjazit_image = forms.enjazit_image;
-    group.created_at = Date.now();
+    group.created_at = moment().format();
 
     let zone = await ZoneModel.findOne({
       company: req.user.company,

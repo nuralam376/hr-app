@@ -1,41 +1,42 @@
 <% include ../layouts/admin/header %>
-    <h1 class = "text-center">Group</h1>
-    <div class="card">
-        <div class="card-body">
-            <h2>All Groups</h2>     
-            <div class="pull-right">
-                <a href="/group/register" class = "btn btn-primary">Create New group</a>
-            </div>   
-            <br><br>
-
-            <table class = "table" id = "myTable">
-                <thead>
-                    <tr>
-                        <th>Group Sl</th>
-                        <th>Visa Number</th>
-                        <th>Visa ID Number</th>
-                        <th>Supplier Info</th>
-                        <th>Occupation</th>
-                        <th>Date</th>
-                        <th>Enjazit</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if(groups) { %>
-                        <% groups.forEach((group) => { %>
-                            <tr>
-                                <td><a href = "/group/<%= group._id %>"><%= group.group_seq %> / <%= group.group_sl%></a></td>
-                                <td><%= group.visa_number %></td>
-                                <td><%= group.visa_id %></td>
-                                <td><%= group.visa_supplier %>, <%= group.zone.name %>, <%= group.amount %></td>
-                                <td><%= group.occupation %></td>
-                                <td><%= moment(group.created_at).format("llll") %></td>
-                                <td><a data-fancybox="gallery" href="<%= group.imageUrl %>"><img src="<%= group.imageUrl %>" alt="" style = "width : 100px;height : 50px;"></a></td>
-                            </tr>
-                        <% }) %>
-                    <% } %>
-                 </tbody>   
-            </table>
+<h1 class="text-center">Group</h1>
+<div class="card">
+    <div class="card-body">
+        <h2>All Groups</h2>
+        <div class="pull-right">
+            <a href="/group/register" class="btn btn-primary">Create New group</a>
         </div>
+        <br><br>
+        <%= moment() %>
+        <table class="table" id="myTable">
+            <thead>
+                <tr>
+                    <th>Group Sl</th>
+                    <th>Visa Number</th>
+                    <th>Visa ID Number</th>
+                    <th>Supplier Info</th>
+                    <th>Occupation</th>
+                    <th>Date</th>
+                    <th>Enjazit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(groups) { %>
+                <% groups.forEach((group) => { %>
+                <tr>
+                    <td><a href="/group/<%= group._id %>"><%= group.group_seq %> / <%= group.group_sl%></a></td>
+                    <td><%= group.visa_number %></td>
+                    <td><%= group.visa_id %></td>
+                    <td><%= group.visa_supplier %>, <%= group.zone.name %>, <%= group.amount %></td>
+                    <td><%= group.occupation %></td>
+                    <td><%= moment(group.created_at).format("llll") %></td>
+                    <td><a data-fancybox="gallery" href="<%= group.imageUrl %>"><img src="<%= group.imageUrl %>" alt=""
+                                style="width : 100px;height : 50px;"></a></td>
+                </tr>
+                <% }) %>
+                <% } %>
+            </tbody>
+        </table>
     </div>
+</div>
 <% include ../layouts/admin/footer %>
