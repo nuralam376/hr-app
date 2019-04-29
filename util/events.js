@@ -38,9 +38,9 @@ const createEvents = async (req, user, id, type) => {
       event.display_name = val + " Changed";
       event.description = `${req.user.name} changed value of  ${val} from ${
         oldUser[val]
-      } to ${user[val]}`;
-      await pushEvents(event, type, id);
+        } to ${user[val]}`;
       event.time = Date.now();
+      await pushEvents(event, type, id);
     }
   }
 };

@@ -7,7 +7,7 @@
             <a href="/group/register" class="btn btn-primary">Create New group</a>
         </div>
         <br><br>
-        <%= moment() %>
+
         <table class="table" id="myTable">
             <thead>
                 <tr>
@@ -29,7 +29,7 @@
                     <td><%= group.visa_id %></td>
                     <td><%= group.visa_supplier %>, <%= group.zone.name %>, <%= group.amount %></td>
                     <td><%= group.occupation %></td>
-                    <td><%= moment(group.created_at).format("llll") %></td>
+                    <td><%= moment(group.created_at).tz(moment.tz.guess()).format("llll") %></td>
                     <td><a data-fancybox="gallery" href="<%= group.imageUrl %>"><img src="<%= group.imageUrl %>" alt=""
                                 style="width : 100px;height : 50px;"></a></td>
                 </tr>

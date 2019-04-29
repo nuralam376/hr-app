@@ -8,7 +8,7 @@ const CompanyInfoModel = require("../models/companyInfoModel");
 /** Zone Model */
 const ZoneModel = require("../models/zoneModel");
 
-const moment = require("moment-timezone");
+const moment = require("moment");
 const fs = require("fs");
 const aws = require("aws-sdk");
 
