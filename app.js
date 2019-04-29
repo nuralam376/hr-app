@@ -43,7 +43,7 @@ app.use(require("connect-flash")());
 app.use(csrfProtection);
 
 /** Required Global Variables */
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.locals.errors = null;
   res.locals.msg = null;
   res.locals.messages = require("express-messages")(req, res);
@@ -102,6 +102,7 @@ app.get("/aws", async (req, res) => {
 const register = require("./controllers/registerController");
 const dashboard = require("./routes/dashboard");
 const login = require("./controllers/loginController");
+const role = require("./routes/role");
 const user = require("./routes/user");
 const supplier = require("./routes/supplier");
 const admin = require("./controllers/adminController");
@@ -121,6 +122,7 @@ const delivery = require("./routes/delivery");
 /** Other Routes */
 app.use("/register", register);
 app.use("/dashboard", dashboard);
+app.use("/role", role);
 app.use("/company", company);
 app.use("/login", login);
 app.use("/pax", user);
@@ -150,7 +152,7 @@ const db = mongoose.connection;
 
 db.once("open", () => {
   console.log("Connected to MongoDB");
-  app.listen(port, function() {
+  app.listen(port, function () {
     console.log("Server started on port " + port);
   });
 });

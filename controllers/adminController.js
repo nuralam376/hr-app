@@ -62,19 +62,19 @@ const upload = multer({
     acl: "public-read",
     expires: Date.now() + 100,
     ServerSideEncryption: "AES256",
-    metadata: function(req, file, cb) {
+    metadata: function (req, file, cb) {
       cb(null, {
         fieldName:
           file.fieldname + "-" + Date.now() + path.extname(file.originalname)
       });
     },
-    key: function(req, file, cb) {
+    key: function (req, file, cb) {
       adminPhoto =
         file.fieldname + "-" + Date.now() + path.extname(file.originalname);
       cb(null, req.user.company + "/admins/" + adminPhoto);
     }
   }),
-  fileFilter: function(req, file, cb) {
+  fileFilter: function (req, file, cb) {
     checkFileType(req, file, cb);
   }
 });
@@ -649,6 +649,8 @@ router.get("/timeline/:id", auth, async (req, res) => {
     console.log(error);
   }
 });
+
+
 
 /**
  * Shows Individual Admin

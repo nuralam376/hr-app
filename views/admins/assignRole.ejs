@@ -1,0 +1,30 @@
+<% include ../layouts/admin/header %>
+<h1>Admin Roles</h1>
+
+<form action="" method="POST">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="name">Admins</label>
+                <select name="admin" id="admin" class="form-control">
+                    <% admins.forEach(admin => { %>
+                    <% if(!admin.isSuperAdmin) { %>
+                    <option value="<%= admin._id %>"><%= admin.name %></option>
+                    <% } }) %>
+                </select>
+            </div>
+            <h3>Roles</h3>
+            <div class="form-group">
+                <% roles.forEach(role => { %>
+                <input type="checkbox" name="roles[]" value="<%= role.slug %>"> <%= role.name %><br />
+                <% }) %>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" name="submit" value="Assign" class="btn btn-success">
+    </div>
+</form>
+<% include ../layouts/admin/footer %>

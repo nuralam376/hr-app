@@ -8,72 +8,80 @@ const StatusSchema = require("./statusSchema");
 /** Admin Table Field .*/
 
 const AdminSchema = mongoose.Schema({
-    name : 
+    name:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    email : 
+    email:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    contact : 
+    contact:
     {
-        type : Number,
-        required : true
-    },
-
-    address : 
-    {
-        type : String,
-        required : true
-    },
-    
-    profile_photo : 
-    {
-        type : String,
-        required : true
+        type: Number,
+        required: true
     },
 
-    password : 
+    address:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
 
-    isSuperAdmin : 
+    profile_photo:
     {
-        type : Boolean,
-        required : true,
-        default : 0
+        type: String,
+        required: true
     },
-    company : 
+
+    password:
+    {
+        type: String,
+        required: true
+    },
+
+    isSuperAdmin:
+    {
+        type: Boolean,
+        required: true,
+        default: 0
+    },
+    company:
     {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Company',
-        required : false
+        required: false
     },
 
-    seq_id : 
+    seq_id:
     {
-        type : String,
+        type: String,
         required: true,
-        default : 0
+        default: 0
     },
-    created_at : 
+    roles: [
+        {
+            name: {
+                type: String,
+                required: true
+            }
+        }
+    ],
+    created_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
+        type: Date,
+        required: true,
+        default: Date.now()
     },
-    updated_at : 
+    updated_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
+        type: Date,
+        required: true,
+        default: Date.now()
     },
-    events : [StatusSchema]
+    events: [StatusSchema]
 });
 
-const Admin = module.exports = mongoose.model("Admin",AdminSchema);
+const Admin = module.exports = mongoose.model("Admin", AdminSchema);
