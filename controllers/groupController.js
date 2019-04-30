@@ -88,7 +88,7 @@ exports.postGroupRegistration = async (req, res) => {
     };
 
     /** Checks whether any file is uploaded */
-    if (enjazitPhoto !== "undefined" && req.fileValidationError == null) {
+    if (typeof enjazitPhoto !== "undefined" && req.fileValidationError == null) {
       forms.enjazit_image = enjazitPhoto;
     }
     let errors = validationResult(req);

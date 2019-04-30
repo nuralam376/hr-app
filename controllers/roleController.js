@@ -4,6 +4,8 @@ const AdminModel = require("../models/adminModel");
 /** Role Model Schema */
 const RoleModel = require("../models/roleModel");
 
+const { check, validationResult } = require("express-validator/check");
+const { sanitizeBody } = require("express-validator/filter");
 
 /** Gets Admin Roles */
 exports.getAdminRoles = async (req, res) => {
@@ -56,3 +58,37 @@ exports.createAdminRoles = async (req, res) => {
         console.log(err);
     }
 };
+
+/** Saves Admin Roles */
+exports.postAdminRoles = async (req, res) => {
+    try {
+
+        let roles = await RoleModel.find({ company: req.user.company }).exec();
+
+        let admins = await AdminModel.find({ company: req.user.company });
+
+        let errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.render("admins/assignRole", {
+                roles: roles,
+                admins: admins,
+                errors: errors.array()
+            });
+        }
+
+        let newAdmin = {};
+        newAdmin.roles = req.body.roles;
+
+        let admin = await AdminModel.findByIdAndUpdate(req.body.admin, newAdmin);
+
+        if (admin) {
+            req.flash("success", "Admin Roles saved");
+            res.redirect("/role/admin");
+        }
+
+    }
+    catch (err) {
+        console.log(err);
+    }
+}

@@ -133,26 +133,16 @@
               <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             </a>
           </li>
+          <% admin.roles.forEach(role => {  %>
+          <% if(role == "company") { %>
           <li>
             <a href="/company">
               <i class="fa fa-industry"></i> <span>Company</span>
             </a>
           </li>
-          <% if(admin.isSuperAdmin) { %>
-          <li class="treeview">
-            <a href="#">
-              <i class="fa fa-user-plus"></i> <span>Admins</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-right pull-right"></i>
-              </span>
-            </a>
-            <ul class="treeview-menu">
-              <li><a href="/admin"><i class="fa fa-circle-o"></i>All Admins</a></li>
-              <li><a href="/admin/register"><i class="fa fa-circle-o"></i>Add New Admin</a></li>
-              <li><a href="/role/admin"><i class="fa fa-circle-o"></i>Admin Roles</a></li>
-            </ul>
-          </li>
           <% } %>
+
+          <% if(role == "zone") { %>
           <li class="treeview">
             <a href="#">
               <i class="fa fa-building"></i> <span>Zones</span>
@@ -161,10 +151,12 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="/zone"><i class="fa fa-circle-o"></i>All zones</a></li>
+              <li><a href="/zone"><i class="fa fa-circle-o"></i>All Zones</a></li>
               <li><a href="/zone/register"><i class="fa fa-circle-o"></i>Add New Zone</a></li>
             </ul>
           </li>
+          <% } %>
+          <% if(role == "group") { %>
           <li class="treeview">
             <a href="#">
               <i class="fa fa-globe"></i> <span>Groups</span>
@@ -177,6 +169,8 @@
               <li><a href="/group/register"><i class="fa fa-circle-o"></i>Add New Group</a></li>
             </ul>
           </li>
+          <% } %>
+          <% if(role == "supplier") { %>
           <li class="treeview">
             <a href="#">
               <i class="fa fa-users"></i> <span>Suppliers</span>
@@ -189,6 +183,8 @@
               <li><a href="/supplier/register"><i class="fa fa-circle-o"></i>Add New Supplier</a></li>
             </ul>
           </li>
+          <% } %>
+          <% if(role == "pax") { %>
           <li class="treeview">
             <a href="#">
               <i class="fa fa-user-circle"></i> <span>PAX</span>
@@ -201,6 +197,8 @@
               <li><a href="/pax/register"><i class="fa fa-circle-o"></i>Add New PAX</a></li>
             </ul>
           </li>
+          <% } %>
+          <% if(role == "medical") { %>
           <li class="treeview">
             <a href="#">
               <i class="fa fa-ambulance"></i> <span>Medical</span>
@@ -215,6 +213,8 @@
               <li><a href="/medical/report"><i class="fa fa-circle-o"></i>Medical Report</a></li>
             </ul>
           </li>
+          <% } %>
+          <% if(role == "mofa") { %>
           <li class="treeview">
             <a href="#">
               <i class="fa fa-money"></i> <span>MOFA</span>
@@ -227,6 +227,9 @@
               <li><a href="/mofa/search"><i class="fa fa-circle-o"></i>MOFA Registration</a></li>
             </ul>
           </li>
+          <% } %>
+          <% if(role == "stamping") { %>
+
           <li class="treeview">
             <a href="#">
               <i class="fa fa-vcard"></i> <span>Stamping</span>
@@ -240,6 +243,9 @@
               <li><a href="/stamping/completesearch"><i class="fa fa-circle-o"></i>After Stamping</a></li>
             </ul>
           </li>
+          <% } %>
+          <% if(role == "tc") { %>
+
           <li class="treeview">
             <a href="#">
               <i class="fa fa-certificate"></i> <span>Training Certificate</span>
@@ -252,6 +258,9 @@
               <li><a href="/tc/search"><i class="fa fa-circle-o"></i>TC Registration</a></li>
             </ul>
           </li>
+          <% } %>
+          <% if(role == "manpower") { %>
+
           <li class="treeview">
             <a href="#">
               <i class="fa fa-address-book-o"></i> <span>Manpower</span>
@@ -265,6 +274,9 @@
               <li><a href="/manpower/status"><i class="fa fa-circle-o"></i>Status after manpower</a></li>
             </ul>
           </li>
+          <% } %>
+          <% if(role == "flight") { %>
+
           <li class="treeview">
             <a href="#">
               <i class="fa fa-plane"></i> <span>Flights</span>
@@ -278,6 +290,9 @@
               <li><a href="/flight/report"><i class="fa fa-circle-o"></i>Flight Report</a></li>
             </ul>
           </li>
+          <% } %>
+          <% if(role == "delivery") { %>
+
           <li class="treeview">
             <a href="#">
               <i class="fa fa-check-square-o"></i> <span>Delivery Report</span>
@@ -290,6 +305,8 @@
               <li><a href="/delivery/search"><i class="fa fa-circle-o"></i>Delivery Report</a></li>
             </ul>
           </li>
+          <% } %>
+          <% }) %>
         </ul>
       </section>
       <!-- /.sidebar -->

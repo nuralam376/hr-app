@@ -61,14 +61,7 @@ const AdminSchema = mongoose.Schema({
         required: true,
         default: 0
     },
-    roles: [
-        {
-            name: {
-                type: String,
-                required: true
-            }
-        }
-    ],
+    roles: [String],
     created_at:
     {
         type: Date,
