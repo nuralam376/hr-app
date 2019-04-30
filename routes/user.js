@@ -6,11 +6,16 @@ const router = express.Router();
 const path = require("path");
 
 /** Validation Configuration */
-const {check,validationResult} = require("express-validator/check");
-const {sanitizeBody} = require("express-validator/filter");
+const { check, validationResult } = require("express-validator/check");
+const { sanitizeBody } = require("express-validator/filter");
 
 /** Authetication File */
 const auth = require("../config/auth");
+
+/** Checks Role of the Admin */
+const hasRole = require("../config/hasRole");
+
+const roleCheck = hasRole("pax");
 
 /** User Controller Page */
 const UserController = require("../controllers/userController");
@@ -19,9 +24,9 @@ const upload = require("../util/uploadFile");
 
 
 /** All routes of the user */
-router.get("/",auth,UserController.getAllUsers);
-router.get("/register",auth,UserController.getRegistration);
-router.post("/register",auth,upload.any(),[
+router.get("/", auth, roleCheck, UserController.getAllUsers);
+router.get("/register", auth, roleCheck, UserController.getRegistration);
+router.post("/register", auth, roleCheck, upload.any(), [
     check("code").not().isEmpty().withMessage("Code is required"),
     check("name").not().isEmpty().withMessage("Name is required"),
     check("father").not().isEmpty().withMessage("Father Name is required"),
@@ -55,11 +60,11 @@ router.post("/register",auth,upload.any(),[
     sanitizeBody("national").trim().unescape(),
     sanitizeBody("nid").trim().unescape(),
     sanitizeBody("passport").trim().unescape(),
-],UserController.postRegistration);
+], UserController.postRegistration);
 
-router.get("/edit/:id",auth,UserController.editUser);
+router.get("/edit/:id", auth, roleCheck, UserController.editUser);
 
-router.post("/update/:id",auth,upload.any(),[
+router.post("/update/:id", auth, roleCheck, upload.any(), [
     check("name").not().isEmpty().withMessage("Name is required"),
     check("father").not().isEmpty().withMessage("Father Name is required"),
     check("mother").not().isEmpty().withMessage("Mother Name is required"),
@@ -89,16 +94,16 @@ router.post("/update/:id",auth,upload.any(),[
     sanitizeBody("national").trim().unescape(),
     sanitizeBody("nid").trim().unescape(),
     sanitizeBody("passport").trim().unescape(),
-],UserController.updateUser);
+], UserController.updateUser);
 
-router.delete("/delete/:id",auth,UserController.deleteUser);
+router.delete("/delete/:id", auth, roleCheck, UserController.deleteUser);
 
-router.get("/sticker/:id",auth,UserController.getUsersSticker);
+router.get("/sticker/:id", auth, roleCheck, UserController.getUsersSticker);
 
-router.get("/pdf/:id",auth,UserController.downloadUsersSticker);
+router.get("/pdf/:id", auth, roleCheck, UserController.downloadUsersSticker);
 
-router.get("/timeline/:id",auth,UserController.usersTimeline);
+router.get("/timeline/:id", auth, roleCheck, UserController.usersTimeline);
 
-router.get("/:id",auth,UserController.getUser);
+router.get("/:id", auth, roleCheck, UserController.getUser);
 
 module.exports = router;

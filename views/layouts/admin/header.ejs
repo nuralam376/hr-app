@@ -141,7 +141,35 @@
             </a>
           </li>
           <% } %>
+          <% if(role == "admin") { %>
 
+          <li class="treeview">
+
+            <a href="#">
+
+              <i class="fa fa-user-plus"></i> <span>Admins</span>
+
+              <span class="pull-right-container">
+
+                <i class="fa fa-angle-right pull-right"></i>
+
+              </span>
+
+            </a>
+
+            <ul class="treeview-menu">
+
+              <li><a href="/admin"><i class="fa fa-circle-o"></i>All Admins</a></li>
+
+              <li><a href="/admin/register"><i class="fa fa-circle-o"></i>Add New Admin</a></li>
+
+              <li><a href="/role/admin"><i class="fa fa-circle-o"></i>Admin Roles</a></li>
+
+            </ul>
+
+          </li>
+
+          <% } %>
           <% if(role == "zone") { %>
           <li class="treeview">
             <a href="#">

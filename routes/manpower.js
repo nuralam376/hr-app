@@ -11,39 +11,44 @@ const auth = require("../config/auth");
 
 const upload = require("../util/uploadFile");
 
+/** Checks Role of the Admin */
+const hasRole = require("../config/hasRole");
+
+const roleCheck = hasRole("manpower");
+
 /** Validation */
-const {check,body} = require("express-validator/check");
-const {sanitizeBody} = require("express-validator/filter");
+const { check, body } = require("express-validator/check");
+const { sanitizeBody } = require("express-validator/filter");
 
-router.get("/",auth,manpowerController.getAllInfos);
+router.get("/", auth, roleCheck, manpowerController.getAllInfos);
 
-router.get("/search",auth,manpowerController.getSearch);
+router.get("/search", auth, roleCheck, manpowerController.getSearch);
 
-router.get("/search/:id",auth,manpowerController.registerManpower);
+router.get("/search/:id", auth, roleCheck, manpowerController.registerManpower);
 
-router.post("/search",auth,[
-    body("code","Pax is required").not().isEmpty(),
+router.post("/search", auth, roleCheck, [
+    body("code", "Pax is required").not().isEmpty(),
     sanitizeBody("code").trim().unescape()
-],manpowerController.postSearch);
+], manpowerController.postSearch);
 
-router.post("/register/:id",auth,manpowerController.postManpower);
+router.post("/register/:id", auth, roleCheck, manpowerController.postManpower);
 
-router.get("/status",auth,manpowerController.getStatusSearch);
+router.get("/status", auth, roleCheck, manpowerController.getStatusSearch);
 
-router.post("/status",auth,[
-    body("code","Pax is required").not().isEmpty(),
+router.post("/status", auth, roleCheck, [
+    body("code", "Pax is required").not().isEmpty(),
     sanitizeBody("code").trim().unescape()
-],manpowerController.postStatusSearch);
+], manpowerController.postStatusSearch);
 
-router.get("/status/:id",auth,manpowerController.getRegisterManpowerStatus);
+router.get("/status/:id", auth, roleCheck, manpowerController.getRegisterManpowerStatus);
 
-router.post("/status/:id",auth,upload.any(),[
+router.post("/status/:id", auth, roleCheck, upload.any(), [
     body("clearance").not().isEmpty().withMessage("Clearance Date is required"),
     body("card_no").not().isEmpty().withMessage("SmartCard No. is required"),
     sanitizeBody("clearance").toDate(),
     sanitizeBody("card_no").trim().unescape(),
-],manpowerController.postRegisterManpowerStatus);
+], manpowerController.postRegisterManpowerStatus);
 
-router.delete("/delete/:id",auth,manpowerController.deleteManpower);
+router.delete("/delete/:id", auth, roleCheck, manpowerController.deleteManpower);
 
 module.exports = router;
