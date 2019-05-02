@@ -12,7 +12,7 @@ const { sanitizeBody } = require("express-validator/filter");
 const aws = require("aws-sdk");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
-const moment = require("moment");
+const moment = require("moment-timezone");
 
 /** Mail Configuration */
 const nodemailer = require("nodemailer");
@@ -115,7 +115,8 @@ router.get("/", auth, isSuperAdmin, async (req, res) => {
         return admin;
       });
       res.render("admins/index", {
-        admins: newAdmins
+        admins: newAdmins,
+        moment: moment
       });
     }
   } catch (err) {

@@ -92,3 +92,23 @@ exports.postAdminRoles = async (req, res) => {
         console.log(err);
     }
 }
+
+/** Gets Admin Role */
+exports.getAdminRole = async (req, res) => {
+    try {
+        let adminId = req.params.id;
+
+        let admin = await AdminModel.findById(adminId);
+        let roles = await RoleModel.find({ company: req.user.company });
+
+        let result = {
+            admin: admin,
+            roles: roles
+        };
+
+        return res.jsonp(result);
+    }
+    catch (err) {
+        console.log(err);
+    }
+}

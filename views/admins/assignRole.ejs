@@ -18,7 +18,10 @@
             <h3>Roles</h3>
             <div class="form-group">
                 <% roles.forEach(role => { %>
-                <input type="checkbox" name="roles" value="<%= role.slug %>"> <%= role.name %><br />
+                <% if(role.slug != "dashboard") { %>
+                <input type="checkbox" id="role<%= role.slug%>" name="roles" value="<%= role.slug %>">
+                <%= role.name %><br />
+                <% } %>
                 <% }) %>
             </div>
         </div>

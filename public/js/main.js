@@ -1,49 +1,49 @@
-$(document).ready(function() {
-  $(function() {
-    $(".delete-user").on("click", function(e) {
+$(document).ready(function () {
+  $(function () {
+    $(".delete-user").on("click", function (e) {
       ajaxDelete(e, "pax");
     });
 
-    $(".delete-supplier").on("click", function(e) {
+    $(".delete-supplier").on("click", function (e) {
       ajaxDelete(e, "supplier");
     });
 
-    $(".delete-admin").on("click", function(e) {
+    $(".delete-admin").on("click", function (e) {
       ajaxDelete(e, "admin");
     });
 
-    $(".delete-zone").on("click", function(e) {
+    $(".delete-zone").on("click", function (e) {
       ajaxDelete(e, "zone");
     });
 
-    $(".delete-group").on("click", function(e) {
+    $(".delete-group").on("click", function (e) {
       ajaxDelete(e, "group");
     });
 
-    $(".delete-medical").on("click", function(e) {
+    $(".delete-medical").on("click", function (e) {
       ajaxDelete(e, "medical");
     });
-    $(".delete-mofa").on("click", function(e) {
+    $(".delete-mofa").on("click", function (e) {
       ajaxDelete(e, "mofa");
     });
 
-    $(".delete-stamping").on("click", function(e) {
+    $(".delete-stamping").on("click", function (e) {
       ajaxDelete(e, "stamping");
     });
 
-    $(".delete-tc").on("click", function(e) {
+    $(".delete-tc").on("click", function (e) {
       ajaxDelete(e, "tc");
     });
 
-    $(".delete-manpower").on("click", function(e) {
+    $(".delete-manpower").on("click", function (e) {
       ajaxDelete(e, "manpower");
     });
 
-    $(".delete-flight").on("click", function(e) {
+    $(".delete-flight").on("click", function (e) {
       ajaxDelete(e, "flight");
     });
 
-    $(".delete-delivery").on("click", function(e) {
+    $(".delete-delivery").on("click", function (e) {
       ajaxDelete(e, "delivery");
     });
 
@@ -54,7 +54,7 @@ $(document).ready(function() {
         content: "Are you sure you want to delete it permanently?",
         type: "red",
         buttons: {
-          confirm: function() {
+          confirm: function () {
             $target = $(e.target);
             const id = $target.attr("data-id");
             const csrf = $target.attr("data-csrf");
@@ -65,7 +65,7 @@ $(document).ready(function() {
               data: {
                 _csrf: csrf
               },
-              success: function(response) {
+              success: function (response) {
                 console.log(response);
                 if (route == "medical") {
                   window.location.href = "/" + route + "/all";
@@ -74,7 +74,7 @@ $(document).ready(function() {
                 }
               },
 
-              error: function(err) {
+              error: function (err) {
                 if (route == "medical") {
                   window.location.href = "/" + route + "/all";
                 } else {
@@ -83,7 +83,7 @@ $(document).ready(function() {
               }
             });
           },
-          cancel: function() {
+          cancel: function () {
             $.alert("Canceled!");
           }
         }
@@ -94,7 +94,7 @@ $(document).ready(function() {
       if (input.files && input.files[0]) {
         var reader = new FileReader();
 
-        reader.onload = function(e) {
+        reader.onload = function (e) {
           $(id).attr("src", e.target.result);
         };
 
@@ -102,26 +102,26 @@ $(document).ready(function() {
       }
     }
 
-    $("#profile_photo").change(function() {
+    $("#profile_photo").change(function () {
       readURL(this, "#photo");
     });
 
-    $("#passport_photo").change(function() {
+    $("#passport_photo").change(function () {
       readURL(this, "#photo1");
     });
-    $("#enjazit").change(function() {
+    $("#enjazit").change(function () {
       readURL(this, "#photo");
     });
-    $("#experience_image").change(function() {
+    $("#experience_image").change(function () {
       readURL(this, "#photo2");
     });
-    $("#slip").change(function() {
+    $("#slip").change(function () {
       readURL(this, "#photo");
     });
-    $("#pc_image").change(function() {
+    $("#pc_image").change(function () {
       readURL(this, "#photo");
     });
-    $("#card_photo").change(function() {
+    $("#card_photo").change(function () {
       readURL(this, "#photo");
     });
 
@@ -129,7 +129,7 @@ $(document).ready(function() {
       $.ajax({
         type: "GET",
         url: "/zone/names",
-        success: function(response) {
+        success: function (response) {
           let availableZones = [];
           let zoneInfo;
           response.forEach(zone => {
@@ -139,13 +139,13 @@ $(document).ready(function() {
           showResult(availableZones);
         },
 
-        error: function(err) {
+        error: function (err) {
           availableTags = err;
         }
       });
     }
 
-    $("#zone").on("focus", function() {
+    $("#zone").on("focus", function () {
       getZones();
     });
 
@@ -153,7 +153,7 @@ $(document).ready(function() {
       $.ajax({
         type: "GET",
         url: "/mofa/groups",
-        success: function(response) {
+        success: function (response) {
           let availableGroups = [];
           let groupInfo;
           response.forEach(group => {
@@ -163,13 +163,13 @@ $(document).ready(function() {
           showGroup(availableGroups);
         },
 
-        error: function(err) {
+        error: function (err) {
           availableTags = err;
         }
       });
     }
 
-    $("#occupation").on("focus", function() {
+    $("#occupation").on("focus", function () {
       getOccupations();
     });
 
@@ -178,10 +178,10 @@ $(document).ready(function() {
         source: availableZones,
         selectFirst: true,
         minLength: 0,
-        focus: function(event, ui) {
+        focus: function (event, ui) {
           $(this).autocomplete("search", $(this).val());
         },
-        select: function(event, ui) {
+        select: function (event, ui) {
           $(this).val(ui.item.label);
         }
       });
@@ -192,10 +192,10 @@ $(document).ready(function() {
         source: availableGroups,
         selectFirst: true,
         minLength: 0,
-        focus: function(event, ui) {
+        focus: function (event, ui) {
           $(this).autocomplete("search", $(this).val());
         },
-        select: function(event, ui) {
+        select: function (event, ui) {
           $(this).val(ui.item.label);
         }
       });
@@ -235,7 +235,7 @@ $(document).ready(function() {
         type: "GET",
         url: "/dashboard/chartdata",
         dataType: "json",
-        success: function(response) {
+        success: function (response) {
           let paxData = getChartData(response.totalPAX);
           let supplierData = getChartData(response.totalSupplier);
           let groupData = getChartData(response.totalGroup);
@@ -327,7 +327,7 @@ $(document).ready(function() {
 
           window.chartType = new Chart(ctx, config);
         },
-        error: function(err) {
+        error: function (err) {
           console.log(err);
         }
       });
@@ -348,7 +348,7 @@ $(document).ready(function() {
       return chartData;
     }
 
-    $(".box-title").on("click", function() {
+    $(".box-title").on("click", function () {
       showChart($(this).attr("data-id"));
     });
 
@@ -356,7 +356,7 @@ $(document).ready(function() {
       type: "GET",
       url: "/dashboard/paxstatus",
       dataType: "json",
-      success: function(response) {
+      success: function (response) {
         let config = {
           type: "line",
           data: {
@@ -426,9 +426,37 @@ $(document).ready(function() {
         var ctx = document.getElementById("barchart").getContext("2d");
         new Chart(ctx, config);
       },
-      error: function(err) {
+      error: function (err) {
         console.log(err);
       }
     });
+
+    $("#admin").on("change", function () {
+      let admin = $("#admin :selected").val();
+
+      $.ajax({
+        type: "GET",
+        url: "/role/adminRoles/" + admin,
+        success: function (response) {
+          if (response) {
+            response.roles.forEach(role => {
+              $("#role" + role.slug).prop("checked", false);
+            });
+            response.admin.roles.forEach(admin => {
+              response.roles.forEach(role => {
+                if (role.slug == admin) {
+                  $("#role" + admin).prop("checked", true);
+                }
+
+              })
+            });
+          }
+        },
+
+        error: function (err) {
+          console.log(err);
+        }
+      });
+    })
   });
 });

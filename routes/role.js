@@ -28,4 +28,6 @@ router.post("/admin", auth, isSuperAdmin, [
     sanitizeBody("admin").trim().unescape()
 ], roleController.postAdminRoles);
 
+router.get("/adminRoles/:id", auth, isSuperAdmin, roleController.getAdminRole);
+
 module.exports = router;
