@@ -7,13 +7,22 @@ const SupplierModel = require("../models/supplierModel");
 /** User Model */
 const UserModel = require("../models/userModel");
 
+/**Moment */
+const moment = require("moment");
+
 /** Created Events  */
 const createEvents = async (req, user, id, type) => {
   let oldUser;
   if ("admin" == type) {
     oldUser = await AdminModel.findOne({ _id: id });
   } else if ("user" == type) {
-    oldUser = await UserModel.findOne({ _id: id });
+    oldUser = await UserModel.findOne({ _id: id }).lean();
+    oldUser["issue"] = moment(oldUser.issue).format("ll");
+    oldUser.expiry = moment(oldUser.expiry).format("ll");
+    oldUser.birth_date = moment(oldUser.birth_date).format("ll");
+    user.issue = moment(user.issue).format("ll");
+    user.expiry = moment(user.expiry).format("ll");
+    user.birth_date = moment(user.birth_date).format("ll");
   } else if ("supplier" == type) {
     oldUser = await SupplierModel.findOne({ _id: id });
   }
