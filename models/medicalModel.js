@@ -1,88 +1,92 @@
 /** Mongoose Module .*/
 const mongoose = require("mongoose");
 
+/** Status Schema*/
+
+const StatusSchema = require("./statusSchema");
 
 /** Medical Table Field .*/
 
 const MedicalSchema = mongoose.Schema({
-    center_name : 
+    center_name:
     {
-        type : String,
-        required : false
+        type: String,
+        required: false
     },
-    medical_slip :
+    medical_slip:
     {
-        type : String,
-        required : false
+        type: String,
+        required: false
     },
-    issue : 
+    issue:
     {
-        type : Date,
-        required : false
+        type: Date,
+        required: false
     },
-    medical_expiry : 
+    medical_expiry:
     {
-        type : Date,
-        required : false
-    },
-
-    status : 
-    {
-        type : String,
-        required : false
+        type: Date,
+        required: false
     },
 
-    unfit_reason : 
+    status:
     {
-        type : String,
-        required : false
+        type: String,
+        required: false
     },
 
-    unfit_slip : 
+    unfit_reason:
     {
-        type : String,
-        required : false
+        type: String,
+        required: false
     },
 
-    interview_date : 
+    unfit_slip:
     {
-        type : Date,
-        required : false
-    },
-    
-    pax : 
-    {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : "User",
-        required : true
+        type: String,
+        required: false
     },
 
-    group : 
+    interview_date:
     {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : "Group",
-        required : true
+        type: Date,
+        required: false
     },
 
-    company : 
+    pax:
     {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : "Company",
-        required : true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     },
 
-    created_at : 
+    group:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Group",
+        required: true
     },
-    updated_at : 
+
+    company:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     },
+
+    created_at:
+    {
+        type: Date,
+        required: true,
+        default: Date.now()
+    },
+    updated_at:
+    {
+        type: Date,
+        required: true,
+        default: Date.now()
+    },
+    events: [StatusSchema]
 });
 
-const Medical = module.exports = mongoose.model("Medical",MedicalSchema);
+const Medical = module.exports = mongoose.model("Medical", MedicalSchema);

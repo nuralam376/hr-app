@@ -9,6 +9,8 @@ let PAXModel = require("../models/userModel");
 /** User/PAX Controller */
 let GroupModel = require("../models/groupModel");
 
+/** Created Events Module */
+const createdEvents = require("../util/paxStageEvents");
 
 /** S3 Delete File */
 const s3DeleteFile = require("../util/deleteS3File");
@@ -86,10 +88,10 @@ exports.postMedicalGroup = async (req, res) => {
 
         /**Updates the group */
         if (medical) {
-            let medical = {};
-            medical.group = forms.group;
-
-            let medicalUpdate = await MedicalModel.updateOne({ company: req.user.company, pax: pax._id }, medical);
+            let newMedical = {};
+            newMedical.group = forms.group;
+            await createdEvents(req, medical, newMedical, "medical");
+            let medicalUpdate = await MedicalModel.updateOne({ company: req.user.company, pax: pax._id }, newMedical);
 
             if (medicalUpdate) {
                 req.flash("success", "Medical Information has been Updated");
@@ -103,12 +105,21 @@ exports.postMedicalGroup = async (req, res) => {
         /** Adds new medical group */
         else {
             /** Saves Medical Data */
-            let medical = new MedicalModel();
-            medical.group = forms.group;
-            medical.company = req.user.company;
-            medical.pax = pax._id;
+            let newMedical = new MedicalModel();
+            newMedical.group = forms.group;
+            newMedical.company = req.user.company;
+            newMedical.pax = pax._id;
+            /** Medical Status */
+            let medicalStatus = {
+                type: "medical_group_saved",
+                display_name: "Medical Group Saved",
+                description: `${req.user.name} saved medical group of ${pax.name}`,
+                time: Date.now()
+            };
 
-            let medicalSave = await medical.save();
+            newMedical.events.push(medicalStatus);
+            newMedical.created_at = Date.now();
+            let medicalSave = await newMedical.save();
 
             if (medicalSave) {
                 req.flash("success", "Medical Information has been saved");
@@ -163,6 +174,8 @@ exports.postMedicalRegistration = async (req, res) => {
                 newMedical.medical_slip = forms.medical_slip;
                 newMedical.issue = forms.issue;
                 newMedical.center_name = forms.center;
+
+                await createdEvents(req, medical, newMedical, "medical");
 
                 let medicalUpdate = await MedicalModel.updateOne({ company: req.user.company, pax: pax._id }, newMedical);
 
@@ -378,7 +391,7 @@ exports.postMedicalReportInfo = async (req, res) => {
 
         let query = { company: req.user.company, code: req.params.id };
         let pax = await PAXModel.findOne(query);
-        let medical = await MedicalModel.findOne({ company: req.user.company, pax: pax._id }).populate("group");
+        let medical = await MedicalModel.findOne({ company: req.user.company, pax: pax._id }).populate("group").lean();
         let errors = validationResult(req);
 
         if (!errors.isEmpty()) {
@@ -449,6 +462,7 @@ exports.postMedicalReportInfo = async (req, res) => {
                 }
             }
             newMedical.medical_expiry = forms.expiry;
+            await createdEvents(req, medical, newMedical, "medical");
             let medicalUpdate = await MedicalModel.updateOne({ company: req.user.company, pax: pax._id }, newMedical);
 
             if (medicalUpdate) {
@@ -588,7 +602,7 @@ exports.updateMedicalCenterInfo = async (req, res) => {
             issue: req.body.issue
         };
 
-        let medical = await MedicalModel.findOne({ company: req.user.company, _id: req.params.id }).populate("group").populate("pax");
+        let medical = await MedicalModel.findOne({ company: req.user.company, _id: req.params.id }).populate("group").populate("pax").lean();
         let pax = await PAXModel.findOne({ company: req.user.company, _id: medical.pax._id }).populate("supplier");
         let medicalSlipUrl = s3GetFile(req, "/pax/" + pax.code + "/medical/", medical.medical_slip);
 
@@ -621,6 +635,7 @@ exports.updateMedicalCenterInfo = async (req, res) => {
             newMedical.center_name = forms.center;
             newMedical.medical_slip = forms.medical_slip;
             newMedical.issue = forms.issue;
+            await createdEvents(req, medical, newMedical, "medical");
 
             let medicalUpdate = await MedicalModel.updateOne({ company: req.user.company, _id: medical._id }, newMedical);
 
@@ -685,7 +700,7 @@ exports.updateMedicalReportInfo = async (req, res) => {
         };
 
         let query = { company: req.user.company, _id: req.params.id };
-        let medical = await MedicalModel.findOne(query).populate("group");
+        let medical = await MedicalModel.findOne(query).populate("group").lean();
         let pax = await PAXModel.findOne({ _id: medical.pax }).populate("supplier");
         let errors = validationResult(req);
         let medicalSlipUrl = s3GetFile(req, "/pax/" + pax.code + "/medical/", medical.medical_slip);
@@ -797,6 +812,8 @@ exports.updateMedicalReportInfo = async (req, res) => {
                 }
             }
             newMedical.medical_expiry = forms.expiry;
+            await createdEvents(req, medical, newMedical, "medical");
+
             let medicalUpdate = await MedicalModel.updateOne({ company: req.user.company, _id: req.params.id }, newMedical);
 
             if (medicalUpdate) {
