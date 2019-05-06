@@ -915,3 +915,24 @@ exports.printEnjazit = async (req, res) => {
         console.log(err);
     }
 }
+
+/**
+ * Shows Timeline of Medical
+ * @param {string} id - The Object Id of the Supplier.
+ */
+
+exports.medicalTimeline = async (req, res) => {
+    try {
+        let query = { _id: req.params.id, company: req.user.company };
+
+        let medical = await MedicalModel.findOne(query).populate("pax", "code").exec();
+
+        res.render("includes/timeline", {
+            paxStage : medical,
+            stageName: "Medical",
+            moment: moment
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};

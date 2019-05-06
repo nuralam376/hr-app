@@ -1,66 +1,70 @@
 <% include ../layouts/admin/header %>
-        <div class="pull-right">
-            <a href = "#" class = "btn btn-danger delete-medical" data-id = "<%= medical._id %>" data-csrf = "<%= csrfToken %>">Delete</a>
-        </div>
-    </h1>    
-   
-    <table class = "table table-bordered">
-            <tr>
-                <th></th>
-                <td></td>
-            </tr>
-            <tr>
-                <th>PAX Code</th>
-                <td><%= medical.pax.code %></td>
-            </tr>
-            <tr>
-                <th>PAX No. </th>
-                <td><%= medical.pax.passport %></td>
-            </tr>
-            <tr>
-                <th>Refernce</th>
-                <td><%= pax.supplier.name %></td>
-            </tr>
-            <tr>
-                <th>Group Sl</th>
-                <td><%= medical.group.group_seq %> / <%= medical.group.group_sl %></td>
-            </tr>
-            <% if(medical.center_name) { %>
-                <tr>
-                    <th>Medical Center name</th>
-                    <td><%= medical.center_name %></td>
-                </tr>
-                <tr>
-                    <th>Medical Issue Date</th>
-                    <td><%= moment(medical.issue).format("ll")%></td>
-                </tr>
-                <tr>
-                    <th>Medical Slip</th>
-                    <td><a data-fancybox="gallery" href = "<%= medicalSlipUrl %>"><img src="<%= medicalSlipUrl %>" alt="" style = "max-width : 500px; height : auto"></a></td>
-                </tr>
-            <%  } if(medical.status) { %>
-                <tr>
-                    <th>Medical Status</th>
-                    <td><%= medical.status %></td>
-                </tr>
-                <tr>
-                    <th>Medical Expiration Date</th>
-                    <td><%= moment(medical.medical_expiry).format("ll") %></td>
-                </tr>
-                <% if(medical.status == 'unfit') { %>
-                    <tr>
-                        <th>Unfit Reason</th>
-                        <td><%= medical.unfit_reason %></td>
-                    </tr>
-                    <tr>
-                        <th>Unfit Medical Slip</th>
-                        <td><a data-fancybox = "gallery" href="<%= medicalUnfitSlipUrl %>"><img src="<%= medicalUnfitSlipUrl %>" alt="" style = "height : auto; max-width : 300px;"></a></td>
-                    </tr>
-                <% } if(medical.status == 'interview') { %>
-                    <tr>
-                        <th>Interview Date</th>
-                        <td><%= moment(medical.interview_date).format("ll") %></td>
-                    </tr>
-            <% }} %>
-        </table>
+<div class="pull-right">
+    <a href="/medical/timeline/<%= medical._id %>" class="btn btn-primary">Show Timeline</a>
+    <a href="#" class="btn btn-danger delete-medical" data-id="<%= medical._id %>"
+        data-csrf="<%= csrfToken %>">Delete</a>
+</div>
+</h1>
+
+<table class="table table-bordered">
+    <tr>
+        <th></th>
+        <td></td>
+    </tr>
+    <tr>
+        <th>PAX Code</th>
+        <td><%= medical.pax.code %></td>
+    </tr>
+    <tr>
+        <th>PAX No. </th>
+        <td><%= medical.pax.passport %></td>
+    </tr>
+    <tr>
+        <th>Refernce</th>
+        <td><%= pax.supplier.name %></td>
+    </tr>
+    <tr>
+        <th>Group Sl</th>
+        <td><%= medical.group.group_seq %> / <%= medical.group.group_sl %></td>
+    </tr>
+    <% if(medical.center_name) { %>
+    <tr>
+        <th>Medical Center name</th>
+        <td><%= medical.center_name %></td>
+    </tr>
+    <tr>
+        <th>Medical Issue Date</th>
+        <td><%= moment(medical.issue).format("ll")%></td>
+    </tr>
+    <tr>
+        <th>Medical Slip</th>
+        <td><a data-fancybox="gallery" href="<%= medicalSlipUrl %>"><img src="<%= medicalSlipUrl %>" alt=""
+                    style="max-width : 500px; height : auto"></a></td>
+    </tr>
+    <%  } if(medical.status) { %>
+    <tr>
+        <th>Medical Status</th>
+        <td><%= medical.status %></td>
+    </tr>
+    <tr>
+        <th>Medical Expiration Date</th>
+        <td><%= moment(medical.medical_expiry).format("ll") %></td>
+    </tr>
+    <% if(medical.status == 'unfit') { %>
+    <tr>
+        <th>Unfit Reason</th>
+        <td><%= medical.unfit_reason %></td>
+    </tr>
+    <tr>
+        <th>Unfit Medical Slip</th>
+        <td><a data-fancybox="gallery" href="<%= medicalUnfitSlipUrl %>"><img src="<%= medicalUnfitSlipUrl %>" alt=""
+                    style="height : auto; max-width : 300px;"></a></td>
+    </tr>
+    <% } if(medical.status == 'interview') { %>
+    <tr>
+        <th>Interview Date</th>
+        <td><%= moment(medical.interview_date).format("ll") %></td>
+    </tr>
+    <% }} %>
+</table>
 <% include ../layouts/admin/footer %>

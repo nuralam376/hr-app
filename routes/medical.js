@@ -83,6 +83,7 @@ router.get("/print/:id", auth, roleCheck, MedicalController.printDoc);
 router.get("/passport/:id", auth, roleCheck, MedicalController.printPassport);
 router.get("/application/:id", auth, roleCheck, MedicalController.printApplication);
 router.get("/enjazit/:id", auth, roleCheck, MedicalController.printEnjazit);
+router.get("/timeline/:id", auth, roleCheck, MedicalController.medicalTimeline);
 router.get("/:id", auth, roleCheck, MedicalController.getMedicalInfo);
 
 
