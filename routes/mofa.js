@@ -38,6 +38,8 @@ router.get("/sticker/:id", auth, roleCheck, mofaController.getSticker);
 
 router.get("/pdf/:id", auth, roleCheck, mofaController.downloadSticker);
 
+router.get("/timeline/:id", auth, roleCheck, mofaController.mofaTimeline);
+
 router.delete("/delete/:id", auth, roleCheck, mofaController.deleteMofa);
 
 module.exports = router;

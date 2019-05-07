@@ -4,6 +4,9 @@ const MedicalModel = require("../models/medicalModel");
 /** Group Model */
 const GroupModel = require("../models/groupModel");
 
+/** Group Model */
+const MOFAModel = require("../models/mofaModel");
+
 /**Moment */
 const moment = require("moment");
 
@@ -12,15 +15,15 @@ const createEvents = async (req, oldData, newData, type) => {
 
   if (oldData) {
     if ("medical" == type) {
-      if (oldData.issue) {
+      if (newData.issue) {
         oldData.issue = moment(oldData.issue).format("ll");
         newData.issue = moment(newData.issue).format("ll");
       }
-      if (oldData.medical_expiry) {
+      if (newData.medical_expiry) {
         oldData.medical_expiry = moment(oldData.medical_expiry).format("ll");
         newData.medical_expiry = moment(newData.medical_expiry).format("ll");
       }
-      if (oldData.interview_date) {
+      if (newData.interview_date) {
         oldData.interview_date = moment(oldData.interview_date).format("ll");
         newData.interview_date = moment(newData.interview_date).format("ll");
       }
@@ -49,14 +52,17 @@ const createEvents = async (req, oldData, newData, type) => {
           } to ${newGroup.group_sl}`;
       }
       else {
-        if (oldData[val]) {
+        if (oldData[val] && newData[val]) {
 
           event.description = `${req.user.name} changed value of  ${val} from ${
             oldData[val]
             } to ${newData[val]}`;
         }
         else {
-          event.description = `${req.user.name} saved value of  ${val} to ${newData[val]}`;
+          if (newData[val])
+            event.description = `${req.user.name} saved value of  ${val} to ${newData[val]}`;
+          else
+            event.description = `${req.user.name} removed  ${val}`;
         }
 
       }
@@ -70,6 +76,11 @@ const createEvents = async (req, oldData, newData, type) => {
 const pushEvents = async (event, type, id) => {
   if ("medical" === type)
     await MedicalModel.findOneAndUpdate(
+      { _id: id },
+      { $push: { events: event } }
+    );
+  if ("mofa" === type)
+    await MOFAModel.findOneAndUpdate(
       { _id: id },
       { $push: { events: event } }
     );

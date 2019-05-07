@@ -2,63 +2,69 @@
 
 const mongoose = require("mongoose");
 
+/** Status Schema*/
+
+const StatusSchema = require("./statusSchema");
+
 const Schema = mongoose.Schema;
 
 /**  Mofa Collection */
 const mofaSchema = new Schema({
-    health_payment : 
+    health_payment:
     {
-        type : Number,
-        required : true,
-        default : 0 
+        type: Number,
+        required: true,
+        default: 0
     },
-    embassy_payment : 
+    embassy_payment:
     {
-        type : Number,
-        required : true,
-        default : 0
+        type: Number,
+        required: true,
+        default: 0
     },
-    type : 
+    type:
     {
-        type : Number,
-        required : true,
-        default : 0
+        type: Number,
+        required: true,
+        default: 0
     },
-    e_number :
+    e_number:
     {
-        type : Number,
-        required : false
+        type: Number,
+        required: false
     },
-    pax : 
+    pax:
     {
-        type : Schema.Types.ObjectId,
-        ref : "User",
-        required : true
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     },
-    group : 
+    group:
     {
-        type : Schema.Types.ObjectId,
-        ref : "Group",
-        required : true
+        type: Schema.Types.ObjectId,
+        ref: "Group",
+        required: true
     },
-    company : 
+    company:
     {
-        type : Schema.Types.ObjectId,
-        ref : "Company",
-        required : true
+        type: Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     },
-    created_at : 
+    created_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
+        type: Date,
+        required: true,
+        default: Date.now()
     },
-    updated_at : 
+    updated_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
-    }
+        type: Date,
+        required: true,
+        default: Date.now()
+    },
+    events: [StatusSchema]
+
 });
 
-const Mofa = module.exports = mongoose.model("Mofa",mofaSchema);
+const Mofa = module.exports = mongoose.model("Mofa", mofaSchema);
