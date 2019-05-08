@@ -1,47 +1,51 @@
 <% include ../layouts/admin/header %>
 
-    <h1 class = "text-center">Stamping</h1>
-    <div class="card">
-        <div class="card-body">
-            <h2>All Information</h2>     
+<h1 class="text-center">Stamping</h1>
+<div class="card">
+    <div class="card-body">
+        <h2>All Information</h2>
 
-            <div class="table-responsive">
-                    <table id="myTable" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>PAX Code</th>
-                                <th>PAX Name</th>
-                                <th>Police Clearance Status	</th>
-                                <th>Police Clearance Documents</th>
-                                <th>Individual Visa Number</th>
-                                <th>Stamping Date</th>
-                                <th>Option</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                          
-                           <% if(stampings.length > 0) { %>
-                                <% stampings.forEach(stamping => { %>
-                                <tr>   
-                                    <td><a href="/pax/<%= stamping.pax.seq_id %>"><%= stamping.pax.code %></a></td>
-                                    <td><%= stamping.pax.name %></td>
-                                    <td><%= stamping.status %></td>
-                                    <td><a data-fancybox="gallery" href="<%= stamping.imageUrl %>"><img src = "<%= stamping.imageUrl %>" height = "50px" width = "150px"></a></td>
-                                    <%if(stamping.visa_no) { %>
-                                        <td><%= stamping.visa_no %></td>
-                                        <td><%= moment(stamping.stamping_date).format("ll") %></td>
-                                    <% } else { %>
-                                        <td>-----</td>
-                                        <td>-----</td>
-                                    <% } %>
-                                    <td><a href = "#" class = "btn btn-danger delete-stamping" data-id = "<%= stamping._id %>" data-csrf = "<%= csrfToken %>">Delete</a></td>
-                                </tr>
-                                <% }) %>
-                           <% } %>
-                               
-                        </tbody>   
-                    </table>
-            </div>
+        <div class="table-responsive">
+            <table id="myTable" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>PAX Code</th>
+                        <th>PAX Name</th>
+                        <th>Police Clearance Status </th>
+                        <th>Police Clearance Documents</th>
+                        <th>Individual Visa Number</th>
+                        <th>Stamping Date</th>
+                        <th>Option</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <% if(stampings.length > 0) { %>
+                    <% stampings.forEach(stamping => { %>
+                    <tr>
+                        <td><a href="/pax/<%= stamping.pax.seq_id %>"><%= stamping.pax.code %></a></td>
+                        <td><%= stamping.pax.name %></td>
+                        <td><%= stamping.status %></td>
+                        <td><a data-fancybox="gallery" href="<%= stamping.imageUrl %>"><img
+                                    src="<%= stamping.imageUrl %>" height="50px" width="150px"></a></td>
+                        <%if(stamping.visa_no) { %>
+                        <td><%= stamping.visa_no %></td>
+                        <td><%= moment(stamping.stamping_date).format("ll") %></td>
+                        <% } else { %>
+                        <td>-----</td>
+                        <td>-----</td>
+                        <% } %>
+                        <td><a href="#" class="btn btn-danger delete-stamping" data-id="<%= stamping._id %>"
+                                data-csrf="<%= csrfToken %>">Delete</a></td>
+                        <td> <a href="/stamping/timeline/<%= stamping._id %>">Timeline</a></td>
+
+                    </tr>
+                    <% }) %>
+                    <% } %>
+
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 <% include ../layouts/admin/footer %>

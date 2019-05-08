@@ -165,7 +165,7 @@ exports.postMofaRegistration = async (req, res) => {
             else {
                 mofa.pax = req.body.pax;
                 mofa.company = req.user.company;
-                /** Medical Status */
+                /** Mofa Status */
                 let mofaStatus = {
                     type: "mofa_information_saved",
                     display_name: "MOFA Information Saved",
@@ -262,7 +262,6 @@ exports.deleteMofa = async (req, res) => {
 
 /**
  * Shows Timeline of MOFA
- * @param {string} id - The Object Id of the Supplier.
  */
 
 exports.mofaTimeline = async (req, res) => {

@@ -1,54 +1,60 @@
 /** Mongoose Module */
 const mongoose = require("mongoose");
 
+/** Status Schema*/
+
+const StatusSchema = require("./statusSchema");
+
 const Schema = mongoose.Schema;
 
 /** Stamping Schema */
 const stampingSchema = new Schema({
-    status : 
+    status:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    pc_image : 
+    pc_image:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    visa_no : 
+    visa_no:
     {
-        type : Number,
-        required : false
+        type: Number,
+        required: false
     },
-    stamping_date : 
+    stamping_date:
     {
-        type : Date,
-        required : false
+        type: Date,
+        required: false
     },
-    pax : 
+    pax:
     {
-        type : Schema.Types.ObjectId,
-        ref : "User",
-        required : true
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     },
-    company : 
+    company:
     {
-        type : Schema.Types.ObjectId,
-        ref : "Company",
-        required : true
+        type: Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     },
-    created_at : 
+    created_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
+        type: Date,
+        required: true,
+        default: Date.now()
     },
-    updated_at : 
+    updated_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
-    }
+        type: Date,
+        required: true,
+        default: Date.now()
+    },
+    events: [StatusSchema]
+
 });
 
-const Stamping = module.exports = mongoose.model("stamping",stampingSchema);
+const Stamping = module.exports = mongoose.model("stamping", stampingSchema);

@@ -4,8 +4,11 @@ const MedicalModel = require("../models/medicalModel");
 /** Group Model */
 const GroupModel = require("../models/groupModel");
 
-/** Group Model */
+/** MOFA Model */
 const MOFAModel = require("../models/mofaModel");
+
+/** Stamping Model */
+const StampingModel = require("../models/stampingModel");
 
 /**Moment */
 const moment = require("moment");
@@ -28,6 +31,11 @@ const createEvents = async (req, oldData, newData, type) => {
         newData.interview_date = moment(newData.interview_date).format("ll");
       }
     }
+    if ("stamping" == type && newData.stamping_date) {
+      oldData.stamping_date = moment(oldData.stamping_date).format("ll");
+      newData.stamping_date = moment(newData.stamping_date).format("ll");
+    }
+
     let changed_keys = new Set();
 
     for (let key in newData) {
@@ -49,7 +57,7 @@ const createEvents = async (req, oldData, newData, type) => {
 
         event.description = `${req.user.name} changed group from  ${oldGroup.group_seq} / ${oldGroup.group_sl} to ${
           newGroup.group_seq
-          } to ${newGroup.group_sl}`;
+          } / ${newGroup.group_sl}`;
       }
       else {
         if (oldData[val] && newData[val]) {
@@ -74,16 +82,28 @@ const createEvents = async (req, oldData, newData, type) => {
 };
 
 const pushEvents = async (event, type, id) => {
-  if ("medical" === type)
-    await MedicalModel.findOneAndUpdate(
-      { _id: id },
-      { $push: { events: event } }
-    );
-  if ("mofa" === type)
-    await MOFAModel.findOneAndUpdate(
-      { _id: id },
-      { $push: { events: event } }
-    );
+
+  switch (type) {
+    case "medical":
+      await MedicalModel.findOneAndUpdate(
+        { _id: id },
+        { $push: { events: event } }
+      );
+      break;
+    case "mofa":
+      await MOFAModel.findOneAndUpdate(
+        { _id: id },
+        { $push: { events: event } }
+      );
+      break;
+    case "stamping":
+      await StampingModel.findOneAndUpdate(
+        { _id: id },
+        { $push: { events: event } }
+      );
+      break;
+  }
+
 };
 
 module.exports = createEvents;

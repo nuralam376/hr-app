@@ -53,4 +53,6 @@ router.post("/completeregistration/:id", auth, roleCheck, [
 
 router.delete("/delete/:id", auth, roleCheck, stampingController.deleteStamping);
 
+router.get("/timeline/:id", auth, roleCheck, stampingController.stampingTimeline);
+
 module.exports = router;

@@ -13,6 +13,9 @@ const s3DeleteFile = require("../util/deleteS3File");
 /** S3 Get File */
 const s3GetFile = require("../util/getS3File");
 
+/** Created Events Module */
+const createdEvents = require("../util/paxStageEvents");
+
 
 /** Validation */
 const { validationResult } = require("express-validator/check");
@@ -149,7 +152,7 @@ exports.postStamping = async (req, res) => {
         let query = { _id: req.params.id, company: req.user.company };
         let pax = await PAXModel.findOne(query).populate("supplier").exec();
         let mofa = await MofaModel.findOne({ pax: pax._id, company: req.user.company }).populate("group").exec();
-        let stamping = await StampingModel.findOne({ pax: pax._id, company: req.user.company }) || undefined;
+        let stamping = await StampingModel.findOne({ pax: pax._id, company: req.user.company }).lean() || undefined;
         /** Checks whetere any file is uploaded */
         if (typeof paxPcImage !== "undefined" && req.fileValidationError == null) {
 
@@ -163,7 +166,9 @@ exports.postStamping = async (req, res) => {
                     newStamping.status = forms.status;
                     newStamping.pc_image = forms.pc_image;
                     /** Removes the old file */
-                    s3DeleteFile(req, "/pax/" + pax.code + "/stamping/", stamping.pc_image);
+                    if (stamping.pc_image != forms.pc_image)
+                        s3DeleteFile(req, "/pax/" + pax.code + "/stamping/", stamping.pc_image);
+                    await createdEvents(req, stamping, newStamping, "stamping");
                     stampingStatus = await StampingModel.updateOne({ _id: stamping._id }, newStamping);
                 }
                 else {
@@ -172,6 +177,15 @@ exports.postStamping = async (req, res) => {
                     newStamping.pc_image = forms.pc_image;
                     newStamping.company = req.user.company;
                     newStamping.pax = req.params.id;
+                    /** Stamping Status */
+                    let stampingEventStatus = {
+                        type: "stamping_information_saved",
+                        display_name: "Stamping Information Saved",
+                        description: `${req.user.name} saved Stamping of ${pax.name}`,
+                        time: Date.now()
+                    };
+
+                    newStamping.events.push(stampingEventStatus);
                     stampingStatus = await newStamping.save();
                 }
 
@@ -294,6 +308,7 @@ exports.postCompleteStampingRegistration = async (req, res) => {
             let newStamping = {};
             newStamping.visa_no = form.visa_no;
             newStamping.stamping_date = form.stamping_date;
+            await createdEvents(req, stamping, newStamping, "stamping");
             newStamping.updated_at = Date.now();
             stampingStatus = await StampingModel.updateOne({ _id: stamping._id }, newStamping);
 
@@ -340,3 +355,28 @@ exports.deleteStamping = async (req, res) => {
         console.log(err);
     }
 }
+
+/**
+ * Shows Timeline of Stamping
+ */
+
+exports.stampingTimeline = async (req, res) => {
+    try {
+        let query = { _id: req.params.id, company: req.user.company };
+
+        let stamping = await StampingModel.findOne(query).populate("pax", "code").exec();
+        if (stamping) {
+            res.render("includes/timeline", {
+                paxStage: stamping,
+                stageName: "Stamping",
+                moment: moment
+            });
+        }
+        else {
+            req.flash("danger", "No Data Found");
+            return res.redirect("/stamping");
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
