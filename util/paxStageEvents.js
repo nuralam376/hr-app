@@ -10,6 +10,9 @@ const MOFAModel = require("../models/mofaModel");
 /** Stamping Model */
 const StampingModel = require("../models/stampingModel");
 
+/** TC Model */
+const TCModel = require("../models/tcModel");
+
 /**Moment */
 const moment = require("moment");
 
@@ -98,6 +101,12 @@ const pushEvents = async (event, type, id) => {
       break;
     case "stamping":
       await StampingModel.findOneAndUpdate(
+        { _id: id },
+        { $push: { events: event } }
+      );
+      break;
+    case "tc":
+      await TCModel.findOneAndUpdate(
         { _id: id },
         { $push: { events: event } }
       );

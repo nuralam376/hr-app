@@ -38,5 +38,8 @@ router.get("/download/:id", auth, roleCheck, tcController.downloadTC);
 
 router.delete("/delete/:id", auth, roleCheck, tcController.deleteTc);
 
+router.get("/timeline/:id", auth, roleCheck, tcController.tcTimeline);
+
+
 
 module.exports = router;
