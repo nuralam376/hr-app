@@ -1,54 +1,58 @@
 <% include ../layouts/admin/header %>
 
-    <h1 class = "text-center">Manpower</h1>
-    <div class="card">
-        <div class="card-body">
-            <h2>All Information</h2>     
+<h1 class="text-center">Manpower</h1>
+<div class="card">
+    <div class="card-body">
+        <h2>All Information</h2>
 
-            <div class="table-responsive">
-                    <table id="myTable" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>PAX Code</th>
-                                <th>PAX Name</th>
-                                <th>Ready for manpower</th>
-                                <th>Clearance Date</th>
-                                <th>SmartCard No</th>
-                                <th>SmartCard Photo</th>
-                                <th>Option</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                          
-                           <% if(manpowers.length > 0) { %>
-                                <% manpowers.forEach(manpower => { %>
-                                <tr>   
-                                    <td><a href="/pax/<%= manpower.pax.seq_id %>"><%= manpower.pax.code %></a></td>
-                                    <td><%= manpower.pax.name %></td>
-                                    <td>
-                                        <% if(manpower.ready == 1) { %>
-                                            Yes
-                                        <% } else { %>
-                                            NO
-                                        <% } %>
-                                    </td>
-                                    <% if(manpower.card_no) { %>
-                                        <td><%= moment(manpower.clearance_date).format("ll") %></td>
-                                        <td><%= manpower.card_no %></td>
-                                        <td>  <a data-fancybox="gallery" href = "<%= manpower.imageUrl %>"><img src="<%= manpower.imageUrl %>" alt="No Pic" style = "max-width : 50px; height : 50px"></a></td>
-                                    <% } else { %>
-                                        <td>------</td>
-                                        <td>------</td>
-                                        <td>------</td>
-                                    <% } %>
-                                    <td><a href = "#" class = "btn btn-danger delete-manpower" data-id = "<%= manpower._id %>" data-csrf = "<%= csrfToken %>">Delete</a></td>
-                                </tr>
-                                <% }) %>
-                           <% } %>
-                               
-                        </tbody>   
-                    </table>
-            </div>
+        <div class="table-responsive">
+            <table id="myTable" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>PAX Code</th>
+                        <th>PAX Name</th>
+                        <th>Ready for manpower</th>
+                        <th>Clearance Date</th>
+                        <th>SmartCard No</th>
+                        <th>SmartCard Photo</th>
+                        <th>Option</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <% if(manpowers.length > 0) { %>
+                    <% manpowers.forEach(manpower => { %>
+                    <tr>
+                        <td><a href="/pax/<%= manpower.pax.seq_id %>"><%= manpower.pax.code %></a></td>
+                        <td><%= manpower.pax.name %></td>
+                        <td>
+                            <% if(manpower.ready == 1) { %>
+                            Yes
+                            <% } else { %>
+                            NO
+                            <% } %>
+                        </td>
+                        <% if(manpower.card_no) { %>
+                        <td><%= moment(manpower.clearance_date).format("ll") %></td>
+                        <td><%= manpower.card_no %></td>
+                        <td> <a data-fancybox="gallery" href="<%= manpower.imageUrl %>"><img
+                                    src="<%= manpower.imageUrl %>" alt="No Pic"
+                                    style="max-width : 50px; height : 50px"></a></td>
+                        <% } else { %>
+                        <td>------</td>
+                        <td>------</td>
+                        <td>------</td>
+                        <% } %>
+                        <td><a href="#" class="btn btn-danger delete-manpower" data-id="<%= manpower._id %>"
+                                data-csrf="<%= csrfToken %>">Delete</a></td>
+                        <td> <a href="/manpower/timeline/<%= manpower._id %>">Timeline</a></td>
+                    </tr>
+                    <% }) %>
+                    <% } %>
+
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 <% include ../layouts/admin/footer %>

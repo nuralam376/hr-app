@@ -13,6 +13,9 @@ const StampingModel = require("../models/stampingModel");
 /** TC Model */
 const TCModel = require("../models/tcModel");
 
+/** Manpower Model */
+const ManpowerModel = require("../models/manpowerModel");
+
 /**Moment */
 const moment = require("moment");
 
@@ -34,9 +37,13 @@ const createEvents = async (req, oldData, newData, type) => {
         newData.interview_date = moment(newData.interview_date).format("ll");
       }
     }
-    if ("stamping" == type && newData.stamping_date) {
+    else if ("stamping" == type && newData.stamping_date) {
       oldData.stamping_date = moment(oldData.stamping_date).format("ll");
       newData.stamping_date = moment(newData.stamping_date).format("ll");
+    }
+    else if ("manpower" == type && newData.clearance_date) {
+      oldData.clearance_date = moment(oldData.clearance_date).format("ll");
+      newData.clearance_date = moment(newData.clearance_date).format("ll");
     }
 
     let changed_keys = new Set();
@@ -107,6 +114,12 @@ const pushEvents = async (event, type, id) => {
       break;
     case "tc":
       await TCModel.findOneAndUpdate(
+        { _id: id },
+        { $push: { events: event } }
+      );
+      break;
+    case "manpower":
+      await ManpowerModel.findOneAndUpdate(
         { _id: id },
         { $push: { events: event } }
       );

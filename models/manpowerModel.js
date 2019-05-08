@@ -1,55 +1,60 @@
 /** Mongoose Module */
 const mongoose = require("mongoose");
 
+/** Status Schema*/
+
+const StatusSchema = require("./statusSchema");
+
 const Schema = mongoose.Schema;
 
 /** Manpower Schema */
 const manpowerSchema = new Schema({
-    ready : 
+    ready:
     {
-        type : Number,
-        required : true,
-        default : 0
+        type: Number,
+        required: true,
+        default: 0
     },
-    clearance_date : 
+    clearance_date:
     {
-        type : Date,
-        required : false,
+        type: Date,
+        required: false,
     },
-    card_no : 
+    card_no:
     {
-        type : String,
-        required : false
+        type: String,
+        required: false
     },
-    card_photo : 
+    card_photo:
     {
-        type : String,
-        required : false
+        type: String,
+        required: false
     },
-    pax : 
+    pax:
     {
-        type : Schema.Types.ObjectId,
-        ref : "User",
-        required : true
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     },
-    company : 
+    company:
     {
-        type : Schema.Types.ObjectId,
-        ref : "Company",
-        required : true
+        type: Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     },
-    created_at : 
+    created_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
+        type: Date,
+        required: true,
+        default: Date.now()
     },
-    updated_at : 
+    updated_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
-    }
+        type: Date,
+        required: true,
+        default: Date.now()
+    },
+    events: [StatusSchema]
 });
 
-const Manpower = module.exports = mongoose.model("Manpower",manpowerSchema);
+const Manpower = module.exports = mongoose.model("Manpower", manpowerSchema);

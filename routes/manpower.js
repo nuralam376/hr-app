@@ -51,4 +51,6 @@ router.post("/status/:id", auth, roleCheck, upload.any(), [
 
 router.delete("/delete/:id", auth, roleCheck, manpowerController.deleteManpower);
 
+router.get("/timeline/:id", auth, roleCheck, manpowerController.manpowerTimeline);
+
 module.exports = router;
