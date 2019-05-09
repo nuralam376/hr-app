@@ -1,39 +1,45 @@
 /** Mongoose Module */
 const mongoose = require("mongoose");
 
+/** Status Schema*/
+
+const StatusSchema = require("./statusSchema");
+
 const Schema = mongoose.Schema;
 
 /** Delivery Schema */
 const deliverySchema = new Schema({
-    received_by : 
+    received_by:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    pax : 
+    pax:
     {
-        type : Schema.Types.ObjectId,
-        ref : "User",
-        required : true
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     },
-    company : 
+    company:
     {
-        type : Schema.Types.ObjectId,
-        ref : "Company",
-        required : true
+        type: Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     },
-    created_at : 
+    created_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
+        type: Date,
+        required: true,
+        default: Date.now()
     },
-    updated_at : 
+    updated_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
-    }
+        type: Date,
+        required: true,
+        default: Date.now()
+    },
+    events: [StatusSchema]
+
 });
 
-const Delivery = module.exports = mongoose.model("Delivery",deliverySchema);
+const Delivery = module.exports = mongoose.model("Delivery", deliverySchema);

@@ -37,5 +37,7 @@ router.post("/report/:id", auth, roleCheck, [
 
 router.delete("/delete/:id", auth, roleCheck, deliveryController.deleteDelivery);
 
+router.get("/timeline/:id", auth, roleCheck, deliveryController.deliveryTimeline);
+
 
 module.exports = router;

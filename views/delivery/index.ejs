@@ -20,21 +20,15 @@
           %>
           <tr>
             <td>
-              <a href="/pax/<%= delivery.pax.seq_id %>"
-                ><%= delivery.pax.code %></a
-              >
+              <a href="/pax/<%= delivery.pax.seq_id %>"><%= delivery.pax.code %></a>
             </td>
             <td><%= delivery.pax.name %></td>
             <td><%= delivery.received_by %></td>
             <td>
-              <a
-                href="#"
-                class="btn btn-danger delete-delivery"
-                data-id="<%= delivery._id %>"
-                data-csrf="<%= csrfToken %>"
-                >Delete</a
-              >
+              <a href="#" class="btn btn-danger delete-delivery" data-id="<%= delivery._id %>"
+                data-csrf="<%= csrfToken %>">Delete</a>
             </td>
+            <td> <a href="/delivery/timeline/<%= delivery._id %>">Timeline</a></td>
           </tr>
           <% }) %> <% } %>
         </tbody>

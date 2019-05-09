@@ -23,6 +23,9 @@ const ManpowerModel = require("../models/manpowerModel");
 /** Flight Model */
 const FlightModel = require("../models/flightModel");
 
+/** Delivery Model */
+const DeliveryModel = require("../models/deliveryModel");
+
 /**Moment */
 const moment = require("moment");
 
@@ -151,6 +154,12 @@ const pushEvents = async (event, type, id) => {
       break;
     case "flight":
       await FlightModel.findOneAndUpdate(
+        { _id: id },
+        { $push: { events: event } }
+      );
+      break;
+    case "delivery":
+      await DeliveryModel.findOneAndUpdate(
         { _id: id },
         { $push: { events: event } }
       );
