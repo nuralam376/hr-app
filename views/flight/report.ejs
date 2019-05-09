@@ -1,60 +1,63 @@
 <% include ../layouts/admin/header %>
 <% include ../includes/search %>
-    
-   <div class="row">
-       <div class="col-md-12">
-            <div class="card">
-                    <div class="card-body">
-                        <h2>Flight Info </h2>  
-                        <div class="table-responsive">
-                            <table class = "table">
-                                <thead>
-                                    <tr>
-                                        <th>PAX Name</th>
-                                        <th>PAX No</th>
-                                        <th>Reference</th>
-                                        <th>Group/SL</th>
-                                        <th>Stamping Date</th>
-                                        <th>Manpower Date</th>
-                                        <th>Zone</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                        <td><%= pax.name %></td>
-                                        <td><%= pax.passport %></td>
-                                        <td><%= pax.supplier.name %></td>
-                                        <td><%= pax.group.group_seq %> / <%= pax.group.group_sl %></td>
-                                        <td><%= moment(stamping.stamping_date).format("ll") %></td>
-                                        <td><%= moment(manpower.clearance_date).format("ll") %></td>
-                                        <td><%= flight.zone.name %></td>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-5">
-                                <form action="/flight/report/<%= pax._id %>" method = "POST">
-                                    <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
-                                    <div class="form-group">                                        
-                                        <label for="probable_date">Final Date: </label>
-                                        <input type = "date" id="final_date" name = "flight_date" class = "form-control" value = "<%= flight.probable_date ? moment(new Date(flight.probable_date)).format('YYYY-MM-DD') : moment(new Date(flight.flight_date)).format('YYYY-MM-DD')%>">
-                                    </div>
-                                    <div class="form-group">                                        
-                                        <label for="probable_airlines">Final Airlines: </label>
-                                        <input type = "text" id="probable_airlines" name = "flight_airlines" class = "form-control" value = "<%= flight.probable_date ? flight.probable_airlines : flight.flight_airlines%>">
-                                    </div>
-                                    <div class="form-group">                                        
-                                        <label for="price">Price </label>
-                                        <input type = "text" id="price" name = "price" class = "form-control" value = "<%= typeof form != 'undefined' ? form.price : flight.price %>">
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="submit" value = "Save" class = "btn btn-success">
-                                    </div>
-                                </form>    
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h2>Flight Info </h2>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>PAX Name</th>
+                                <th>PAX No</th>
+                                <th>Reference</th>
+                                <th>Group/SL</th>
+                                <th>Stamping Date</th>
+                                <th>Manpower Date</th>
+                                <th>Zone</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <td><%= pax.name %></td>
+                            <td><%= pax.passport %></td>
+                            <td><%= pax.supplier.name %></td>
+                            <td><%= pax.group.group_seq %> / <%= pax.group.group_sl %></td>
+                            <td><%= moment(stamping.stamping_date).format("ll") %></td>
+                            <td><%= moment(manpower.clearance_date).format("ll") %></td>
+                            <td><%= flight.zone.name %></td>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <form action="/flight/report/<%= pax._id %>" method="POST">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <div class="form-group">
+                                <label for="probable_date">Final Date: </label>
+                                <input type="date" id="final_date" name="flight_date" class="form-control"
+                                    value="<%= flight.flight_date ? moment(new Date(flight.flight_date)).format('YYYY-MM-DD') : moment(new Date(flight.probable_date)).format('YYYY-MM-DD')%>">
                             </div>
-                        </div>
-                           
+                            <div class="form-group">
+                                <label for="probable_airlines">Final Airlines: </label>
+                                <input type="text" id="probable_airlines" name="flight_airlines" class="form-control"
+                                    value="<%= flight.flight_airlines ? flight.flight_airlines : flight.probable_airlines%>">
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price </label>
+                                <input type="text" id="price" name="price" class="form-control"
+                                    value="<%= typeof form != 'undefined' ? form.price : flight.price %>">
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Save" class="btn btn-success">
+                            </div>
+                        </form>
                     </div>
                 </div>
-       </div>
-   </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 <% include ../layouts/admin/footer %>

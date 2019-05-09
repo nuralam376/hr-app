@@ -58,4 +58,7 @@ router.post("/report/:id", auth, roleCheck, [
 
 router.delete("/delete/:id", auth, roleCheck, flightController.deleteFlight);
 
+router.get("/timeline/:id", auth, roleCheck, flightController.flightTimeline);
+
+
 module.exports = router;

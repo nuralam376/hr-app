@@ -1,50 +1,52 @@
 <% include ../layouts/admin/header %>
 
-    <h1 class = "text-center">Flights</h1>
-    <div class="card">
-        <div class="card-body">
-            <h2>All Information</h2>     
+<h1 class="text-center">Flights</h1>
+<div class="card">
+    <div class="card-body">
+        <h2>All Information</h2>
 
-            <div class="table-responsive">
-                    <table id="myTable" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>PAX Code</th>
-                                <th>PAX Name</th>
-                                <th>Probable Date</th>
-                                <th>Probable Airlines</th>
-                                <th>Flight Date</th>
-                                <th>Flight Airlines</th>
-                                <th>Price</th>
-                                <th>Option</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                          
-                           <% if(flights.length > 0) { %>
-                                <% flights.forEach(flight => { %>
-                                <tr>   
-                                    <td><a href="/pax/<%= flight.pax.seq_id %>"><%= flight.pax.code %></a></td>
-                                    <td><%= flight.pax.name %></td>
-                                    <td><%= moment(flight.probable_date).format("ll") %></td>
-                                    <td><%= flight.probable_airlines %></td>
-                                    <% if(flight.price) { %>
-                                        <td><%= moment(flight.flight_date).format("ll") %></td>
-                                        <td><%= flight.flight_airlines %></td>
-                                        <td><%= flight.price %></td>
-                                    <% } else { %>
-                                        <td>------</td>
-                                        <td>------</td>
-                                        <td>------</td>
-                                    <% } %>
-                                    <td><a href = "#" class = "btn btn-danger delete-flight" data-id = "<%= flight._id %>" data-csrf = "<%= csrfToken %>">Delete</a></td>
-                                </tr>
-                                <% }) %>
-                           <% } %>
-                               
-                        </tbody>   
-                    </table>
-            </div>
+        <div class="table-responsive">
+            <table id="myTable" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>PAX Code</th>
+                        <th>PAX Name</th>
+                        <th>Probable Date</th>
+                        <th>Probable Airlines</th>
+                        <th>Flight Date</th>
+                        <th>Flight Airlines</th>
+                        <th>Price</th>
+                        <th>Option</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <% if(flights.length > 0) { %>
+                    <% flights.forEach(flight => { %>
+                    <tr>
+                        <td><a href="/pax/<%= flight.pax.seq_id %>"><%= flight.pax.code %></a></td>
+                        <td><%= flight.pax.name %></td>
+                        <td><%= moment(flight.probable_date).format("ll") %></td>
+                        <td><%= flight.probable_airlines %></td>
+                        <% if(flight.price) { %>
+                        <td><%= moment(flight.flight_date).format("ll") %></td>
+                        <td><%= flight.flight_airlines %></td>
+                        <td><%= flight.price %></td>
+                        <% } else { %>
+                        <td>------</td>
+                        <td>------</td>
+                        <td>------</td>
+                        <% } %>
+                        <td><a href="#" class="btn btn-danger delete-flight" data-id="<%= flight._id %>"
+                                data-csrf="<%= csrfToken %>">Delete</a></td>
+                        <td> <a href="/flight/timeline/<%= flight._id %>">Timeline</a></td>
+                    </tr>
+                    <% }) %>
+                    <% } %>
+
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 <% include ../layouts/admin/footer %>

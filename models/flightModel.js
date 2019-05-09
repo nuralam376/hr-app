@@ -1,65 +1,70 @@
 /** Mongoose Module */
 const mongoose = require("mongoose");
 
+/** Status Schema*/
+
+const StatusSchema = require("./statusSchema");
+
 const Schema = mongoose.Schema;
 
 /** Flight Schema */
 const flightSchema = new Schema({
-    probable_date : 
+    probable_date:
     {
-        type : Date,
-        required : true
+        type: Date,
+        required: true
     },
-    flight_date : 
+    flight_date:
     {
-        type : Date,
-        required : false
+        type: Date,
+        required: false
     },
-    probable_airlines : 
+    probable_airlines:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    flight_airlines : 
+    flight_airlines:
     {
-        type : String,
-        required : false
+        type: String,
+        required: false
     },
-    price : 
+    price:
     {
-        type : Number,
-        required : false
+        type: Number,
+        required: false
     },
-    pax : 
+    pax:
     {
-        type : Schema.Types.ObjectId,
-        ref : "User",
-        required : true
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     },
-    zone : 
+    zone:
     {
-        type : Schema.Types.ObjectId,
-        ref : "Zone",
-        required : false
+        type: Schema.Types.ObjectId,
+        ref: "Zone",
+        required: false
     },
-    company : 
+    company:
     {
-        type : Schema.Types.ObjectId,
-        ref : "Company",
-        required : true
+        type: Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     },
-    created_at : 
+    created_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
+        type: Date,
+        required: true,
+        default: Date.now()
     },
-    updated_at : 
+    updated_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
-    }
+        type: Date,
+        required: true,
+        default: Date.now()
+    },
+    events: [StatusSchema]
 });
 
-const Flight = module.exports = mongoose.model("Flight",flightSchema);
+const Flight = module.exports = mongoose.model("Flight", flightSchema);
