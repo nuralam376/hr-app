@@ -1,75 +1,81 @@
 /** Mongoose Module .*/
 const mongoose = require("mongoose");
 
+/** Status Schema*/
+
+const StatusSchema = require("./statusSchema");
+
 
 /** Group Table Field .*/
 
 const GroupSchema = mongoose.Schema({
-    group_seq : 
+    group_seq:
     {
-        type : Number,
-        required : true,
-        default : 0
+        type: Number,
+        required: true,
+        default: 0
     },
-    group_sl : 
+    group_sl:
     {
-        type : Number,
-        required : true
+        type: Number,
+        required: true
     },
-    visa_number : 
+    visa_number:
     {
-        type : Number,
-        required : true
+        type: Number,
+        required: true
     },
-    visa_id : 
+    visa_id:
     {
-        type : Number,
-        required : true
+        type: Number,
+        required: true
     },
-    visa_supplier : 
+    visa_supplier:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    zone : 
+    zone:
     {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : "Zone",
-        required : false,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Zone",
+        required: false,
     },
-    amount : 
+    amount:
     {
-        type : Number,
-        required : true
+        type: Number,
+        required: true
     },
-    occupation : 
+    occupation:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    enjazit_image : 
+    enjazit_image:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    company : 
+    company:
     {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : "Company",
-        required : true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
+        required: true
     },
-    created_at : 
+    created_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
+        type: Date,
+        required: true,
+        default: Date.now()
     },
-    updated_at : 
+    updated_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
-    }
+        type: Date,
+        required: true,
+        default: Date.now()
+    },
+    events: [StatusSchema]
+
 });
 
-const Group = module.exports = mongoose.model("Group",GroupSchema);
+const Group = module.exports = mongoose.model("Group", GroupSchema);

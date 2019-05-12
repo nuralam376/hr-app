@@ -8,6 +8,9 @@ const CompanyInfoModel = require("../models/companyInfoModel");
 /** Zone Model */
 const ZoneModel = require("../models/zoneModel");
 
+/** Created Events Module */
+const createdEvents = require("../util/events");
+
 const moment = require("moment-timezone");
 const fs = require("fs");
 const aws = require("aws-sdk");
@@ -300,6 +303,15 @@ const groupSave = async (req, res, forms) => {
       companyInfo
     );
 
+    /** Group Status */
+    let groupStatus = {
+      type: "group_created",
+      display_name: "Group Created",
+      description: `${req.user.name} created group of ${group.group_seq} / ${group.group_sl}`,
+      time: Date.now()
+    };
+
+    group.events.push(groupStatus);
     let groupSave = await group.save(); // Saves group data
 
     if (groupSave) {
@@ -349,6 +361,7 @@ const groupUpdate = async (req, res, forms) => {
     let newZoneSave = await newZone.save();
     group.zone = newZoneSave._id;
   }
+  await createdEvents(req, group, req.params.id, "group");
 
   let groupUpdate = await GroupModel.updateOne(
     { _id: req.params.id, company: req.user.company },
@@ -383,5 +396,26 @@ exports.getGroupImage = async (req, res) => {
     res.end();
   } catch (err) {
     console.log(err);
+  }
+};
+
+
+/**
+ * Shows Timeline of the Group
+ * @param {string} id - The Object Id of the Group.
+ */
+
+exports.groupTimeline = async (req, res) => {
+  try {
+    let query = { _id: req.params.id, company: req.user.company };
+
+    let group = await GroupModel.findOne(query);
+
+    res.render("group/timeline", {
+      newGroup: group,
+      moment: moment
+    });
+  } catch (error) {
+    console.log(error);
   }
 };

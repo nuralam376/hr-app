@@ -107,6 +107,7 @@ router.post("/update/:id", auth, roleCheck, upload.any(), [
 router.delete("/delete/:id", auth, roleCheck, GroupController.deleteGroup);
 
 router.get("/getGroupImage/:image", auth, roleCheck, GroupController.getGroupImage);
+router.get("/timeline/:id", auth, roleCheck, GroupController.groupTimeline);
 router.get("/:id", auth, roleCheck, GroupController.getGroup);
 
 module.exports = router;
