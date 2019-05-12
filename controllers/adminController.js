@@ -13,6 +13,7 @@ const aws = require("aws-sdk");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
 const moment = require("moment-timezone");
+const uuid = require("uuid");
 
 /** Mail Configuration */
 const nodemailer = require("nodemailer");
@@ -253,7 +254,7 @@ router.post(
         };
 
         admin.events.push(adminStatus);
-
+        admin.emailVerificationToken = `${Date.now()} ` + `${uuid()}`;
         let adminCreate = await admin.save(); // Creates New Admin
 
         if (adminCreate) {
@@ -267,6 +268,14 @@ router.post(
 
           req.flash("success", "New Admin account has been created");
           res.redirect("/admin");
+          let fullUrl = req.protocol + '://' + req.get('host');
+          await transporter.sendMail({
+            to: req.body.email,
+            from: "nuraalam939@gmail.com",
+            subject: "Hr-App New Admin",
+            html:
+              "<h2>Your account has been created as an Admin in HR-APP. </h2><h2>Please click the below link to verify your email.</h2><p><a href = '" + fullUrl + "/admin/verifyEmail/" + admin.emailVerificationToken + "'>Verify your email</a></p><p>After email verification, you can login with the following credentials. </p><p>Email : " + admin.email + "</p><p>Password : " + forms.pass + "</p>"
+          });
         } else {
           req.flash("danger", "Something went wrong");
           res.redirect("/admin");
@@ -651,7 +660,43 @@ router.get("/timeline/:id", auth, async (req, res) => {
   }
 });
 
+/**
+ * Shows Individual Admin
+ * @param {string} id - The Object Id of the Admin.
+ */
 
+router.get("/verifyEmail/:id", async (req, res) => {
+  try {
+    let query = {
+      emailVerificationToken: req.params.id,
+    }; // Admin Object Id, Company and Normal Admin
+
+    let adminInfo = await AdminModel.findOne(query); // Finds Admin
+
+    // If Admin exists
+    if (adminInfo) {
+      let newAdmin = {};
+      newAdmin.isEmailVerified = true;
+      newAdmin.emailVerificationToken = null;
+      let adminUpdate = await AdminModel.updateOne(query, newAdmin); // Update the Admin's Info
+
+      if (adminUpdate) {
+        req.flash("success", "Your email account has been verified succssfully");
+        res.redirect("/login");
+      }
+      else {
+        req.flash("danger", "Token Mismatch");
+        res.redirect("/login");
+      }
+
+    } else {
+      req.flash("danger", "Not Found");
+      res.redirect("/login");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 /**
  * Shows Individual Admin
@@ -667,10 +712,15 @@ router.get("/:id", auth, isSuperAdmin, async (req, res) => {
     }; // Admin Object Id, Company and Normal Admin
 
     let adminInfo = await AdminModel.findOne(query); // Finds Admin
-
+    let url;
     // If Admin exists
     if (adminInfo) {
-      let url = s3GetFile(req, "/admins/", adminInfo.profile_photo);
+
+      if (adminInfo.profile_photo != "dummy.jpeg")
+        url = s3GetFile(req, "/admins/", adminInfo.profile_photo);
+      else
+        url = "/images/dummy.jpg";
+
 
       res.render("admins/view", {
         adminInfo: adminInfo,

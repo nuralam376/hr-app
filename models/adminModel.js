@@ -42,6 +42,19 @@ const AdminSchema = mongoose.Schema({
         required: true
     },
 
+    isEmailVerified:
+    {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+
+    emailVerificationToken:
+    {
+        type: String,
+        required: true
+    },
+
     isSuperAdmin:
     {
         type: Boolean,

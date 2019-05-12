@@ -21,6 +21,21 @@ let PackageModel = require("../models/packageModel");
 /** Company Info Model Schema */
 let CompanyInfoModel = require("../models/companyInfoModel");
 
+const uuid = require("uuid");
+
+/** Mail Configuration */
+const nodemailer = require("nodemailer");
+const sendgridTransport = require("nodemailer-sendgrid-transport");
+
+const transporter = nodemailer.createTransport(
+    sendgridTransport({
+        auth: {
+            api_key:
+                "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"
+        }
+    })
+);
+
 
 /** Shows Registration page for SuperAdmin*/
 router.get("/", async (req, res) => {
@@ -122,13 +137,21 @@ router.post("/", [
 
             let hashPwd = await bcrypt.hash(superAdmin.password, 10);
             superAdmin.password = hashPwd;
-
+            superAdmin.emailVerificationToken = `${Date.now()}`+`${uuid()}`;
 
             let superAdminCreate = await superAdmin.save(); // Creates New SuperAdmin
 
             if (superAdminCreate) {
                 req.flash("success", "Your account has been created. Please fill up the company details.");
                 res.redirect("/register/" + superAdminCreate._id + "/company");
+                let fullUrl = req.protocol + '://' + req.get('host');
+                await transporter.sendMail({
+                    to: req.body.email,
+                    from: "nuraalam939@gmail.com",
+                    subject: "Hr-App New Admin",
+                    html:
+                        "<h2>Your account has been created as an SuperAdmin in HR-APP. </h2><h2>Please click the below link to verify your email.</h2><p><a href = '" + fullUrl + "/admin/verifyEmail/" + superAdmin.emailVerificationToken + "'>Verify your email</a></p><p>After email verification, you can login with the following credentials. </p><p>Email : " + forms.email + "</p><p>Password : " + forms.pass + "</p>"
+                });
             }
             else {
                 req.flash("danger", "Something went wrong");
