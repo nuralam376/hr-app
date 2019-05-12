@@ -1,38 +1,42 @@
 /** Mongoose Module .*/
 const mongoose = require("mongoose");
 
+/** Status Schema*/
+
+const StatusSchema = require("./statusSchema");
 
 /** Zone Table Field .*/
 
 const ZoneSchema = mongoose.Schema({
-    name : 
+    name:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    country : 
+    country:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    company : 
+    company:
     {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : "Company",
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company",
         required: false
     },
-    created_at : 
+    created_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
+        type: Date,
+        required: true,
+        default: Date.now()
     },
-    updated_at : 
+    updated_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
+        type: Date,
+        required: true,
+        default: Date.now()
     },
+    events: [StatusSchema]
 });
 
-const Zone = module.exports = mongoose.model("Zone",ZoneSchema);
+const Zone = module.exports = mongoose.model("Zone", ZoneSchema);

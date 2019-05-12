@@ -36,6 +36,9 @@ const createEvents = async (req, user, id, type) => {
   else if ("group" == type) {
     oldUser = await GroupModel.findOne({ _id: id });
   }
+  else if ("zone" == type) {
+    oldUser = await ZoneModel.findOne({ _id: id });
+  }
 
   if (oldUser) {
     user.company = oldUser.company;

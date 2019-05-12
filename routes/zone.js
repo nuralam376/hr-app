@@ -36,6 +36,7 @@ router.post("/update/:id", auth, roleCheck, [
 ], ZoneController.updateZone);
 router.delete("/delete/:id", auth, roleCheck, ZoneController.deleteZone);
 router.get("/names", auth, roleCheck, ZoneController.getAllNames);
+router.get("/timeline/:id", auth, roleCheck, ZoneController.zoneTimeline);
 router.get("/:id", auth, roleCheck, ZoneController.getZone);
 
 module.exports = router;
