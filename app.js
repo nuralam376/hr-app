@@ -68,16 +68,29 @@ app.use(async (req, res, next) => {
           if (!mofa) {
             let medical = await MedicalModel.findOne({ pax: pax, company: req.user.company });
 
-            if (medical && new Date(medical.medical_expiry) > new Date(Date.now())) {
-              res.locals.notification = ++notification;
-              events.push({
-                pax: pax.code,
-                expiry: moment(medical.medical_expiry).format("ll"),
-                stage: "Medical expiration Date"
-              });
+            if (medical) {
+              if (medical.status != "fit" && medical.medical_expiry) {
+                ++notification;
+                events.push({
+                  pax: pax.code,
+                  expiry: moment(medical.medical_expiry).format("ll"),
+                  stage: "Medical expiration Date",
+                  url: "/medical/register/report/" + pax.code
+                });
+              }
+              if (medical.status == "interview" && medical.interview_date) {
+                ++notification;
+                events.push({
+                  pax: pax.code,
+                  expiry: moment(medical.interview_date).format("ll"),
+                  stage: "Medical Interview Date",
+                  url: "/medical/register/report/" + pax.code
+                });
+              }
             }
           }
           res.locals.events = events;
+          res.locals.notification = notification;
         }
       }
     }
