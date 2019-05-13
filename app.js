@@ -15,6 +15,18 @@ const port = process.env.PORT || 8000;
 const aws = require("aws-sdk");
 const keys = require("./config/s3");
 
+/** PAX Model */
+const PAXModel = require("./models/userModel");
+
+/** Medical Model */
+const MedicalModel = require("./models/medicalModel");
+
+/** Mofa Model */
+const MOFAModel = require("./models/mofaModel");
+
+/** Moment */
+const moment = require("moment");
+
 /** Gets S3 File */
 const s3GetFile = require("./util/getS3File");
 
@@ -43,21 +55,50 @@ app.use(require("connect-flash")());
 app.use(csrfProtection);
 
 /** Required Global Variables */
-app.use(function (req, res, next) {
-  res.locals.errors = null;
-  res.locals.msg = null;
-  res.locals.messages = require("express-messages")(req, res);
-  res.locals.admin = req.user || null;
-  if (req.user && req.user.profile_photo != "dummy.jpeg")
-    res.locals.adminImageUrl = s3GetFile(
-      req,
-      "/admins/",
-      req.user.profile_photo
-    );
-  else res.locals.adminImageUrl = "/images/dummy.jpg";
-  res.locals.fileError = null;
-  res.locals.csrfToken = req.csrfToken();
-  next();
+app.use(async (req, res, next) => {
+  try {
+    if (req.user) {
+      let paxs = await PAXModel.find({ company: req.user.company });
+      let notification = 0;
+      res.locals.notification = 0;
+      let events = [];
+      if (paxs) {
+        for (let pax of paxs) {
+          let mofa = await MOFAModel.findOne({ pax: pax, company: req.user.company });
+          if (!mofa) {
+            let medical = await MedicalModel.findOne({ pax: pax, company: req.user.company });
+
+            if (medical && new Date(medical.medical_expiry) > new Date(Date.now())) {
+              res.locals.notification = ++notification;
+              events.push({
+                pax: pax.code,
+                expiry: moment(medical.medical_expiry).format("ll"),
+                stage: "Medical expiration Date"
+              });
+            }
+          }
+          res.locals.events = events;
+        }
+      }
+    }
+    res.locals.errors = null;
+    res.locals.msg = null;
+    res.locals.messages = require("express-messages")(req, res);
+    res.locals.admin = req.user || null;
+    if (req.user && req.user.profile_photo != "dummy.jpeg")
+      res.locals.adminImageUrl = s3GetFile(
+        req,
+        "/admins/",
+        req.user.profile_photo
+      );
+    else res.locals.adminImageUrl = "/images/dummy.jpg";
+    res.locals.fileError = null;
+    res.locals.csrfToken = req.csrfToken();
+    next();
+  }
+  catch (err) {
+    console.log(err);
+  }
 });
 
 /** EJS view engine */
