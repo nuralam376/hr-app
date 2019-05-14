@@ -24,6 +24,18 @@ const MedicalModel = require("./models/medicalModel");
 /** Mofa Model */
 const MOFAModel = require("./models/mofaModel");
 
+/** Stamping Model */
+const StampingModel = require("./models/stampingModel");
+
+/** Manpower Model Schema */
+const ManpowerModel = require("./models/manpowerModel");
+
+/** Flight Model Schema */
+const FlightModel = require("./models/flightModel");
+
+/** Delivery Model Schema */
+const DeliveryModel = require("./models/deliveryModel");
+
 /** Moment */
 const moment = require("moment");
 
@@ -64,33 +76,38 @@ app.use(async (req, res, next) => {
       let events = [];
       if (paxs) {
         for (let pax of paxs) {
-          let mofa = await MOFAModel.findOne({ pax: pax, company: req.user.company });
-          if (!mofa) {
-            let medical = await MedicalModel.findOne({ pax: pax, company: req.user.company });
+          let delivery = await StampingModel.findOne({ pax: pax, company: req.user.company });
 
-            if (medical) {
-              if (medical.status != "fit" && medical.medical_expiry) {
-                ++notification;
-                events.push({
-                  pax: pax.code,
-                  expiry: moment(medical.medical_expiry).format("ll"),
-                  stage: "Medical expiration Date",
-                  url: "/medical/register/report/" + pax.code
-                });
-              }
-              if (medical.status == "interview" && medical.interview_date) {
-                ++notification;
-                events.push({
-                  pax: pax.code,
-                  expiry: moment(medical.interview_date).format("ll"),
-                  stage: "Medical Interview Date",
-                  url: "/medical/register/report/" + pax.code
-                });
+          if (!delivery) {
+            let mofa = await MOFAModel.findOne({ pax: pax, company: req.user.company });
+            if (!mofa) {
+              let medical = await MedicalModel.findOne({ pax: pax, company: req.user.company });
+
+              if (medical) {
+                if (medical.status != "fit" && medical.medical_expiry) {
+                  ++notification;
+                  events.push({
+                    pax: pax.code,
+                    expiry: moment(medical.medical_expiry).format("ll"),
+                    stage: "Medical expiration Date",
+                    url: "/medical/register/report/" + pax.code
+                  });
+                }
+                if (medical.status == "interview" && medical.interview_date) {
+                  ++notification;
+                  events.push({
+                    pax: pax.code,
+                    expiry: moment(medical.interview_date).format("ll"),
+                    stage: "Medical Interview Date",
+                    url: "/medical/register/report/" + pax.code
+                  });
+                }
               }
             }
+            res.locals.events = events;
+            res.locals.notification = notification;
           }
-          res.locals.events = events;
-          res.locals.notification = notification;
+
         }
       }
     }
