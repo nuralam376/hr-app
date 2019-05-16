@@ -20,6 +20,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "bower": "^1.8.4",
+    "connect-ensure-login": "^0.1.1",
     "connect-flash": "^0.1.1",
     "crypto": "^1.0.1",
     "csurf": "^1.9.0",

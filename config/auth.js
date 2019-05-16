@@ -6,6 +6,11 @@ function ensureAuthenticated(req, res, next) {
             if (req.user.isEmailVerified) {
 
                 res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+                if (req.session.returnTo) {
+                    let url = req.session.returnTo;
+                    delete req.session.returnTo;
+                    return res.redirect(url);
+                }
                 next();
             }
             else {
@@ -19,6 +24,7 @@ function ensureAuthenticated(req, res, next) {
         }
     }
     else {
+        req.session.returnTo = req.originalUrl;
         res.redirect("/login");
     }
 }
