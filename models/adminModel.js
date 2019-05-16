@@ -90,4 +90,7 @@ const AdminSchema = mongoose.Schema({
     events: [StatusSchema]
 });
 
+AdminSchema.index({ company: 1 });
+
+
 const Admin = module.exports = mongoose.model("Admin", AdminSchema);

@@ -76,20 +76,20 @@ app.use(async (req, res, next) => {
       let events = [];
       if (paxs) {
         for (let pax of paxs) {
-          let delivery = await DeliveryModel.findOne({ pax: pax, company: req.user.company });
+          let delivery = await DeliveryModel.findOne({ company: req.user.company, pax: pax });
           if (!delivery) {
-            let flight = await FlightModel.findOne({ pax: pax, company: req.user.company });
+            let flight = await FlightModel.findOne({ company: req.user.company, pax: pax });
 
             if (!flight) {
-              let manpower = await ManpowerModel.findOne({ pax: pax, company: req.user.company });
+              let manpower = await ManpowerModel.findOne({ company: req.user.company, pax: pax });
 
               if (!manpower) {
-                let stamping = await StampingModel.findOne({ pax: pax, company: req.user.company });
+                let stamping = await StampingModel.findOne({ company: req.user.company, pax: pax });
 
                 if (!stamping) {
-                  let mofa = await MOFAModel.findOne({ pax: pax, company: req.user.company });
+                  let mofa = await MOFAModel.findOne({ company: req.user.company, pax: pax });
                   if (!mofa) {
-                    let medical = await MedicalModel.findOne({ pax: pax, company: req.user.company });
+                    let medical = await MedicalModel.findOne({ company: req.user.company, pax: pax });
 
                     if (medical) {
                       if (medical.medical_expiry) {

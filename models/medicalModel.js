@@ -89,4 +89,7 @@ const MedicalSchema = mongoose.Schema({
     events: [StatusSchema]
 });
 
+MedicalSchema.index({ company: 1, pax: 1 });
+
+
 const Medical = module.exports = mongoose.model("Medical", MedicalSchema);

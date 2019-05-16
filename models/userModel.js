@@ -9,160 +9,163 @@ const StatusSchema = require("./statusSchema");
 /** User Table Field .*/
 
 const UserSchema = mongoose.Schema({
-    code : 
+    code:
     {
-        type : Number,
-        required : true
+        type: Number,
+        required: true
     },
-    name : 
+    name:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    father : 
+    father:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    mother : 
+    mother:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    contact : 
+    contact:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    birth_date :
+    birth_date:
     {
-        type : Date,
-        required : true
+        type: Date,
+        required: true
     },
-    blood_group : 
+    blood_group:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    national : 
+    national:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    gender : 
+    gender:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    religion : 
+    religion:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    maritial : 
+    maritial:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    nid : 
+    nid:
     {
-        type : Number,
-        required : true
+        type: Number,
+        required: true
     },
-    passport :
+    passport:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    issue : 
+    issue:
     {
-        type : Date,
-        required : true
+        type: Date,
+        required: true
     },
-    expiry : 
+    expiry:
     {
-        type : Date,
-        required : true
+        type: Date,
+        required: true
     },
-    present_address : 
+    present_address:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    permanent_address : 
+    permanent_address:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    profile_photo : 
+    profile_photo:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    passport_photo : 
+    passport_photo:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
 
-    supplier : 
+    supplier:
     {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Supplier',
-        required : true
+        required: true
     },
-    group : 
+    group:
     {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Group',
-        required : true
+        required: true
     },
-    
-    company : 
+
+    company:
     {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Company',
-        required : false
-    },
-    experience_image : 
-    {
-        type : String,
         required: false
     },
-    experience_year : 
+    experience_image:
     {
-        type : Number,
-        required : false
+        type: String,
+        required: false
     },
-    experience_month : 
+    experience_year:
     {
-        type : Number,
-        required : false
+        type: Number,
+        required: false
     },
-    experience_day : 
+    experience_month:
     {
-        type : Number,
-        required : false
+        type: Number,
+        required: false
     },
-    seq_id : 
+    experience_day:
     {
-        type : String,
+        type: Number,
+        required: false
+    },
+    seq_id:
+    {
+        type: String,
         required: true,
-        default : 0
+        default: 0
     },
-    created_at : 
+    created_at:
     {
-        type : Date,
-        required : false,
-        default : Date.now()
+        type: Date,
+        required: false,
+        default: Date.now()
     },
-    updated_at : 
+    updated_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
+        type: Date,
+        required: true,
+        default: Date.now()
     },
-    events : [StatusSchema]
+    events: [StatusSchema]
 });
 
-const User = module.exports = mongoose.model("User",UserSchema);
+UserSchema.index({ company: 1 });
+
+
+const User = module.exports = mongoose.model("User", UserSchema);

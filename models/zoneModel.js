@@ -39,4 +39,6 @@ const ZoneSchema = mongoose.Schema({
     events: [StatusSchema]
 });
 
+ZoneSchema.index({ company: 1 });
+
 const Zone = module.exports = mongoose.model("Zone", ZoneSchema);

@@ -67,4 +67,7 @@ const mofaSchema = new Schema({
 
 });
 
+mofaSchema.index({ company: 1, pax: 1 });
+
+
 const Mofa = module.exports = mongoose.model("Mofa", mofaSchema);

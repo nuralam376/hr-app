@@ -57,4 +57,6 @@ const stampingSchema = new Schema({
 
 });
 
+stampingSchema.index({ company: 1, pax: 1 });
+
 const Stamping = module.exports = mongoose.model("stamping", stampingSchema);

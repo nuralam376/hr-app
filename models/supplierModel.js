@@ -9,83 +9,86 @@ const StatusSchema = require("./statusSchema");
 /** Supplier Table Field .*/
 
 const SupplierSchema = mongoose.Schema({
-    code : 
+    code:
     {
-        type : Number,
-        required : true
+        type: Number,
+        required: true
     },
-    name : 
+    name:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    nid : 
+    nid:
     {
-        type : Number,
-        required : true
+        type: Number,
+        required: true
     },
-    contact : 
+    contact:
     {
-        type : String,
-        required : true,
+        type: String,
+        required: true,
     },
-    introducer_name : 
+    introducer_name:
     {
-        type : String,
-        required : true,
+        type: String,
+        required: true,
     },
-    introducer_number : 
+    introducer_number:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    present_address : 
+    present_address:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    permanent_address : 
+    permanent_address:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    profile_photo : 
+    profile_photo:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    passport_photo : 
+    passport_photo:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
 
-    company : 
+    company:
     {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Company',
-        required : false
+        required: false
     },
-    
-    seq_id : 
+
+    seq_id:
     {
-        type : String,
+        type: String,
         required: true,
-        default : 0
+        default: 0
     },
-    created_at : 
+    created_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
+        type: Date,
+        required: true,
+        default: Date.now()
     },
-    updated_at : 
+    updated_at:
     {
-        type : Date,
-        required : true,
-        default : Date.now()
+        type: Date,
+        required: true,
+        default: Date.now()
     },
-    events : [StatusSchema]
+    events: [StatusSchema]
 });
 
-const Supplier = module.exports = mongoose.model("Supplier",SupplierSchema);
+SupplierSchema.index({ company: 1 });
+
+
+const Supplier = module.exports = mongoose.model("Supplier", SupplierSchema);

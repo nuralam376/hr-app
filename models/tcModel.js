@@ -52,4 +52,7 @@ const tcSchema = new Schema({
     events: [StatusSchema]
 });
 
+
+tcSchema.index({ company: 1, pax: 1 });
+
 const Tc = module.exports = mongoose.model("Tc", tcSchema);

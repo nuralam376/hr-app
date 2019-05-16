@@ -57,4 +57,7 @@ const manpowerSchema = new Schema({
     events: [StatusSchema]
 });
 
+manpowerSchema.index({ company: 1, pax: 1 });
+
+
 const Manpower = module.exports = mongoose.model("Manpower", manpowerSchema);

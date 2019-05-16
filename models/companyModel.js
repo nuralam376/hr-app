@@ -8,40 +8,40 @@ const StatusSchema = require("./statusSchema");
 /** Company Table Field .*/
 
 const CompanySchema = mongoose.Schema({
-    name : 
+    name:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    email : 
+    email:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    address : 
+    address:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    contact : 
+    contact:
     {
-        type : String,
-        required : true
+        type: String,
+        required: true
     },
-    superadmin : 
+    superadmin:
     {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Admin',
-        required : true
+        required: true
     },
 
-    package : 
+    package:
     {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Package',
-        required : false
+        required: false
     },
-    events : [StatusSchema]
+    events: [StatusSchema]
 });
 
-const Company = module.exports = mongoose.model("Company",CompanySchema);
+const Company = module.exports = mongoose.model("Company", CompanySchema);

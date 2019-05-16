@@ -4,43 +4,46 @@ const mongoose = require("mongoose");
 /** Company Info Table Field .*/
 
 const CompanyInfoSchema = mongoose.Schema({
-    admin : 
+    admin:
     {
-        type : Number,
+        type: Number,
         required: true,
-        default : 0
+        default: 0
     },
-    supplier : 
+    supplier:
     {
-        type : Number,
-        required : true,
-        default : 0
+        type: Number,
+        required: true,
+        default: 0
     },
-    user : 
+    user:
     {
-        type : Number,
-        required : true,
-        default : 0
+        type: Number,
+        required: true,
+        default: 0
     },
-    group : 
+    group:
     {
-        type : Number,
-        required : true,
-        default : 0
+        type: Number,
+        required: true,
+        default: 0
     },
-    pax : 
+    pax:
     {
-        type : Number,
-        required : true,
-        default : 0
+        type: Number,
+        required: true,
+        default: 0
     },
 
-    company : 
+    company:
     {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Company',
-        required : false
+        required: false
     }
 });
 
-const CompanyInfo = module.exports = mongoose.model("CompanyInfo",CompanyInfoSchema);
+CompanyInfoSchema.index({ company: 1 });
+
+
+const CompanyInfo = module.exports = mongoose.model("CompanyInfo", CompanyInfoSchema);

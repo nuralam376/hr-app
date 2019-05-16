@@ -78,4 +78,7 @@ const GroupSchema = mongoose.Schema({
 
 });
 
+GroupSchema.index({ company: 1 });
+
+
 const Group = module.exports = mongoose.model("Group", GroupSchema);

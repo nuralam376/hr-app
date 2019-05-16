@@ -42,4 +42,6 @@ const deliverySchema = new Schema({
 
 });
 
+deliverySchema.index({ company: 1, pax: 1 });
+
 const Delivery = module.exports = mongoose.model("Delivery", deliverySchema);

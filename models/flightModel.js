@@ -67,4 +67,7 @@ const flightSchema = new Schema({
     events: [StatusSchema]
 });
 
+flightSchema.index({ company: 1, pax: 1 });
+
+
 const Flight = module.exports = mongoose.model("Flight", flightSchema);
