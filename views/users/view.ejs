@@ -2,27 +2,17 @@
 <h1>
   Code : <%= newUser.code %>
   <div class="pull-right">
-    <a href="/pax/timeline/<%= newUser.seq_id %>" class="btn btn-primary"
-      >Show Timeline</a
-    >
-    <a href="/pax/sticker/<%= newUser.seq_id %>" class="btn btn-warning"
-      >Generate Sticker</a
-    >
+    <a href="/pax/timeline/<%= newUser.seq_id %>" class="btn btn-primary">Show Timeline</a>
+    <a href="/pax/sticker/<%= newUser.seq_id %>" class="btn btn-warning">Generate Sticker</a>
     <a href="/pax/edit/<%= newUser.seq_id %>" class="btn btn-info">Edit</a>
-    <a
-      href="#"
-      class="btn btn-danger delete-user"
-      data-id="<%= newUser._id %>"
-      data-csrf="<%= csrfToken %>"
-      >Delete</a
-    >
+    <a href="#" class="btn btn-danger delete-user" data-id="<%= newUser._id %>" data-csrf="<%= csrfToken %>">Delete</a>
   </div>
 </h1>
 
 <table class="table table-bordered">
   <tr>
     <th>Profile created at</th>
-    <td><%= moment(newUser.created_at).format("llll") %></td>
+    <td id="profile" data-val="<%= newUser.created_at %>"></td>
   </tr>
   <tr>
     <th>PAX Code</th>
@@ -36,9 +26,7 @@
   <tr>
     <th>Next Stage</th>
     <td>
-      <a href="/<%= status.nextStage.toLowerCase() %>"
-        ><%= status.nextStage %></a
-      >
+      <a href="/<%= status.nextStage.toLowerCase() %>"><%= status.nextStage %></a>
     </td>
   </tr>
   <% } %>
@@ -114,12 +102,8 @@
   <tr>
     <th>Experience Image</th>
     <td>
-      <a data-fancybox="gallery" href="<%= experiencePhotoUrl %> %>"
-        ><img
-          src="<%= experiencePhotoUrl %>"
-          alt=""
-          style="height : auto; max-width : 400px;"
-      /></a>
+      <a data-fancybox="gallery" href="<%= experiencePhotoUrl %> %>"><img src="<%= experiencePhotoUrl %>" alt=""
+          style="height : auto; max-width : 400px;" /></a>
     </td>
   </tr>
   <% } %>
@@ -127,23 +111,15 @@
   <tr>
     <th>Profile Photo</th>
     <td>
-      <a data-fancybox="gallery" href="<%= profilePhotoUrl %>"
-        ><img
-          src="<%= profilePhotoUrl %>"
-          alt=""
-          style="height : auto; max-width : 400px;"
-      /></a>
+      <a data-fancybox="gallery" href="<%= profilePhotoUrl %>"><img src="<%= profilePhotoUrl %>" alt=""
+          style="height : auto; max-width : 400px;" /></a>
     </td>
   </tr>
   <tr>
     <th>Passport Photo</th>
     <td>
-      <a data-fancybox="gallery" href="<%= passportPhotoUrl %>"
-        ><img
-          src="<%= passportPhotoUrl %>"
-          alt=""
-          style="height : auto; max-width : 400px;"
-      /></a>
+      <a data-fancybox="gallery" href="<%= passportPhotoUrl %>"><img src="<%= passportPhotoUrl %>" alt=""
+          style="height : auto; max-width : 400px;" /></a>
     </td>
   </tr>
 </table>

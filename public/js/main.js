@@ -1,5 +1,6 @@
 $(document).ready(function () {
   $(function () {
+
     $(".delete-user").on("click", function (e) {
       ajaxDelete(e, "pax");
     });
@@ -457,6 +458,15 @@ $(document).ready(function () {
           console.log(err);
         }
       });
-    })
+    });
+    const val = $("#profile").data("val");
+    const pax = moment(new Date(val)).format("llll");
+    console.log(pax);
+    $("#profile").text(pax);
+
+    $('.sidebar-menu').tree();
+    $('#myTable').DataTable({
+      "ordering": false
+    });
   });
 });
