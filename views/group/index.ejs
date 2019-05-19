@@ -21,7 +21,8 @@
                 </tr>
             </thead>
             <tbody>
-                <% if(groups) { %>
+                <% if(groups) {  let i = 0; %>
+                <input type="hidden" id="userCount" data-length="<%= groups.length %>">
                 <% groups.forEach((group) => { %>
                 <tr>
                     <td><a href="/group/<%= group._id %>"><%= group.group_seq %> / <%= group.group_sl%></a></td>
@@ -29,7 +30,9 @@
                     <td><%= group.visa_id %></td>
                     <td><%= group.visa_supplier %>, <%= group.zone.name %>, <%= group.amount %></td>
                     <td><%= group.occupation %></td>
-                    <td><%= moment(group.created_at).tz(moment.tz.guess(true)).format("llll") %></td>
+                    <td id="user-<%= i++ %>" data-user="<%= group.created_at %>">
+
+                    </td>
                     <td><a data-fancybox="gallery" href="<%= group.imageUrl %>"><img src="<%= group.imageUrl %>" alt=""
                                 style="width : 100px;height : 50px;"></a></td>
                 </tr>

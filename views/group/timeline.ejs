@@ -3,13 +3,14 @@
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
       <h4>Group TimeLine</h4>
-      <%if (newGroup.events.length > 0){ %>
+      <%if (newGroup.events.length > 0){ let i = 0; %>
+      <input type="hidden" id="userCount" data-length="<%= newGroup.events.length %>">
 
       <ul class="timeline">
         <% newGroup.events.reverse().forEach(group => { %>
         <li>
           <a href="javascript:void(0)"><%= group.display_name %></a>
-          <a href="javascript:void(0)" class="pull-right"><%= moment(group.time).format('llll'); %></a>
+          <a href="javascript:void(0)" class="pull-right" id="user-<%= i++ %>" data-user="<%= group.time %>"></a>
           <p><%= group.description %></p>
         </li>
         <% }); %>
