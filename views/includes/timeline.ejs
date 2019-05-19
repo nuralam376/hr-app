@@ -3,13 +3,15 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <h4><%= paxStage.pax.code %> <%= stageName %> TimeLine</h4>
-            <%if (paxStage.events.length > 0){ %>
+            <%if (paxStage.events.length > 0){ let i = 0;%>
+            <input type="hidden" id="userCount" data-length="<%= paxStage.events.length %>">
 
             <ul class="timeline">
                 <% paxStage.events.reverse().forEach(event => { %>
                 <li>
                     <a href="javascript:void(0)"><%= event.display_name %></a>
-                    <a href="javascript:void(0)" class="pull-right"><%= moment(event.time).format('llll'); %></a>
+                    <a href="javascript:void(0)" class="pull-right" id="user-<%= i++ %>"
+                        data-user="<%= event.time %>"></a>
                     <p><%= event.description %></p>
                 </li>
                 <% }); %>
