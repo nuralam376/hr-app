@@ -3,13 +3,13 @@
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
       <h4>Zone TimeLine</h4>
-      <%if (newZone.events.length > 0){ %>
-
+      <%if (newZone.events.length > 0){  let i = 0; %>
+      %> <input type="hidden" id="userCount" data-length="<%= newZone.events.length %>">
       <ul class="timeline">
         <% newZone.events.reverse().forEach(zone => { %>
         <li>
           <a href="javascript:void(0)"><%= zone.display_name %></a>
-          <a href="javascript:void(0)" class="pull-right"><%= moment(zone.time).format('llll'); %></a>
+          <a href="javascript:void(0)" class="pull-right" id="user-<%= i++ %>" data-user="<%= zone.time %>"></a>
           <p><%= zone.description %></p>
         </li>
         <% }); %>
