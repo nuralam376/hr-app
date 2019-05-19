@@ -21,7 +21,10 @@
         </tr>
       </thead>
       <tbody>
-        <% if(admins) { %> <% admins.forEach(function(adminInfo) { %>
+        <% if(admins) {                  
+          let i = 0; 
+        %> <input type="hidden" id="userCount" data-length="<%= admins.length %>">
+        <% admins.forEach(function(adminInfo) { %>
         <tr>
           <td>
             <a href="/admin/<%= adminInfo.seq_id %>"><%= adminInfo.seq_id %></a>
@@ -51,8 +54,8 @@
                 alt="No Pic" height="50px" width="50px" /></a>
           </td>
           <% } %>
-          <td>
-            <%= moment(adminInfo.created_at).format("llll") %>
+          <td id="user-<%= i++ %>" data-user="<%= adminInfo.created_at %>">
+
           </td>
         </tr>
         <% }) %> <% } %>

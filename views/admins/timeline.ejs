@@ -3,17 +3,15 @@
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
       <h4>Admin TimeLine</h4>
-      <%if (newAdmin.events.length > 0){ %>
+      <%if (newAdmin.events.length > 0){ let i = 0; %>
+      <input type="hidden" id="userCount" data-length="<%= newAdmin.events.length %>">
 
       <ul class="timeline">
-        <% newAdmin.events.reverse().forEach(admin => { %>
+        <% newAdmin.events.reverse().forEach(admin => {  %>
+
         <li>
-          <a target="_blank" href="https://www.totoprayogo.com/#"
-            ><%= admin.display_name %></a
-          >
-          <a href="#" class="pull-right"
-            ><%= moment(admin.time).format('llll'); %></a
-          >
+          <a target="_blank" href="https://www.totoprayogo.com/#"><%= admin.display_name %></a>
+          <a href="#" class="pull-right" id="user-<%= i++ %>" data-user="<%= admin.time %>"></a>
           <p><%= admin.description %></p>
         </li>
         <% }); %>
