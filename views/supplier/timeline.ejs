@@ -3,15 +3,14 @@
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
       <h4>Supplier TimeLine</h4>
-      <%if (newSupplier.events.length > 0){ %>
+      <%if (newSupplier.events.length > 0){ let i = 0; %>
+      <input type="hidden" id="userCount" data-length="<%= newSupplier.events.length %>">
 
       <ul class="timeline">
         <% newSupplier.events.reverse().forEach(supplier => { %>
         <li>
           <a href="javascript:void(0)"><%= supplier.display_name %></a>
-          <a href="javascript:void(0)" class="pull-right"
-            ><%= moment(supplier.time).format('llll'); %></a
-          >
+          <a href="javascript:void(0)" class="pull-right" id="user-<%= i++ %>" data-user="<%= supplier.time %>"></a>
           <p><%= supplier.description %></p>
         </li>
         <% }); %>

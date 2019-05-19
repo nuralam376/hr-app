@@ -1,39 +1,43 @@
 <% include ../layouts/admin/header %>
-    <h1 class = "text-center">Supplier Home</h1>
-    <div class="card">
-        <div class="card-body">
-            <h2>All Suppliers</h2>     
-            <div class="pull-right">
-                <a href="/supplier/register" class = "btn btn-primary">Create New Supplier</a>
-            </div>   
-            <br><br>
-
-            <table class = "table" id = "myTable">
-                <thead>
-                    <tr>
-                        <th>Code</th>
-                        <th>Name</th>
-                        <th>NID / Passport</th>
-                        <th>Introducer Name</th>
-                        <th>Photo</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if(suppliers) { %>
-                        <% suppliers.forEach((supplier) => { %>
-                            <tr>
-                                <td><a href = "/supplier/<%= supplier.seq_id %>"><%= supplier.code %></a></td>
-                                <td><%= supplier.name %></td>
-                                <td><%= supplier.nid %></td>
-                                <td><%= supplier.introducer_name %></td>
-                                <td><a data-fancybox="gallery" href = "<%= supplier.imageUrl %>"><img src = "<%= supplier.imageUrl %>" height = "50px" width = "50px"></a></td>
-                                <td><%= moment(supplier.created_at).format("llll")%></td>
-                            </tr>
-                        <% }) %>
-                    <% } %>
-                 </tbody>   
-            </table>
+<h1 class="text-center">Supplier Home</h1>
+<div class="card">
+    <div class="card-body">
+        <h2>All Suppliers</h2>
+        <div class="pull-right">
+            <a href="/supplier/register" class="btn btn-primary">Create New Supplier</a>
         </div>
+        <br><br>
+
+        <table class="table" id="myTable">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>NID / Passport</th>
+                    <th>Introducer Name</th>
+                    <th>Photo</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(suppliers) { let i = 0; %>
+                <input type="hidden" id="userCount" data-length="<%= suppliers.length %>">
+
+                <% suppliers.forEach((supplier) => { %>
+                <tr>
+                    <td><a href="/supplier/<%= supplier.seq_id %>"><%= supplier.code %></a></td>
+                    <td><%= supplier.name %></td>
+                    <td><%= supplier.nid %></td>
+                    <td><%= supplier.introducer_name %></td>
+                    <td><a data-fancybox="gallery" href="<%= supplier.imageUrl %>"><img src="<%= supplier.imageUrl %>"
+                                height="50px" width="50px"></a></td>
+                    <td id="user-<%= i++ %>" data-user="<%= supplier.created_at %>">
+                    </td>
+                </tr>
+                <% }) %>
+                <% } %>
+            </tbody>
+        </table>
     </div>
+</div>
 <% include ../layouts/admin/footer %>
