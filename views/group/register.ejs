@@ -1,58 +1,67 @@
 <% include ../layouts/admin/header %>
-    <h1>Register Group</h1>
+<h1>Register Group</h1>
 
-    <form action="/group/register/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
-        <div class="row">
-            <div class="col-md-5">
-                <div class="form-group">
-                    <% if(group.group != 0) { %>
-                        <label for="group_seq">Group Seq : </label>  
-                        <input readonly type="text" name = "group_seq" id = "group_seq" class = "form-control" value = "<%= group.group + 1 %>">
-                    <% } else { %>  
-                        <label for="group_seq">Start from your New Group Seq : </label>
-                        <input type="text" name = "group_seq" id = "group_seq" class = "form-control" value = "<%= typeof form != 'undefined' ? form.group_seq : '' %>">
-                    <% } %>   
-                    <div class = "text-center"><b>/</b></div>
-                    <label for="group_sl">Group SL : </label>
-                    <input type="text" name = "group_sl" id = "group_sl" class = "form-control" value = "<%= typeof form != 'undefined' ? form.group_sl : '' %>"> 
-                    </h4>
-                </div>
-                <div class="form-group">
-                    <label for="visa">Visa Number</label>
-                    <input type="text" name = "visa" id = "visa" class = "form-control" value = "<%= typeof form != 'undefined' ? form.visa : '' %>">
-                </div>
-                <div class="form-group">
-                    <label for="id">Visa ID Number</label>
-                    <input type="text" name = "id" id = "id" class = "form-control" value = "<%= typeof form != 'undefined' ? form.id : '' %>">
-                </div>
-                <div class="form-group">
-                    <label for="supplier">Visa Supplier</label>
-                    <input type="text" name = "supplier" id = "supplier" class = "form-control" value = "<%= typeof form != 'undefined' ? form.supplier : '' %>">
-                </div>
-                <div class="form-group">
-                    <div class="ui-widget">
-                        <label for="zone">Zone: </label>
-                        <input id="zone" name = "zone" class = "form-control" value = "<%= typeof form != 'undefined' ? form.zone : '' %>">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="amount">Amount</label>
-                    <input type="text" name = "amount" id = "amount" class = "form-control" value = "<%= typeof form != 'undefined' ? form.amount : '' %>">
-                </div>
-                <div class="form-group">
-                    <label for="occupation">Occupation</label>
-                    <input type="text" name = "occupation" id = "occupation" class = "form-control" value = "<%= typeof form != 'undefined' ? form.occupation : '' %>">
-                </div>
-                <div class="form-group">
-                    <label for="enjazit">Enjazit Image</label>
-                    <input type="file" name = "enjazit_image" id = "enjazit" style = "height:auto;max-width:500px;" id = "photo">
-                    <img src="" alt="" style = "height:auto;max-width:500px;" id = "photo">
+<form action="/group/register/?_csrf=<%= csrfToken %>" method="POST" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="form-group">
+                <% if(group.group != 0) { %>
+                <label for="group_seq">Group Seq : </label>
+                <input type="text" name="group_seq" id="group_seq" class="form-control"
+                    value="<%= typeof form != 'undefined' ? form.group_seq : '' %>">
+                <% } else { %>
+                <label for="group_seq">Start from your New Group Seq : </label>
+                <input type="text" name="group_seq" id="group_seq" class="form-control"
+                    value="<%= typeof form != 'undefined' ? form.group_seq : '' %>">
+                <% } %>
+                <div class="text-center"><b>/</b></div>
+                <label for="group_sl">Group SL : </label>
+                <input type="text" name="group_sl" id="group_sl" class="form-control"
+                    value="<%= typeof form != 'undefined' ? form.group_sl : '' %>">
+                </h4>
+            </div>
+            <div class="form-group">
+                <label for="visa">Visa Number</label>
+                <input type="text" name="visa" id="visa" class="form-control"
+                    value="<%= typeof form != 'undefined' ? form.visa : '' %>">
+            </div>
+            <div class="form-group">
+                <label for="id">Visa ID Number</label>
+                <input type="text" name="id" id="id" class="form-control"
+                    value="<%= typeof form != 'undefined' ? form.id : '' %>">
+            </div>
+            <div class="form-group">
+                <label for="supplier">Visa Supplier</label>
+                <input type="text" name="supplier" id="supplier" class="form-control"
+                    value="<%= typeof form != 'undefined' ? form.supplier : '' %>">
+            </div>
+            <div class="form-group">
+                <div class="ui-widget">
+                    <label for="zone">Zone: </label>
+                    <input id="zone" name="zone" class="form-control"
+                        value="<%= typeof form != 'undefined' ? form.zone : '' %>">
                 </div>
             </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <input type="submit" name = "submit" value = "Register" class = "btn btn-success">
-                </div>
+            <div class="form-group">
+                <label for="amount">Amount</label>
+                <input type="text" name="amount" id="amount" class="form-control"
+                    value="<%= typeof form != 'undefined' ? form.amount : '' %>">
             </div>
-    </form>
+            <div class="form-group">
+                <label for="occupation">Occupation</label>
+                <input type="text" name="occupation" id="occupation" class="form-control"
+                    value="<%= typeof form != 'undefined' ? form.occupation : '' %>">
+            </div>
+            <div class="form-group">
+                <label for="enjazit">Enjazit Image</label>
+                <input type="file" name="enjazit_image" id="enjazit" style="height:auto;max-width:500px;" id="photo">
+                <img src="" alt="" style="height:auto;max-width:500px;" id="photo">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <input type="submit" name="submit" value="Register" class="btn btn-success">
+            </div>
+        </div>
+</form>
 <% include ../layouts/admin/footer %>
