@@ -37,7 +37,9 @@ exports.getMofas = async (req, res) => {
 /** Gets Mofa Registration View */
 exports.getMofaSearch = async (req, res) => {
     try {
-        res.render("mofa/searchPAX");
+        res.render("mofa/searchPAX", {
+            searchStage: "MOFA Registration"
+        });
     }
     catch (err) {
         console.log(err);
@@ -57,7 +59,9 @@ exports.postSearch = async (req, res) => {
         if (!errors.isEmpty()) {
             return res.render("mofa/searchPAX", {
                 errors: errors.array(),
-                form: form
+                form: form,
+                searchStage: "MOFA Registration"
+
             });
         }
         let query = { code: req.body.code, company: req.user.company };
@@ -74,7 +78,9 @@ exports.postSearch = async (req, res) => {
                 res.render("mofa/register", {
                     pax: pax,
                     groups: groups,
-                    mofa: mofa
+                    mofa: mofa,
+                    searchStage: "MOFA Registration"
+
                 });
             }
             else {
@@ -113,7 +119,8 @@ exports.postMofaRegistration = async (req, res) => {
                 errors: errors.array(),
                 form: form,
                 pax: pax,
-                groups: groups
+                groups: groups,
+                searchStage: "MOFA Registration"
             });
         }
 
@@ -136,7 +143,8 @@ exports.postMofaRegistration = async (req, res) => {
                             form: form,
                             pax: pax,
                             groups: groups,
-                            mofa: mofaInfo
+                            mofa: mofaInfo,
+                            searchStage: "MOFA Registration"
                         });
                     }
                     else {

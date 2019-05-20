@@ -1,121 +1,133 @@
 <% include ../layouts/admin/header %>
-    <div class="row">
-        <div class="col-md-12">
-                <div style = "text-align: center">
-                        <h1>Search By PAX Code</h1>
-                    
-                        <form action="/mofa/search" method = "POST">
-                            <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
-                                <div class="col-md-offset-4 col-md-4 ">
-                                    <div class="form-group">
-                                        <label for="code">PAX Code</label>
-                                        <input type="text" name = "code" id = "code" class = "form-control" value = "<%= typeof form != 'undefined' ? form.code : '' %>">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <input type="submit" name = "submit" value = "Search" class = "btn btn-success">
-                                    </div>
-                                </div>
-                        </form>
-                </div>
-        </div>
-    </div>
-    
-   <div class="row">
-       <div class="col-md-12">
-            <div class="card">
-                    <div class="card-body">
-                        <h2>MOFA Info 
-                            <% if(typeof mofa != 'undefined') { %>
-                            <a href = "#" class = "btn btn-danger delete-mofa" data-id = "<%= mofa._id %>" data-csrf = "<%= csrfToken %>">Delete</a> 
-                            <% } %>
-                        </h2>  
-                        <form action="/mofa/register" method = "POST">
-                            <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
-                            <input type="hidden" name = "pax" value = "<%= pax._id %>">
-                            <table class = "table">
-                                    <thead>
-                                        <tr>
-                                            <th>PAX Code</th>
-                                            <td><%= pax.code %></td>
-                                        </tr>
-                                        <tr>
-                                            <th>PAX Name</th>
-                                            <td><%= pax.name %></td>
-                                        </tr>
-                                        <tr>
-                                            <th>PAX NO</th>
-                                            <td><%= pax.passport %></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Reference</th>
-                                            <td><%= pax.group.visa_supplier %></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Group/SL</th>
-                                            <td>
-                                                <select name="group" id="group">
-                                                    <% groups.forEach(group => { %>
-                                                        <option value="<%= group._id %>" <%= pax.group.equals(group._id) ? 'selected' : ''%>><%= group.group_seq %> / <%= group.group_sl %></option>
-                                                    <% }); %>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Occupation</th>
-                                            <td>
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <div class="ui-widget">
-                                                            <input id="occupation" name = "occupation" class = "form-control" value = "<%= pax.group.occupation %>">
-                                                    </div>    
-                                                </div> 
-                                            </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Visa Id</th>
-                                            <td><%= pax.group.visa_id %></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Health Payment</th>
-                                            <td><input type="checkbox" value = "1100" name = "health" <%= typeof mofa != 'undefined' && mofa.health_payment == '1100' ? 'checked' : '' %>> 1100</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Embassy Payment</th>
-                                            <td><input type="checkbox" value = "1200" name = "embassy" <%= typeof mofa != 'undefined' && mofa.embassy_payment == '1200' ? 'checked' : '' %>> 1200</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Type</th>
-                                            <td><input type="checkbox" value = "100" name = "type" <%= typeof mofa != 'undefined' && mofa.type == '100' ? 'checked' : '' %>> 100</td>
-                                        </tr>
-                                       <% if(typeof mofa != "undefined" && mofa.embassy_payment != 0 && mofa.health_payment != 0 && mofa.type != 0) { %>
-                                            <tr>
-                                                <th>E-Number</th>
-                                                <td><input type="text" name = "enumber" value = "<%= mofa.e_number %>"></td>
-                                            </tr>
-                                       <% } %>
-                                        <tr>
-                                            <th>Total</th>
-                                            <% if(typeof mofa == 'undefined') { %>
-                                            <td>0</td>
-                                            <% } else { %>
-                                                <td>TK <%= mofa.embassy_payment + mofa.health_payment + mofa.type %></td>
-                                            <% } %>
-                                        </tr>
-                                        <tr>
-                                            <th></th>
-                                            <% if(typeof mofa == 'undefined') { %>
-                                                <td><input type="submit" value = "Save" class = "btn btn-success"></td>
-                                            <% } else { %>
-                                                <td><input type="submit" value = "Update" class = "btn btn-success"></td>
-                                            <% } %>
-                                        </tr>
-                                    </form>    
-                            </table>
+<div class="row">
+    <div class="col-md-12">
+        <div style="text-align: center">
+            <h1><%= searchStage %></h1>
+            <h3>Search By PAX Code</h3>
+
+            <form action="/mofa/search" method="POST">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <div class="col-md-offset-4 col-md-4 ">
+                    <div class="form-group">
+                        <label for="code">PAX Code</label>
+                        <input type="text" name="code" id="code" class="form-control"
+                            value="<%= typeof form != 'undefined' ? form.code : '' %>">
                     </div>
                 </div>
-       </div>
-   </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <input type="submit" name="submit" value="Search" class="btn btn-success">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h2>MOFA Info
+                    <% if(typeof mofa != 'undefined') { %>
+                    <a href="#" class="btn btn-danger delete-mofa" data-id="<%= mofa._id %>"
+                        data-csrf="<%= csrfToken %>">Delete</a>
+                    <% } %>
+                </h2>
+                <form action="/mofa/register" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input type="hidden" name="pax" value="<%= pax._id %>">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>PAX Code</th>
+                                <td><%= pax.code %></td>
+                            </tr>
+                            <tr>
+                                <th>PAX Name</th>
+                                <td><%= pax.name %></td>
+                            </tr>
+                            <tr>
+                                <th>PAX NO</th>
+                                <td><%= pax.passport %></td>
+                            </tr>
+                            <tr>
+                                <th>Reference</th>
+                                <td><%= pax.group.visa_supplier %></td>
+                            </tr>
+                            <tr>
+                                <th>Group/SL</th>
+                                <td>
+                                    <select name="group" id="group">
+                                        <% groups.forEach(group => { %>
+                                        <option value="<%= group._id %>"
+                                            <%= pax.group.equals(group._id) ? 'selected' : ''%>><%= group.group_seq %> /
+                                            <%= group.group_sl %></option>
+                                        <% }); %>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Occupation</th>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="ui-widget">
+                                                <input id="occupation" name="occupation" class="form-control"
+                                                    value="<%= pax.group.occupation %>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Visa Id</th>
+                                <td><%= pax.group.visa_id %></td>
+                            </tr>
+                            <tr>
+                                <th>Health Payment</th>
+                                <td><input type="checkbox" value="1100" name="health"
+                                        <%= typeof mofa != 'undefined' && mofa.health_payment == '1100' ? 'checked' : '' %>>
+                                    1100</td>
+                            </tr>
+                            <tr>
+                                <th>Embassy Payment</th>
+                                <td><input type="checkbox" value="1200" name="embassy"
+                                        <%= typeof mofa != 'undefined' && mofa.embassy_payment == '1200' ? 'checked' : '' %>>
+                                    1200</td>
+                            </tr>
+                            <tr>
+                                <th>Type</th>
+                                <td><input type="checkbox" value="100" name="type"
+                                        <%= typeof mofa != 'undefined' && mofa.type == '100' ? 'checked' : '' %>> 100
+                                </td>
+                            </tr>
+                            <% if(typeof mofa != "undefined" && mofa.embassy_payment != 0 && mofa.health_payment != 0 && mofa.type != 0) { %>
+                            <tr>
+                                <th>E-Number</th>
+                                <td><input type="text" name="enumber" value="<%= mofa.e_number %>"></td>
+                            </tr>
+                            <% } %>
+                            <tr>
+                                <th>Total</th>
+                                <% if(typeof mofa == 'undefined') { %>
+                                <td>0</td>
+                                <% } else { %>
+                                <td>TK <%= mofa.embassy_payment + mofa.health_payment + mofa.type %></td>
+                                <% } %>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <% if(typeof mofa == 'undefined') { %>
+                                <td><input type="submit" value="Save" class="btn btn-success"></td>
+                                <% } else { %>
+                                <td><input type="submit" value="Update" class="btn btn-success"></td>
+                                <% } %>
+                            </tr>
+                </form>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <% include ../layouts/admin/footer %>
