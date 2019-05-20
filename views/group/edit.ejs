@@ -1,50 +1,67 @@
 <% include ../layouts/admin/header %>
-    <h1>Update Group</h1>
+<h1>Update Group</h1>
 
-    <form action="/group/update/<%= group._id %>/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="group_seq">Group SL</label>
-                    <b><%= group.group_seq%> / </b>
-                    <input type="text" name = "group_sl" id = "group_sl" value = "<%=  group.group_sl %>">
-                </div>
-                <div class="form-group">
-                    <label for="visa_number">Visa Number</label>
-                    <input type="text" name = "visa_number" id = "visa_number" class = "form-control" value = "<%= group.visa_number %>">
-                </div>
-                <div class="form-group">
-                    <label for="id">Visa ID Number</label>
-                    <input type="text" name = "visa_id" id = "visa_id" class = "form-control" value = "<%= group.visa_id %>">
-                </div>
-                <div class="form-group">
-                    <label for="visa_supplier">Visa Supplier</label>
-                    <input type="text" name = "visa_supplier" id = "visa_supplier" class = "form-control" value = "<%= group.visa_supplier %>">
-                </div>
-                <div class="form-group">
-                    <div class="ui-widget">
-                        <label for="zone">Zone: </label>
-                        <input id="zone" name = "zone" class = "form-control" value = "<%= group.zone.name %>">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="amount">Amount</label>
-                    <input type="text" name = "amount" id = "amount" class = "form-control" value = "<%= group.amount %>">
-                </div>
-                <div class="form-group">
-                    <label for="occupation">Occupation</label>
-                    <input type="text" name = "occupation" id = "occupation" class = "form-control" value = "<%= group.occupation %>">
-                </div>
-                <div class="form-group">
-                    <label for="enjazit">Enjazit Image</label>
-                    <input type="file" name = "enjazit_image" id = "enjazit">
-                    <a data-fancybox="gallery" href="<%= imageUrl %>"><img src="<%= imageUrl %>" alt="Enjazit Image" style = "width:200px; height : 200px;" id = "photo"></a>
+<form action="/group/update/<%= group._id %>/?_csrf=<%= csrfToken %>" method="POST" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="group_seq">Group SL</label>
+                <input type="text" name="group_seq" id="group_seq" value="<%=  group.group_seq %>" class="form-control">
+                <span class="text-center"><b>/</b></span>
+                <input type="text" name="group_sl" id="group_sl" value="<%=  group.group_sl %>" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="visa_number">Visa Number</label>
+                <input type="text" name="visa_number" id="visa_number" class="form-control"
+                    value="<%= group.visa_number %>">
+            </div>
+            <div class="form-group">
+                <label for="id">Visa ID Number</label>
+                <input type="text" name="visa_id" id="visa_id" class="form-control" value="<%= group.visa_id %>">
+            </div>
+            <div class="form-group">
+                <label for="visa_supplier">Visa Supplier</label>
+                <input type="text" name="visa_supplier" id="visa_supplier" class="form-control"
+                    value="<%= group.visa_supplier %>">
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select name="category" id="groupCategory" class="form-control">
+                    <option value="">Choose Category</option>
+                    <option value="processing" <%= group.category == 'processing' ? 'selected' : '' %>>Processing
+                    </option>
+                    <option value="selling" <%= group.category == 'selling' ? 'selected' : '' %>>Selling
+                    </option>
+                    <option value="supply" <%= group.category == 'supply' ? 'selected' : '' %>>Supply
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <div class="ui-widget">
+                    <label for="zone">Zone: </label>
+                    <input id="zone" name="zone" class="form-control" value="<%= group.zone.name %>">
                 </div>
             </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <input type="submit" name = "submit" value = "Update" class = "btn btn-success">
-                </div>
+            <div class="form-group">
+                <label for="amount">Amount</label>
+                <input type="text" name="amount" id="amount" class="form-control" value="<%= group.amount %>">
             </div>
-    </form>
+            <div class="form-group">
+                <label for="occupation">Occupation</label>
+                <input type="text" name="occupation" id="occupation" class="form-control"
+                    value="<%= group.occupation %>">
+            </div>
+            <div class="form-group">
+                <label for="enjazit">Enjazit Image</label>
+                <input type="file" name="enjazit_image" id="enjazit">
+                <a data-fancybox="gallery" href="<%= imageUrl %>"><img src="<%= imageUrl %>" alt="Enjazit Image"
+                        style="width:200px; height : 200px;" id="photo"></a>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <input type="submit" name="submit" value="Update" class="btn btn-success">
+            </div>
+        </div>
+</form>
 <% include ../layouts/admin/footer %>

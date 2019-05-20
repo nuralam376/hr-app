@@ -16,6 +16,7 @@
                     <th>Visa ID Number</th>
                     <th>Supplier Info</th>
                     <th>Occupation</th>
+                    <th>Category</th>
                     <th>Date</th>
                     <th>Enjazit</th>
                 </tr>
@@ -30,6 +31,7 @@
                     <td><%= group.visa_id %></td>
                     <td><%= group.visa_supplier %>, <%= group.zone.name %>, <%= group.amount %></td>
                     <td><%= group.occupation %></td>
+                    <td><%= group.category %></td>
                     <td id="user-<%= i++ %>" data-user="<%= group.created_at %>">
 
                     </td>

@@ -86,6 +86,7 @@ exports.postGroupRegistration = async (req, res) => {
       supplier: req.body.supplier,
       visa: req.body.visa,
       zone: req.body.zone,
+      category: req.body.category,
       amount: req.body.amount,
       occupation: req.body.occupation
     };
@@ -141,11 +142,13 @@ exports.editGroup = async (req, res) => {
 exports.updateGroup = async (req, res) => {
   try {
     let forms = {
+      group_seq: req.body.group_seq,
       group_sl: req.body.group_sl,
       id: req.body.id,
       visa_number: req.body.visa_number,
       visa_supplier: req.body.visa_supplier,
       visa_id: req.body.visa_id,
+      category: req.body.category,
       zone: req.body.zone,
       amount: req.body.amount,
       occupation: req.body.occupation
@@ -275,6 +278,7 @@ const groupSave = async (req, res, forms) => {
     group.amount = forms.amount;
     group.company = req.user.company;
     group.occupation = forms.occupation;
+    group.category = forms.category;
     group.enjazit_image = forms.enjazit_image;
     group.created_at = moment().format();
 
@@ -334,6 +338,7 @@ const groupSave = async (req, res, forms) => {
 const groupUpdate = async (req, res, forms) => {
   /** Saves forms data in group object */
   let group = {};
+  group.group_seq = forms.group_seq;
   group.group_sl = forms.group_sl;
   group.visa_number = forms.visa_number;
   group.visa_supplier = forms.visa_supplier;
@@ -341,6 +346,7 @@ const groupUpdate = async (req, res, forms) => {
   group.amount = forms.amount;
   group.company = req.user.company;
   group.occupation = forms.occupation;
+  group.category = forms.category;
   group.enjazit_image = forms.enjazit_image;
   group.updated_at = Date.now();
 

@@ -35,6 +35,11 @@ const GroupSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    category:
+    {
+        type: String,
+        required: true
+    },
     zone:
     {
         type: mongoose.Schema.Types.ObjectId,

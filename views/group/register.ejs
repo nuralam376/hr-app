@@ -10,7 +10,7 @@
                 <input type="text" name="group_seq" id="group_seq" class="form-control"
                     value="<%= typeof form != 'undefined' ? form.group_seq : '' %>">
                 <% } else { %>
-                <label for="group_seq">Start from your New Group Seq : </label>
+                <label for="group_seq">New Group Seq : </label>
                 <input type="text" name="group_seq" id="group_seq" class="form-control"
                     value="<%= typeof form != 'undefined' ? form.group_seq : '' %>">
                 <% } %>
@@ -34,6 +34,21 @@
                 <label for="supplier">Visa Supplier</label>
                 <input type="text" name="supplier" id="supplier" class="form-control"
                     value="<%= typeof form != 'undefined' ? form.supplier : '' %>">
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select name="category" id="groupCategory" class="form-control">
+                    <option value="">Choose Category</option>
+                    <option value="processing"
+                        <%= typeof form != 'undefined' && form.category == 'processing' ? 'selected' : '' %>>Processing
+                    </option>
+                    <option value="selling"
+                        <%= typeof form != 'undefined' && form.category == 'selling' ? 'selected' : '' %>>Selling
+                    </option>
+                    <option value="supply"
+                        <%= typeof form != 'undefined' && form.category == 'supply' ? 'selected' : '' %>>Supply
+                    </option>
+                </select>
             </div>
             <div class="form-group">
                 <div class="ui-widget">
