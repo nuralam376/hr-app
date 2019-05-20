@@ -52,7 +52,9 @@ exports.getAllInfos = async (req, res) => {
 /** Search Stamping by PAX Code */
 exports.getSearch = async (req, res) => {
     try {
-        res.render("stamping/searchPAX");
+        res.render("stamping/searchPAX", {
+            searchStage: "Stamping Registration"
+        });
     }
     catch (err) {
         console.log(err);
@@ -72,7 +74,9 @@ exports.postSearch = async (req, res) => {
         if (!errors.isEmpty()) {
             return res.render("stamping/searchPAX", {
                 errors: errors.array(),
-                form: form
+                form: form,
+                searchStage: "Stamping Registration"
+
             });
         }
         let query = { code: req.body.code, company: req.user.company };
@@ -124,7 +128,9 @@ exports.registerStamping = async (req, res) => {
                     pax: pax,
                     stamping: stamping,
                     mofa: mofa,
-                    imageUrl: url
+                    imageUrl: url,
+                    searchStage: "Stamping Registration"
+
                 });
             }
             else {
@@ -220,7 +226,9 @@ exports.postStamping = async (req, res) => {
 /** Gets Stamping Complete Page */
 exports.getCompleteStampingSearch = async (req, res) => {
     try {
-        res.render("stamping/afterStampingSearch");
+        res.render("stamping/afterStampingSearch",{
+            searchStage: "After Stamping Registration"
+        });
     }
     catch (err) {
         console.log(err);
@@ -266,7 +274,8 @@ exports.getCompleteRegistration = async (req, res) => {
             res.render("stamping/afterStampingRegistration", {
                 stamping: stamping,
                 mofa: mofa,
-                moment: moment
+                moment: moment,
+                searchStage: "After Stamping Registration"
             });
         }
         else {
@@ -298,7 +307,8 @@ exports.postCompleteStampingRegistration = async (req, res) => {
                 mofa: mofa,
                 errors: errors.array(),
                 form: form,
-                moment: moment
+                moment: moment,
+                searchStage: "After Stamping Registration"
             });
         }
         else {
