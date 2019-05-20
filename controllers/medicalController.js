@@ -30,7 +30,9 @@ exports.getMedicalRegistrationSearch = async (req, res) => {
     try {
         res.render("medical/searchPax", {
             pax: null,
-            result: null
+            result: null,
+            searchStage: "Medical Group"
+
         });
     }
     catch (err) {
@@ -45,7 +47,8 @@ exports.getMedicalCenterInfo = async (req, res) => {
         res.render("medical/searchPax", {
             pax: null,
             result: null,
-            postUrl: "/center"
+            postUrl: "/center",
+            searchStage: "Medical Center"
         });
     }
     catch (err) {
@@ -56,7 +59,7 @@ exports.getMedicalCenterInfo = async (req, res) => {
 /** Shows PAX Code Information For Group */
 exports.postPAXCodeForGroup = async (req, res) => {
     try {
-        await postPaxCode(req, res, "medical/register/");
+        await postPaxCode(req, res, "medical/register/", "Medical Group");
     }
     catch (err) {
         console.log(err);
@@ -66,7 +69,7 @@ exports.postPAXCodeForGroup = async (req, res) => {
 /** Shows PAX Code Information For Medical Center */
 exports.postPAXCodeForMedicalCenter = async (req, res) => {
     try {
-        await postPaxCode(req, res, "/medical/register/center/");
+        await postPaxCode(req, res, "/medical/register/center/", "Medical Center");
     }
     catch (err) {
         console.log(err);
@@ -160,7 +163,9 @@ exports.postMedicalRegistration = async (req, res) => {
                 result: null,
                 moment: moment,
                 medical: medical,
-                postUrl: "/center"
+                postUrl: "/center",
+                searchStage: "Medical Center"
+
             });
         }
         else {
@@ -216,7 +221,8 @@ exports.getMedicalPAXInfo = async (req, res) => {
             res.render("medical/register", {
                 pax: pax,
                 medical: medical,
-                groups: groups
+                groups: groups,
+                searchStage: "Medical Group"
             });
         }
         else {
@@ -248,7 +254,9 @@ exports.getMedicalPAXInfoForCenter = async (req, res) => {
                     groups: groups,
                     postUrl: "/center",
                     moment: moment,
-                    medicalSlipUrl: medicalSlipUrl
+                    medicalSlipUrl: medicalSlipUrl,
+                    searchStage: "Medical Center"
+
                 });
             }
             else {
@@ -269,7 +277,7 @@ exports.getMedicalPAXInfoForCenter = async (req, res) => {
 }
 
 /** POSTS PAX Code */
-const postPaxCode = async (req, res, url) => {
+const postPaxCode = async (req, res, url, stage) => {
     try {
         let forms = {
             code: req.body.code
@@ -282,7 +290,8 @@ const postPaxCode = async (req, res, url) => {
                 errors: errors.array(),
                 form: forms,
                 pax: null,
-                result: null
+                result: null,
+                searchStage: stage
             });
         }
         else {
@@ -295,7 +304,9 @@ const postPaxCode = async (req, res, url) => {
                 res.render("medical/searchPax", {
                     form: forms,
                     pax: pax,
-                    result: "No Data Found"
+                    result: "No Data Found",
+                    searchStage: stage
+
                 });
             }
         }
@@ -311,7 +322,9 @@ exports.searchPAXForReport = async (req, res) => {
         res.render("medical/searchPax", {
             pax: null,
             result: null,
-            postUrl: "/report"
+            postUrl: "/report",
+            searchStage: "Medical Report"
+
         });
     }
     catch (err) {
@@ -322,7 +335,7 @@ exports.searchPAXForReport = async (req, res) => {
 /** Gets Report page for Medical Registration */
 exports.getReportRegistration = async (req, res) => {
     try {
-        await postPaxCode(req, res, "/medical/register/report/");
+        await postPaxCode(req, res, "/medical/register/report/", "Medical Report");
     }
     catch (err) {
         console.log(err);
@@ -355,7 +368,9 @@ exports.getMedicalPAXInfoForReport = async (req, res) => {
                     postUrl: "/report",
                     moment: moment,
                     medicalSlipUrl: medicalSlipUrl,
-                    medicalUnfitSlipUrl: medicalUnfitSlipUrl
+                    medicalUnfitSlipUrl: medicalUnfitSlipUrl,
+                    searchStage: "Medical Report"
+
                 });
             }
             else if (medical && medical.group) {
@@ -401,7 +416,9 @@ exports.postMedicalReportInfo = async (req, res) => {
                 pax: pax,
                 medical: medical,
                 moment: moment,
-                form: forms
+                form: forms,
+                searchStage: "Medical Report"
+
             });
         }
         else {
@@ -426,7 +443,9 @@ exports.postMedicalReportInfo = async (req, res) => {
                         pax: pax,
                         medical: medical,
                         moment: moment,
-                        form: forms
+                        form: forms,
+                        searchStage: "Medical Report"
+
                     });
                 }
                 if (req.body.reason) {
@@ -440,7 +459,8 @@ exports.postMedicalReportInfo = async (req, res) => {
                         pax: pax,
                         medical: medical,
                         moment: moment,
-                        form: forms
+                        form: forms,
+                        searchStage: "Medical Report"
                     });
                 }
             }
@@ -582,7 +602,9 @@ exports.editMedicalCenterInfo = async (req, res) => {
                 medical: medical,
                 pax: pax,
                 moment: moment,
-                medicalSlipUrl: medicalSlipUrl
+                medicalSlipUrl: medicalSlipUrl,
+                searchStage: "Medical Center"
+
             });
         }
     }
@@ -616,7 +638,8 @@ exports.updateMedicalCenterInfo = async (req, res) => {
                 medical: medical,
                 pax: pax,
                 moment: moment,
-                medicalSlipUrl: medicalSlipUrl
+                medicalSlipUrl: medicalSlipUrl,
+                searchStage: "Medical Center"
             });
         }
         else {
@@ -680,7 +703,9 @@ exports.editMedicalReportInfo = async (req, res) => {
                 pax: pax,
                 moment: moment,
                 medicalSlipUrl: medicalSlipUrl,
-                medicalUnfitSlipUrl: medicalUnfitSlipUrl
+                medicalUnfitSlipUrl: medicalUnfitSlipUrl,
+                searchStage: "Medical Report"
+
             });
         }
     }
@@ -721,7 +746,8 @@ exports.updateMedicalReportInfo = async (req, res) => {
                 form: forms,
                 editReport: true,
                 medicalSlipUrl: medicalSlipUrl,
-                medicalUnfitSlipUrl: medicalUnfitSlipUrl
+                medicalUnfitSlipUrl: medicalUnfitSlipUrl,
+                searchStage: "Medical Report"
             });
         }
         else {
@@ -763,7 +789,9 @@ exports.updateMedicalReportInfo = async (req, res) => {
                             form: forms,
                             editReport: true,
                             medicalSlipUrl: medicalSlipUrl,
-                            medicalUnfitSlipUrl: medicalUnfitSlipUrl
+                            medicalUnfitSlipUrl: medicalUnfitSlipUrl,
+                            searchStage: "Medical Report"
+
                         });
                     }
                 }
@@ -781,7 +809,8 @@ exports.updateMedicalReportInfo = async (req, res) => {
                         form: forms,
                         editReport: true,
                         medicalSlipUrl: medicalSlipUrl,
-                        medicalUnfitSlipUrl: medicalUnfitSlipUrl
+                        medicalUnfitSlipUrl: medicalUnfitSlipUrl,
+                        searchStage: "Medical Report"
                     });
                 }
             }
@@ -807,7 +836,9 @@ exports.updateMedicalReportInfo = async (req, res) => {
                         form: forms,
                         editReport: true,
                         medicalSlipUrl: medicalSlipUrl,
-                        medicalUnfitSlipUrl: medicalUnfitSlipUrl
+                        medicalUnfitSlipUrl: medicalUnfitSlipUrl,
+                        searchStage: "Medical Report"
+
                     });
                 }
             }
@@ -841,7 +872,8 @@ exports.printDoc = async (req, res) => {
         if (pax && medical) {
             res.render("medical/print", {
                 pax: pax,
-                medical: medical
+                medical: medical,
+                searchStage: "Medical Group"
             });
         }
         else {
@@ -928,7 +960,7 @@ exports.medicalTimeline = async (req, res) => {
         let medical = await MedicalModel.findOne(query).populate("pax", "code").exec();
 
         res.render("includes/timeline", {
-            paxStage : medical,
+            paxStage: medical,
             stageName: "Medical",
             moment: moment
         });
