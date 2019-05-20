@@ -77,6 +77,14 @@ exports.postSupplierRegistration = async (req, res) => {
       company: req.user.company
     });
 
+    let supplier = await SupplierModel.findOne({ code: forms.code, company: req.user.company });
+
+    if (supplier) {
+      return res.render("supplier/register", {
+        form: forms,
+        fileError: "Code is already taken",
+      });
+    }
     /** Checks if the Supplier uploads any file */
     if (
       typeof supplierProfilePhoto !== "undefined" &&

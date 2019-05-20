@@ -151,7 +151,7 @@ exports.postRegistration = async (req, res) => {
     let companyInfo = await CompanyInfoModel.findOne({
       company: req.user.company
     });
-    let pax = await UserModel.findOne({ code: forms.code });
+    let pax = await UserModel.findOne({ code: forms.code, company: req.user.company });
 
     if (pax) {
       return res.render("users/register", {

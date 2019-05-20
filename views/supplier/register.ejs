@@ -1,68 +1,73 @@
 <% include ../layouts/admin/header %>
-    <h1>Register Supplier</h1>
+<h1>Register Supplier</h1>
 
-    <form action="/supplier/register/?_csrf=<%= csrfToken %>" method = "POST" enctype = "multipart/form-data">
-        <div class="row">
-            <div class="col-md-6">
-                <% if(companyInfo.supplier != 0) { %>
-                    <label for="code">Code : </label>  
-                    <input readonly type="text" name = "code" id = "code" class = "form-control" value = "<%= companyInfo.supplier + 1 %>">
-                <% } else { %>  
-                    <label for="code">Start from your New Supplier Code : </label>
-                    <input type="text" name = "code" id = "code" class = "form-control" value = "<%= typeof form != 'undefined' ? form.code : '' %>">
-                <% } %>   
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" name = "name" id = "name" class = "form-control" value = "<%= typeof form != 'undefined' ? form.name : '' %>">
-                </div>
-                <div class="form-group">
-                    <label for="nid">NID OR Passport No</label>
-                    <input type="text" name = "nid" id = "nid" class = "form-control" value = "<%= typeof form != 'undefined' ? form.nid : '' %>">
-                </div>
-                <div class="form-group">
-                    <label for="contact">Contact Number</label>
-                    <input type="text" name = "contact" id = "contact" class = "form-control" value = "<%= typeof form != 'undefined' ? form.contact : '' %>">
-                </div>
-                <div class="form-group">
-                    <label for="introducer_name">Introducer Name</label>
-                    <input type="text" name = "introducer_name" id = "introducer_name" class = "form-control" value = "<%= typeof form != 'undefined' ? form.introducer_name : '' %>">
-                </div>
-                <div class="form-group">
-                    <label for="introducer_number">Introducer Number</label>
-                    <input type="text" name = "introducer_number" id = "introducer_number" class = "form-control" value = "<%= typeof form != 'undefined' ? form.introducer_number : '' %>">
-                </div>
+<form action="/supplier/register/?_csrf=<%= csrfToken %>" method="POST" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-6">
+
+            <label for="code">Supplier Code : </label>
+            <input type="text" name="code" id="code" class="form-control"
+                value="<%= typeof form != 'undefined' ? form.code : '' %>">
+
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" class="form-control"
+                    value="<%= typeof form != 'undefined' ? form.name : '' %>">
             </div>
-            <div class="col-md-6">        
-                <div class="form-group">
-                    <label for="present_address">Present Address</label>
-                    <textarea name="present_address" id="present_address" cols="30" rows="5" class = "form-control"><%= typeof form != 'undefined' ? form.present_address : '' %></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="permanent_address">Permanent Address</label>
-                    <textarea name="permanent_address" id="permanent_address" cols="30" rows="5" class = "form-control"><%= typeof form != 'undefined' ? form.permanent_address : '' %></textarea>
-                </div>
+            <div class="form-group">
+                <label for="nid">NID OR Passport No</label>
+                <input type="text" name="nid" id="nid" class="form-control"
+                    value="<%= typeof form != 'undefined' ? form.nid : '' %>">
+            </div>
+            <div class="form-group">
+                <label for="contact">Contact Number</label>
+                <input type="text" name="contact" id="contact" class="form-control"
+                    value="<%= typeof form != 'undefined' ? form.contact : '' %>">
+            </div>
+            <div class="form-group">
+                <label for="introducer_name">Introducer Name</label>
+                <input type="text" name="introducer_name" id="introducer_name" class="form-control"
+                    value="<%= typeof form != 'undefined' ? form.introducer_name : '' %>">
+            </div>
+            <div class="form-group">
+                <label for="introducer_number">Introducer Number</label>
+                <input type="text" name="introducer_number" id="introducer_number" class="form-control"
+                    value="<%= typeof form != 'undefined' ? form.introducer_number : '' %>">
             </div>
         </div>
-        
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="profile_photo">Supplier Photo</label>
-                    <input type="file" name = "profile_photo" id = "profile_photo">
-                    <img src="" alt="" style = "height:auto;max-width:500px;" id = "photo">
-                </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="present_address">Present Address</label>
+                <textarea name="present_address" id="present_address" cols="30" rows="5"
+                    class="form-control"><%= typeof form != 'undefined' ? form.present_address : '' %></textarea>
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                    <label for="passport_photo">Passport/NID Photo</label>
-                    <input type="file" name = "passport_photo" id = "passport_photo">
-                    <img src="" alt="" style = "height:auto;max-width:500px;" id = "photo1">
-                </div>
+            <div class="form-group">
+                <label for="permanent_address">Permanent Address</label>
+                <textarea name="permanent_address" id="permanent_address" cols="30" rows="5"
+                    class="form-control"><%= typeof form != 'undefined' ? form.permanent_address : '' %></textarea>
             </div>
         </div>
-      
-        <div class="form-group">
-            <input type="submit" name = "submit" value = "Register" class = "btn btn-success">
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="profile_photo">Supplier Photo</label>
+                <input type="file" name="profile_photo" id="profile_photo">
+                <img src="" alt="" style="height:auto;max-width:500px;" id="photo">
+            </div>
         </div>
-    </form>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="passport_photo">Passport/NID Photo</label>
+                <input type="file" name="passport_photo" id="passport_photo">
+                <img src="" alt="" style="height:auto;max-width:500px;" id="photo1">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" name="submit" value="Register" class="btn btn-success">
+    </div>
+</form>
 <% include ../layouts/admin/footer %>
