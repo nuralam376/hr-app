@@ -358,6 +358,7 @@ $(document).ready(function () {
       url: "/dashboard/paxstatus",
       dataType: "json",
       success: function (response) {
+        console.log(response);
         let config = {
           type: "line",
           data: {

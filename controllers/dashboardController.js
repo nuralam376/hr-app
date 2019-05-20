@@ -33,14 +33,14 @@ const s3GetFile = require("../util/getS3File");
 
 exports.getDashboard = async (req, res) => {
   try {
-    let totalSupplier = await SupplierModel.find({company:req.user.company}).countDocuments();
-    let totalUser = await UserModel.find({company:req.user.company}).countDocuments();
-    let totalGroup = await GroupModel.find({company:req.user.company}).countDocuments();
+    let totalSupplier = await SupplierModel.find({ company: req.user.company }).countDocuments();
+    let totalUser = await UserModel.find({ company: req.user.company }).countDocuments();
+    let totalGroup = await GroupModel.find({ company: req.user.company }).countDocuments();
 
     res.render("dashboard", {
       totaluser: totalUser,
       totalSupplier: totalSupplier,
-      totalGroup : totalGroup
+      totalGroup: totalGroup
     });
   } catch (err) {
     console.log(err);
@@ -49,9 +49,9 @@ exports.getDashboard = async (req, res) => {
 
 exports.getChartAjaxData = async (req, res) => {
   try {
-    let totalPAX = await getChartTotalResult(req,UserModel);
-    let totalSupplier = await getChartTotalResult(req,SupplierModel);
-    let totalGroup = await getChartTotalResult(req,GroupModel);
+    let totalPAX = await getChartTotalResult(req, UserModel);
+    let totalSupplier = await getChartTotalResult(req, SupplierModel);
+    let totalGroup = await getChartTotalResult(req, GroupModel);
 
     let totals = {
       totalPAX: totalPAX,
@@ -65,12 +65,12 @@ exports.getChartAjaxData = async (req, res) => {
   }
 };
 
-const getChartTotalResult = async (req,Model) => {
+const getChartTotalResult = async (req, Model) => {
   try {
     let total = await Model.aggregate([
       {
-        $match : {
-          company : req.user.company
+        $match: {
+          company: req.user.company
         }
       },
       {
@@ -107,24 +107,69 @@ const getChartTotalResult = async (req,Model) => {
 
 
 /** Gets PAX Data */
-exports.getChartPaxData = async(req,res) => {
-  try
-  {
-    let totalMedical = await MedicalModel.find({company : req.user.company}).countDocuments() || 0;
-    let totalMOFA = await MofaModel.find({company : req.user.company}).countDocuments() || 0;
-    let totalStamping = await StampingModel.find({company : req.user.company}).countDocuments() || 0;
-    let totalTC = await TCModel.find({company : req.user.company}).countDocuments() || 0;
-    let totalManpower = await ManpowerModel.find({company : req.user.company}).countDocuments() || 0;
-    let totalFlight = await FlightModel.find({company : req.user.company}).countDocuments() || 0;
-    let totalDelivery = await DeliveryModel.find({company : req.user.company}).countDocuments() || 0;
+exports.getChartPaxData = async (req, res) => {
+  try {
+    let totalMedical = 0;
+    let totalMOFA = 0;
+    let totalStamping = 0;
+    let totalTC = 0;
+    let totalManpower = 0;
+    let totalFlight = 0;
+    let totalDelivery = 0;
+    let paxs = await UserModel.find({ company: req.user.company });
 
+    for (let pax of paxs) {
+
+      query = { company: req.user.company, pax: pax._id };
+      let delivery = await DeliveryModel.findOne(query);
+
+      if (delivery && delivery.received_by) {
+        totalDelivery++;
+
+      } else {
+        let flight = await FlightModel.findOne(query);
+
+        if (flight && flight.flight_date) {
+          totalFlight++;
+        } else {
+          let manpower = await ManpowerModel.findOne(query);
+
+          if (manpower && manpower.card_no) {
+            totalManpower++;
+          } else {
+            let tc = await TCModel.findOne(query);
+
+            if (tc && tc.tc_received) {
+              totalTC++;
+            } else {
+              let stamping = await StampingModel.findOne(query);
+
+              if (stamping && stamping.stamping_date) {
+                totalStamping++;
+              } else {
+                let mofa = await MofaModel.findOne(query);
+
+                if (mofa && mofa.e_number) {
+                  totalMOFA++;
+                } else {
+                  let medical = await MedicalModel.findOne(query);
+
+                  if (medical && medical.status == "fit") {
+                    totalMedical++;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    };
     let totals = [totalMedical, totalMOFA, totalStamping, totalTC, totalManpower, totalFlight, totalDelivery];
 
     return res.jsonp(totals);
-    
+
   }
-  catch(err)
-  {
+  catch (err) {
     console.log(err);
   }
 }
