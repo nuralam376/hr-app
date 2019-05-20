@@ -369,6 +369,7 @@ const groupUpdate = async (req, res, forms) => {
   }
   await createdEvents(req, group, req.params.id, "group");
 
+
   let groupUpdate = await GroupModel.updateOne(
     { _id: req.params.id, company: req.user.company },
     group

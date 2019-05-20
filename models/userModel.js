@@ -39,7 +39,7 @@ const UserSchema = mongoose.Schema({
         type: Date,
         required: true
     },
-    blood_group:
+    category:
     {
         type: String,
         required: true

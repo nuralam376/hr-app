@@ -18,6 +18,7 @@
                     <th>Passport ID</th>
                     <th>Assigned Supplier</th>
                     <th>Group</th>
+                    <th>Category</th>
                     <th>Date</th>
                     <th>Photo</th>
                 </tr>
@@ -39,6 +40,7 @@
                     <% } %>
                     <td><a href="/group/<%= user.group._id %>"><%= user.group.group_seq %> /
                             <%= user.group.group_sl %></a></td>
+                    <td><%= user.category %></td>
                     <td id="user-<%= i++ %>" data-user="<%= user.created_at %>">
                     </td>
                     <td><a data-fancybox="gallery" href="<%= user.imageUrl %>"><img src="<%= user.imageUrl %>" alt=""

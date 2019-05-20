@@ -72,42 +72,6 @@
 
             <div class="form-group">
 
-                <label for="blood">Blood Group</label>
-
-                <select name="blood" id="blood" class="form-control">
-
-                    <option value="">Choose Blood Group</option>
-
-                    <option value="A+" <%= typeof form != 'undefined' && form.blood == 'A+' ? 'selected' : '' %>>A+
-                    </option>
-
-                    <option value="A-" <%= typeof form != 'undefined' && form.blood == 'A-' ? 'selected' : '' %>>A-
-                    </option>
-
-                    <option value="AB+" <%= typeof form != 'undefined' && form.blood == 'AB+' ? 'selected' : '' %>>AB+
-                    </option>
-
-                    <option value="AB-" <%= typeof form != 'undefined' && form.blood == 'AB-' ? 'selected' : '' %>>AB-
-                    </option>
-
-                    <option value="B+" <%= typeof form != 'undefined' && form.blood == 'B+' ? 'selected' : '' %>>B+
-                    </option>
-
-                    <option value="B-" <%= typeof form != 'undefined' && form.blood == 'B-' ? 'selected' : '' %>>B-
-                    </option>
-
-                    <option value="O+" <%= typeof form != 'undefined' && form.blood == 'O+' ? 'selected' : '' %>>O+
-                    </option>
-
-                    <option value="O-" <%= typeof form != 'undefined' && form.blood == 'O-' ? 'selected' : '' %>>O-
-                    </option>
-
-                </select>
-
-            </div>
-
-            <div class="form-group">
-
                 <label for="national">Nationality</label>
 
                 <input type="text" name="national" id="national" class="form-control"
@@ -158,7 +122,26 @@
 
             </div>
 
+            <div class="form-group">
 
+                <label for="category">Category</label>
+
+                <select name="category" id="category" class="form-control">
+
+                    <option value="">Choose Category</option>
+
+                    <option value="processing"
+                        <%= typeof form != 'undefined' && form.category == 'processing' ? 'selected' : '' %>>Processing
+                    </option>
+
+                    <option value="selling"
+                        <%= typeof form != 'undefined' && form.category == 'selling' ? 'selected' : '' %>>
+                        Selling
+                    </option>
+
+                </select>
+
+            </div>
 
         </div>
 

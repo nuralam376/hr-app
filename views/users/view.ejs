@@ -51,10 +51,6 @@
     <td><%= moment(newUser.birth_date).format("ll") %></td>
   </tr>
   <tr>
-    <th>Blood Group</th>
-    <td><%= newUser.blood_group %></td>
-  </tr>
-  <tr>
     <th>Gender</th>
     <td><%= newUser.gender %></td>
   </tr>
@@ -89,6 +85,10 @@
   <tr>
     <th>Group</th>
     <td><%= newUser.group.group_seq %> / <%= newUser.group.group_sl %></td>
+  </tr>
+  <tr>
+    <th>Category</th>
+    <td><%= newUser.category %></td>
   </tr>
   <% if (newUser.experience_year || newUser.experience_month ||
   newUser.experience_day) { %>

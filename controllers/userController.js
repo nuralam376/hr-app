@@ -112,7 +112,7 @@ exports.postRegistration = async (req, res) => {
       father: req.body.father,
       mother: req.body.mother,
       contact: req.body.contact,
-      blood: req.body.blood,
+      category: req.body.category,
       present_address: req.body.present_address,
       permanent_address: req.body.permanent_address,
       birth_date: req.body.birth_date,
@@ -151,6 +151,17 @@ exports.postRegistration = async (req, res) => {
     let companyInfo = await CompanyInfoModel.findOne({
       company: req.user.company
     });
+    let pax = await UserModel.findOne({ code: forms.code });
+
+    if (pax) {
+      return res.render("users/register", {
+        form: forms,
+        suppliers: suppliers,
+        fileError: "Code is already taken",
+        groups: groups,
+        companyInfo: companyInfo
+      });
+    }
 
     let errors = validationResult(req);
 
@@ -244,7 +255,7 @@ exports.updateUser = async (req, res) => {
       father: req.body.father,
       mother: req.body.mother,
       contact: req.body.contact,
-      blood: req.body.blood,
+      category: req.body.category,
       present_address: req.body.present_address,
       permanent_address: req.body.permanent_address,
       birth_date: req.body.birth_date,
@@ -265,6 +276,8 @@ exports.updateUser = async (req, res) => {
 
     let query = { _id: req.params.id, company: req.user.company };
 
+
+
     let newUser = await UserModel.findOne(query);
     let suppliers = await SupplierModel.find({ company: req.user.company });
     let groups = await GroupModel.find({ company: req.user.company });
@@ -284,7 +297,6 @@ exports.updateUser = async (req, res) => {
       "/pax/" + newUser.code + "/",
       newUser.experience_image
     );
-
     let errors = validationResult(req);
     forms.profile_photo = newUser.profile_photo;
     forms.passport_photo = newUser.passport_photo;
@@ -532,7 +544,7 @@ const saveNewUser = async (req, res, forms, suppliers, groups, companyInfo) => {
   user.mother = forms.mother;
   user.contact = forms.contact;
   user.birth_date = forms.birth_date;
-  user.blood_group = forms.blood;
+  user.category = forms.category;
   user.nid = forms.nid;
   user.passport = forms.passport;
   user.issue = forms.issue;
@@ -642,7 +654,7 @@ const userUpdate = async (
   user.mother = forms.mother;
   user.contact = forms.contact;
   user.birth_date = forms.birth_date;
-  user.blood_group = forms.blood;
+  user.category = forms.category;
   user.nid = forms.nid;
   user.passport = forms.passport;
   user.issue = forms.issue;
