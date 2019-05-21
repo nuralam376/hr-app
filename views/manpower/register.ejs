@@ -1,50 +1,53 @@
 <% include ../layouts/admin/header %>
-    <div class="row">
-        <div class="col-md-12">
-                <div style = "text-align: center">
-                        <h1>Search By PAX Code</h1>
-                    
-                        <form action="/manpower/search" method = "POST">
-                            <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
-                                <div class="col-md-offset-4 col-md-4 ">
-                                    <div class="form-group">
-                                        <label for="code">PAX Code</label>
-                                        <input type="text" name = "code" id = "code" class = "form-control" value = "<%= typeof form != 'undefined' ? form.code : '' %>">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <input type="submit" name = "submit" value = "Search" class = "btn btn-success">
-                                    </div>
-                                </div>
-                        </form>
-                </div>
-        </div>
-    </div>
-    
-   <div class="row">
-       <div class="col-md-12">
-            <div class="card">
-                    <div class="card-body">
-                        <h2>Manpower Info - <%= pax.code %></h2>  
-                        <h4>Status - <% if(tc.tc_received && tc.finger) { %>
-                            Complete
-                        <% } else { %>
-                            Incomplete
-                        <% } %></h4>
-                        <form action="/manpower/register/<%= pax._id %>" method = "POST">
-                            <input type="hidden" name = "_csrf" value = "<%= csrfToken %>">
-                              <div class="form-group">
-                                <input type="checkbox" name = "ready" value = "1" id = "ready" <%= manpower && manpower.ready == '1' ? 'checked' : '' %>> 
-                                <label for="ready">Ready</label>
-                              </div>
-                                <div class="form-group">
-                                    <input type="submit" value = "Save" class = "btn btn-success">
-                                </div>
-                        </form>    
-                           
+<div class="row">
+    <div class="col-md-12">
+        <div style="text-align: center">
+            <h1><%= searchStage %></h1>
+            <h3>Search By PAX Code</h3>
+
+            <form action="/manpower/search" method="POST">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <div class="col-md-offset-4 col-md-4 ">
+                    <div class="form-group">
+                        <label for="code">PAX Code</label>
+                        <input type="text" name="code" id="code" class="form-control"
+                            value="<%= typeof form != 'undefined' ? form.code : '' %>">
                     </div>
                 </div>
-       </div>
-   </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <input type="submit" name="submit" value="Search" class="btn btn-success">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h2>Manpower Info - <%= pax.code %></h2>
+                <h4>Status - <% if(tc.tc_received && tc.finger) { %>
+                    Complete
+                    <% } else { %>
+                    Incomplete
+                    <% } %></h4>
+                <form action="/manpower/register/<%= pax._id %>" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <div class="form-group">
+                        <input type="checkbox" name="ready" value="1" id="ready"
+                            <%= manpower && manpower.ready == '1' ? 'checked' : '' %>>
+                        <label for="ready">Ready</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-success">
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
 <% include ../layouts/admin/footer %>

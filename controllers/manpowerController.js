@@ -49,7 +49,10 @@ exports.getAllInfos = async (req, res) => {
 /** Search Stamping by PAX Code */
 exports.getSearch = async (req, res) => {
     try {
-        res.render("manpower/searchPAX");
+        res.render("manpower/searchPAX", {
+            searchStage: "Ready for Manpower"
+
+        });
     }
     catch (err) {
         console.log(err);
@@ -69,7 +72,9 @@ exports.postSearch = async (req, res) => {
         if (!errors.isEmpty()) {
             return res.render("manpower/searchPAX", {
                 errors: errors.array(),
-                form: form
+                form: form,
+                searchStage: "Ready for Manpower"
+
             });
         }
         let query = { code: req.body.code, company: req.user.company };
@@ -113,7 +118,8 @@ exports.registerManpower = async (req, res) => {
                 res.render("manpower/register", {
                     pax: pax,
                     tc: tc,
-                    manpower: manpower
+                    manpower: manpower,
+                    searchStage: "Ready for Manpower"
                 });
             }
             else {
