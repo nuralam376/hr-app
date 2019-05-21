@@ -52,7 +52,9 @@ exports.getAllInfos = async (req, res) => {
 /** Search TC by PAX Code */
 exports.getSearch = async (req, res) => {
     try {
-        res.render("tc/searchPAX");
+        res.render("tc/searchPAX", {
+            searchStage: "TC Registration"
+        });
     }
     catch (err) {
         console.log(err);
@@ -72,7 +74,8 @@ exports.postSearch = async (req, res) => {
         if (!errors.isEmpty()) {
             return res.render("tc/searchPAX", {
                 errors: errors.array(),
-                form: form
+                form: form,
+                searchStage: "TC Registration"
             });
         }
         let query = { code: req.body.code, company: req.user.company };
@@ -115,7 +118,9 @@ exports.registerTC = async (req, res) => {
             if (stamping && stamping.stamping_date) {
                 res.render("tc/register", {
                     pax: pax,
-                    tc: tc
+                    tc: tc,
+                    searchStage: "TC Registration"
+
                 });
             }
             else {
@@ -150,7 +155,8 @@ exports.postTC = async (req, res) => {
             return res.render("tc/register", {
                 pax: pax,
                 tc: tc,
-                fileError: "File must be in pdf format"
+                fileError: "File must be in pdf format",
+                searchStage: "TC Registration"
             });
         }
         /** Checks whether any file is uploaded */
