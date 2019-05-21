@@ -302,7 +302,7 @@ exports.deleteSupplier = async (req, res) => {
     }
     else {
       req.flash("danger", "PAX information needs to be deleted first");
-      res.redirect("/pax");
+      res.redirect("/supplier");
     }
   } catch (err) {
     console.log(err);

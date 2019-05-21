@@ -7,6 +7,9 @@ const StampingModel = require("../models/stampingModel");
 const MofaModel = require("../models/mofaModel");
 
 
+/** TC Model */
+const TCModel = require("../models/tcModel");
+
 /** S3 Delete File */
 const s3DeleteFile = require("../util/deleteS3File");
 
@@ -345,7 +348,9 @@ exports.deleteStamping = async (req, res) => {
 
         let stamping = await StampingModel.findOne(query).populate("pax", "code");
 
-        if (stamping) {
+        let tc = await TCModel.findOne({ company: req.user.company, pax: stamping.pax });
+
+        if (!tc && stamping) {
 
             s3DeleteFile(req, "/pax/" + stamping.pax.code + "/stamping/", stamping.pc_image);
 
@@ -359,6 +364,9 @@ exports.deleteStamping = async (req, res) => {
                 req.flash("danger", "Something Went Wrong");
                 res.redirect("/stamping");
             }
+        } else {
+            req.flash("danger", "TC information needs to be deleted first");
+            res.redirect("/stamping");
         }
     }
     catch (err) {

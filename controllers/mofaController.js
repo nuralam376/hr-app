@@ -10,6 +10,9 @@ const GroupModel = require("../models/groupModel");
 /** Mofa Model */
 const MofaModel = require("../models/mofaModel");
 
+/** Stamping Model */
+const StampingModel = require("../models/stampingModel");
+
 /** Created Events Module */
 const createdEvents = require("../util/paxStageEvents");
 
@@ -251,15 +254,22 @@ exports.downloadSticker = async (req, res) => {
 exports.deleteMofa = async (req, res) => {
     try {
         let query = { _id: req.params.id, company: req.user.company };
+        let mofa = await MofaModel.findOne(query);
 
-        let mofaDelete = await MofaModel.deleteOne(query);
+        let stamping = await StampingModel.findOne({ company: req.user.company, pax: mofa.pax });
+        if (!stamping) {
+            let mofaDelete = await MofaModel.deleteOne(query);
 
-        if (mofaDelete) {
-            req.flash("success", "Mofa Deleted Successfully");
-            res.redirect("/mofa");
-        }
-        else {
-            req.flash("error", "Something went wrong");
+            if (mofaDelete) {
+                req.flash("success", "Mofa Deleted Successfully");
+                res.redirect("/mofa");
+            }
+            else {
+                req.flash("error", "Something went wrong");
+                res.redirect("/mofa");
+            }
+        } else {
+            req.flash("danger", "Stamping information needs to be deleted first");
             res.redirect("/mofa");
         }
     }

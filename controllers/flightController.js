@@ -15,6 +15,9 @@ const ZoneModel = require("../models/zoneModel");
 /** Group Model */
 const GroupModel = require("../models/groupModel");
 
+/** Delivery Model */
+const DeliveryModel = require("../models/deliveryModel");
+
 /** Created Events Module */
 const createdEvents = require("../util/paxStageEvents");
 
@@ -395,7 +398,10 @@ exports.deleteFlight = async (req, res) => {
 
         let flight = await FlightModel.findOne(query);
 
-        if (flight) {
+        let delivery = await DeliveryModel.findOne({ company: req.user.company, pax: flight.pax });
+
+
+        if (!delivery && flight) {
             let flightDelete = await FlightModel.deleteOne(query);
 
             if (flightDelete) {
@@ -406,6 +412,9 @@ exports.deleteFlight = async (req, res) => {
                 req.flash("danger", "Something Went Wrong");
                 res.redirect("/flight");
             }
+        } else {
+            req.flash("danger", "Delivery information needs to be deleted first");
+            res.redirect("/flight");
         }
     }
     catch (err) {

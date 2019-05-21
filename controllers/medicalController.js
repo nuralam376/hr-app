@@ -6,6 +6,10 @@ const MedicalModel = require("../models/medicalModel");
 /** User/PAX Controller */
 let PAXModel = require("../models/userModel");
 
+/** Mofa Model Schema */
+let MofaModel = require("../models/mofaModel");
+
+
 /** User/PAX Controller */
 let GroupModel = require("../models/groupModel");
 
@@ -523,7 +527,9 @@ exports.deleteMedicalInfo = async (req, res) => {
 
         let medical = await MedicalModel.findOne(query).populate("pax", "code");
 
-        if (medical) {
+        let mofa = await MofaModel.findOne({ company: req.user.company, pax: medical.pax });
+
+        if (!mofa && medical) {
             /** Removes the slips */
             if (medical.medical_slip) {
                 s3DeleteFile(req, "/pax/" + medical.pax.code + "/medical/", medical.medical_slip);
@@ -542,6 +548,10 @@ exports.deleteMedicalInfo = async (req, res) => {
                 req.flash("danger", "Something Went Wrong");
                 res.redirect("/medical/all");
             }
+        }
+        else {
+            req.flash("danger", "Mofa information needs to be deleted first");
+            res.redirect("/medical/all");
         }
     }
     catch (err) {

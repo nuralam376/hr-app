@@ -3,8 +3,11 @@ const PAXModel = require("../models/userModel");
 /** TC Model */
 const TCModel = require("../models/tcModel");
 
-/** TC Model */
+/** Manpower Model */
 const ManpowerModel = require("../models/manpowerModel");
+
+/** Flight Model */
+const FlightModel = require("../models/flightModel");
 
 /** S3 Delete File */
 const s3DeleteFile = require("../util/deleteS3File");
@@ -372,7 +375,9 @@ exports.deleteManpower = async (req, res) => {
 
         let manpower = await ManpowerModel.findOne(query).populate("pax", "code").exec();
 
-        if (manpower) {
+        let flight = await FlightModel.findOne({ company: req.user.company, pax: manpower.pax });
+
+        if (!flight && manpower) {
 
             s3DeleteFile(req, "/pax/" + manpower.pax.code + "/manpower/", manpower.card_photo);
 
@@ -387,6 +392,9 @@ exports.deleteManpower = async (req, res) => {
                 req.flash("danger", "Something Went Wrong");
                 res.redirect("/manpower");
             }
+        } else {
+            req.flash("danger", "Flight information needs to be deleted first");
+            res.redirect("/manpower");
         }
     }
     catch (err) {

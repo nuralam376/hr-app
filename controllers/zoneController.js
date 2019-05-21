@@ -179,7 +179,7 @@ exports.deleteZone = async (req, res) => {
         }
         else {
             req.flash("danger", "Other Zone related information needs to be deleted first");
-            res.redirect("/pax");
+            res.redirect("/zone");
         }
     }
     catch (err) {

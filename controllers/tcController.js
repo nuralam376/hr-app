@@ -3,8 +3,11 @@ const PAXModel = require("../models/userModel");
 /** Stamping Model */
 const StampingModel = require("../models/stampingModel");
 
-/** Mofa Model */
+/** TC Model */
 const TCModel = require("../models/tcModel");
+
+/** Manpower Model */
+const ManpowerModel = require("../models/manpowerModel");
 
 /** Validation */
 const { validationResult } = require("express-validator/check");
@@ -250,7 +253,9 @@ exports.deleteTc = async (req, res) => {
 
         let tc = await TCModel.findOne(query).populate("pax", "code");
 
-        if (tc) {
+        let manpower = await ManpowerModel.findOne({ company: req.user.company, pax: tc.pax });
+
+        if (!manpower && tc) {
             if (tc.tc_pdf) {
 
                 s3DeleteFile(req, "/pax/" + tc.pax.code + "/tc/", tc.tc_pdf);
@@ -267,6 +272,9 @@ exports.deleteTc = async (req, res) => {
                 req.flash("danger", "Something Went Wrong");
                 res.redirect("/tc");
             }
+        } else {
+            req.flash("danger", "Manpower information needs to be deleted first");
+            res.redirect("/tc");
         }
     }
     catch (err) {
