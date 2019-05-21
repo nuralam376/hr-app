@@ -396,7 +396,9 @@ exports.deleteUser = async (req, res) => {
 
     let user = await UserModel.findOne(query);
 
-    if (user) {
+    let medical = await MedicalModel.findOne({ company: req.user.company, pax: req.params.id });
+
+    if (!medical && user) {
       /** Removes the old files */
       if (user.profile_photo != "dummy.jpeg") {
         s3DeleteFile(req, "/pax/" + user.code + "/", user.profile_photo);
@@ -417,6 +419,10 @@ exports.deleteUser = async (req, res) => {
         req.flash("danger", "Something Went Wrong");
         res.redirect("/pax");
       }
+    }
+    else {
+      req.flash("danger", "Medical information needs to be deleted first");
+      res.redirect("/pax");
     }
   } catch (error) {
     console.log(error);

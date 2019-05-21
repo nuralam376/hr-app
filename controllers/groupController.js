@@ -11,6 +11,15 @@ const ZoneModel = require("../models/zoneModel");
 /** Created Events Module */
 const createdEvents = require("../util/events");
 
+/** PAX Model Schema */
+const PAXModel = require("../models/userModel");
+
+/** Medical Model Schema */
+const MedicalModel = require("../models/medicalModel");
+
+/** Mofa Model Schema */
+const MofaModel = require("../models/mofaModel");
+
 const moment = require("moment-timezone");
 const fs = require("fs");
 const aws = require("aws-sdk");
@@ -212,7 +221,13 @@ exports.deleteGroup = async (req, res) => {
 
     let group = await GroupModel.findOne(query);
 
-    if (group) {
+    let pax = await PAXModel.findOne({ company: req.user.company, group: group._id });
+
+    let medical = await MedicalModel.findOne({ company: req.user.company, group: group._id });
+
+    let mofa = await MofaModel.findOne({ company: req.user.company, group: group._id });
+
+    if (!pax && !medical && !mofa && group) {
       /** Removes the previous file */
       let params = {
         Bucket: "hr-app-test",
@@ -233,6 +248,10 @@ exports.deleteGroup = async (req, res) => {
         req.flash("danger", "Something Went Wrong");
         res.redirect("/group");
       }
+    }
+    else {
+      req.flash("danger", "Other Group related information needs to be deleted first");
+      res.redirect("/pax");
     }
   } catch (err) {
     console.log(err);

@@ -2,6 +2,14 @@
 
 const ZoneModel = require("../models/zoneModel");
 
+/** Group Model */
+
+const GroupModel = require("../models/groupModel");
+
+/** Flight Model */
+
+const FlightModel = require("../models/flightModel");
+
 
 /** Created Events Module */
 const createdEvents = require("../util/events");
@@ -153,15 +161,25 @@ exports.updateZone = async (req, res) => {
 /** Deletes Zone */
 exports.deleteZone = async (req, res) => {
     try {
-        let zoneDelete = await ZoneModel.deleteOne({ _id: req.params.id, company: req.user.company });
 
-        if (zoneDelete) {
-            req.flash("success", "Zone Deleted Successfully");
-            res.redirect("/zone");
+        let group = await GroupModel.findOne({ company: req.user.company, zone: req.params.id });
+        let flight = await FlightModel.findOne({ company: req.user.company, zone: req.params.id });
+
+        if (!group && !flight) {
+            let zoneDelete = await ZoneModel.deleteOne({ _id: req.params.id, company: req.user.company });
+
+            if (zoneDelete) {
+                req.flash("success", "Zone Deleted Successfully");
+                res.redirect("/zone");
+            }
+            else {
+                req.flash("danger", "Something went wrong");
+                res.redirect("/zone");
+            }
         }
         else {
-            req.flash("danger", "Something went wrong");
-            res.redirect("/zone");
+            req.flash("danger", "Other Zone related information needs to be deleted first");
+            res.redirect("/pax");
         }
     }
     catch (err) {

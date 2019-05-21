@@ -12,6 +12,9 @@ const createdEvents = require("../util/events");
 /** Supplier Model Schema */
 const SupplierModel = require("../models/supplierModel");
 
+/** PAX Model Schema */
+const PAXModel = require("../models/userModel");
+
 /** Company Info Model Schema */
 let CompanyInfoModel = require("../models/companyInfoModel");
 
@@ -276,7 +279,9 @@ exports.deleteSupplier = async (req, res) => {
 
     let supplier = await SupplierModel.findOne(query);
 
-    if (supplier) {
+    let pax = await PAXModel.findOne({ supplier: supplier._id });
+
+    if (!pax && supplier) {
       /** Removes the old files */
       if (supplier.profile_photo != "dummy.jpeg") {
         s3DeleteFile(req, "/suppliers/", supplier.profile_photo);
@@ -294,6 +299,10 @@ exports.deleteSupplier = async (req, res) => {
         req.flash("danger", "Something Went Wrong");
         res.redirect("/supplier");
       }
+    }
+    else {
+      req.flash("danger", "PAX information needs to be deleted first");
+      res.redirect("/pax");
     }
   } catch (err) {
     console.log(err);
