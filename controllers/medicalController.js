@@ -85,7 +85,7 @@ exports.postMedicalGroup = async (req, res) => {
         };
 
         let paxCode = forms.code;
-        let query = { code: paxCode, company: req.user.company };
+        let query = { company: req.user.company, code: paxCode };
         let pax = await PAXModel.findOne(query).populate("supplier").populate("group");
         let medical = await MedicalModel.findOne({ company: req.user.company, pax: pax._id });
 
@@ -151,7 +151,7 @@ exports.postMedicalRegistration = async (req, res) => {
 
         let paxCode = req.body.code;
         let errors = validationResult(req);
-        let query = { code: paxCode, company: req.user.company };
+        let query = { company: req.user.company, code: paxCode };
         let pax = await PAXModel.findOne(query).populate("supplier").populate("group");
         let medical = await MedicalModel.findOne({ company: req.user.company, pax: pax._id }).populate("group");
 
@@ -295,7 +295,7 @@ const postPaxCode = async (req, res, url, stage) => {
             });
         }
         else {
-            let query = { code: forms.code, company: req.user.company };
+            let query = { company: req.user.company, code: forms.code };
             let pax = await PAXModel.findOne(query).populate("supplier").populate("group");
             if (pax) {
                 res.redirect(url + pax.code);

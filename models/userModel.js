@@ -165,7 +165,7 @@ const UserSchema = mongoose.Schema({
     events: [StatusSchema]
 });
 
-UserSchema.index({ company: 1 });
+UserSchema.index({ company: 1, code: 1 });
 
 
 const User = module.exports = mongoose.model("User", UserSchema);

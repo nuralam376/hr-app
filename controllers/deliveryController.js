@@ -75,12 +75,12 @@ exports.postSearch = async (req, res) => {
                 form: form
             });
         }
-        let query = { code: req.body.code, company: req.user.company };
+        let query = { company: req.user.company, code: req.body.code };
         let pax = await PAXModel.findOne(query).exec();
 
         /** Finds PAX Code */
         if (pax) {
-            let flight = await FlightModel.findOne({ pax: pax._id, company: req.user.company });
+            let flight = await FlightModel.findOne({ company: req.user.company, pax: pax._id });
 
 
             /** Finds Flight information of the PAX */
@@ -110,13 +110,13 @@ exports.registerReport = async (req, res) => {
 
         if (pax) {
 
-            let flight = await FlightModel.findOne({ pax: pax._id, company: req.user.company }).populate("zone").exec();
+            let flight = await FlightModel.findOne({ company: req.user.company, pax: pax._id, }).populate("zone").exec();
 
             /** Finds Flight information of the PAX */
             if (flight && flight.flight_date) {
-                let stamping = await StampingModel.findOne({ pax: pax._id, company: req.user.company }).select("stamping_date").exec();
-                let manpower = await ManpowerModel.findOne({ pax: pax._id, company: req.user.company }).select("clearance_date").exec();
-                let delivery = await DeliveryModel.findOne({ pax: pax._id, company: req.user.company }).exec();
+                let stamping = await StampingModel.findOne({ company: req.user.company, pax: pax._id }).select("stamping_date").exec();
+                let manpower = await ManpowerModel.findOne({ company: req.user.company, pax: pax._id }).select("clearance_date").exec();
+                let delivery = await DeliveryModel.findOne({ company: req.user.company, pax: pax._id }).exec();
                 res.render("delivery/report", {
                     pax: pax,
                     manpower: manpower,
@@ -157,9 +157,9 @@ exports.postReport = async (req, res) => {
         let errors = validationResult(req);
 
         if (flight && flight.flight_date) {
-            let manpower = await ManpowerModel.findOne({ pax: pax._id, company: req.user.company }).select("clearance_date card_no").exec();
-            let stamping = await StampingModel.findOne({ pax: pax._id, company: req.user.company }).select(" stamping_date").exec();
-            let delivery = await DeliveryModel.findOne({ pax: pax._id, company: req.user.company }).exec();
+            let manpower = await ManpowerModel.findOne({ company: req.user.company, pax: pax._id }).select("clearance_date card_no").exec();
+            let stamping = await StampingModel.findOne({ company: req.user.company, pax: pax._id }).select(" stamping_date").exec();
+            let delivery = await DeliveryModel.findOne({ company: req.user.company, pax: pax._id }).exec();
             let deliveryStatus;
             if (!errors.isEmpty()) {
                 return res.render("delivery/report", {

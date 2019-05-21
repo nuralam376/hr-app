@@ -64,13 +64,13 @@ exports.postSearch = async (req, res) => {
 
             });
         }
-        let query = { code: req.body.code, company: req.user.company };
+        let query = { company: req.user.company, code: req.body.code };
         let pax = await PAXModel.findOne(query).populate("supplier").populate("group").exec();
 
         /** Finds PAX Code */
         if (pax) {
             let medical = await MedicalModel.findOne({ pax: pax._id, status: "fit" });
-            let mofa = await MofaModel.findOne({ pax: pax._id, company: req.user.company }) || undefined;
+            let mofa = await MofaModel.findOne({ company: req.user.company, pax: pax._id }) || undefined;
 
             /** Finds Medical information of the PAX */
             if (medical) {
@@ -130,7 +130,7 @@ exports.postMofaRegistration = async (req, res) => {
         let groupUpdate = await GroupModel.updateOne({ _id: form.group }, newGroup).exec();
 
         if (groupUpdate) {
-            let mofaInfo = await MofaModel.findOne({ pax: pax._id, company: req.user.company }) || undefined;
+            let mofaInfo = await MofaModel.findOne({ company: req.user.company, pax: pax._id, }) || undefined;
             let mofa;
             if (mofaInfo) {
                 mofa = {};
@@ -164,7 +164,7 @@ exports.postMofaRegistration = async (req, res) => {
             if (mofaInfo) {
                 await createdEvents(req, mofaInfo, mofa, "mofa");
                 mofa.updated_at = Date.now();
-                let mofaUpdate = await MofaModel.updateOne({ pax: req.body.pax, company: req.user.company }, mofa);
+                let mofaUpdate = await MofaModel.updateOne({ company: req.user.company, pax: req.body.pax }, mofa);
                 if (mofaUpdate) {
                     req.flash("success", "Mofa Updated Successfully");
                     res.redirect("/mofa");

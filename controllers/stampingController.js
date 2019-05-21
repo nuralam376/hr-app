@@ -79,12 +79,12 @@ exports.postSearch = async (req, res) => {
 
             });
         }
-        let query = { code: req.body.code, company: req.user.company };
+        let query = { company: req.user.company, code: req.body.code };
         let pax = await PAXModel.findOne(query).populate("supplier").exec();
 
         /** Finds PAX Code */
         if (pax) {
-            let mofa = await MofaModel.findOne({ pax: pax._id, company: req.user.company }).populate("group").exec();
+            let mofa = await MofaModel.findOne({ company: req.user.company, pax: pax._id, }).populate("group").exec();
 
 
             /** Finds MOFA information of the PAX */
@@ -113,8 +113,8 @@ exports.registerStamping = async (req, res) => {
         let pax = await PAXModel.findOne(query).populate("supplier").exec();
 
         if (pax) {
-            let mofa = await MofaModel.findOne({ pax: pax._id, company: req.user.company }).populate("group").exec();
-            let stamping = await StampingModel.findOne({ pax: pax._id, company: req.user.company }) || undefined;
+            let mofa = await MofaModel.findOne({ company: req.user.company, pax: pax._id }).populate("group").exec();
+            let stamping = await StampingModel.findOne({ company: req.user.company, pax: pax._id, }) || undefined;
             /** Finds MOFA information of the PAX */
             if (mofa && mofa.e_number) {
                 let url;
@@ -157,8 +157,8 @@ exports.postStamping = async (req, res) => {
         };
         let query = { _id: req.params.id, company: req.user.company };
         let pax = await PAXModel.findOne(query).populate("supplier").exec();
-        let mofa = await MofaModel.findOne({ pax: pax._id, company: req.user.company }).populate("group").exec();
-        let stamping = await StampingModel.findOne({ pax: pax._id, company: req.user.company }).lean() || undefined;
+        let mofa = await MofaModel.findOne({ company: req.user.company, pax: pax._id }).populate("group").exec();
+        let stamping = await StampingModel.findOne({ company: req.user.company, pax: pax._id }).lean() || undefined;
         /** Checks whetere any file is uploaded */
         if (typeof paxPcImage !== "undefined" && req.fileValidationError == null) {
 
@@ -226,7 +226,7 @@ exports.postStamping = async (req, res) => {
 /** Gets Stamping Complete Page */
 exports.getCompleteStampingSearch = async (req, res) => {
     try {
-        res.render("stamping/afterStampingSearch",{
+        res.render("stamping/afterStampingSearch", {
             searchStage: "After Stamping Registration"
         });
     }
@@ -241,7 +241,7 @@ exports.postStampingCompleteSearch = async (req, res) => {
         let form = {
             code: req.body.code
         };
-        let query = { code: req.body.code, company: req.user.company };
+        let query = { company: req.user.company, code: req.body.code };
         let pax = await PAXModel.findOne(query).exec();
         if (pax) {
             let stamping = await StampingModel.findOne({ pax: pax._id }).exec();
@@ -269,7 +269,7 @@ exports.getCompleteRegistration = async (req, res) => {
     try {
         let query = { _id: req.params.id, company: req.user.company };
         let stamping = await StampingModel.findById(query).populate("pax").exec();
-        let mofa = await MofaModel.findOne({ pax: stamping.pax._id }).populate("pax").populate("group").exec();
+        let mofa = await MofaModel.findOne({ company: req.user.company, pax: stamping.pax._id }).populate("pax").populate("group").exec();
         if (stamping) {
             res.render("stamping/afterStampingRegistration", {
                 stamping: stamping,
@@ -300,7 +300,7 @@ exports.postCompleteStampingRegistration = async (req, res) => {
 
         let query = { _id: req.params.id, company: req.user.company };
         let stamping = await StampingModel.findOne(query).populate("pax").exec();
-        let mofa = await MofaModel.findOne({ pax: stamping.pax._id }).populate("group").exec();
+        let mofa = await MofaModel.findOne({ company: req.user.company, pax: stamping.pax._id }).populate("group").exec();
         if (!errors.isEmpty()) {
             res.render("stamping/afterStampingRegistration", {
                 stamping: stamping,

@@ -77,12 +77,12 @@ exports.postSearch = async (req, res) => {
 
             });
         }
-        let query = { code: req.body.code, company: req.user.company };
+        let query = { company: req.user.company, code: req.body.code };
         let pax = await PAXModel.findOne(query).exec();
 
         /** Finds PAX Code */
         if (pax) {
-            let tc = await TCModel.findOne({ pax: pax._id, company: req.user.company });
+            let tc = await TCModel.findOne({ company: req.user.company, pax: pax._id });
 
 
             /** Finds MOFA information of the PAX */
@@ -111,8 +111,8 @@ exports.registerManpower = async (req, res) => {
         let pax = await PAXModel.findOne(query).populate("supplier").exec();
 
         if (pax) {
-            let tc = await TCModel.findOne({ pax: pax._id, company: req.user.company });
-            let manpower = await ManpowerModel.findOne({ pax: pax._id, company: req.user.company });
+            let tc = await TCModel.findOne({ company: req.user.company, pax: pax._id });
+            let manpower = await ManpowerModel.findOne({ company: req.user.company, pax: pax._id });
             /** Finds TC information of the PAX */
             if (tc && tc.tc_received && tc.finger) {
                 res.render("manpower/register", {
@@ -147,8 +147,8 @@ exports.postManpower = async (req, res) => {
 
         let query = { _id: req.params.id, company: req.user.company };
         let pax = await PAXModel.findOne(query).populate("supplier").exec();
-        let manpower = await ManpowerModel.findOne({ pax: pax._id, company: req.user.company });
-        let tc = await TCModel.findOne({ pax: req.params.id, company: req.user.company }).exec();
+        let manpower = await ManpowerModel.findOne({ company: req.user.company, pax: pax._id });
+        let tc = await TCModel.findOne({ company: req.user.company, pax: req.params.id }).exec();
 
         if (pax && tc && tc.tc_received && tc.finger) {
 
@@ -229,12 +229,12 @@ exports.postStatusSearch = async (req, res) => {
                 form: form
             });
         }
-        let query = { code: req.body.code, company: req.user.company };
+        let query = { company: req.user.company, code: req.body.code };
         let pax = await PAXModel.findOne(query);
 
         /** Finds PAX Code */
         if (pax) {
-            let manpower = await ManpowerModel.findOne({ pax: pax._id, company: req.user.company });
+            let manpower = await ManpowerModel.findOne({ company: req.user.company, pax: pax._id });
             /** Finds Manpower information of the PAX */
             if (manpower && manpower.ready == 1) {
                 res.redirect("/manpower/status/" + manpower._id);

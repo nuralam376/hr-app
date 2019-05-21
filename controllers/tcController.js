@@ -78,12 +78,12 @@ exports.postSearch = async (req, res) => {
                 searchStage: "TC Registration"
             });
         }
-        let query = { code: req.body.code, company: req.user.company };
+        let query = { company: req.user.company, code: req.body.code };
         let pax = await PAXModel.findOne(query).populate("supplier").exec();
 
         /** Finds PAX Code */
         if (pax) {
-            let stamping = await StampingModel.findOne({ pax: pax._id, company: req.user.company }).exec();
+            let stamping = await StampingModel.findOne({ company: req.user.company, pax: pax._id }).exec();
 
 
             /** Finds MOFA information of the PAX */
@@ -112,8 +112,8 @@ exports.registerTC = async (req, res) => {
         let pax = await PAXModel.findOne(query).exec();
 
         if (pax) {
-            let stamping = await StampingModel.findOne({ pax: pax._id, company: req.user.company }).exec();
-            let tc = await TCModel.findOne({ pax: pax._id, company: req.user.company }).exec();
+            let stamping = await StampingModel.findOne({ company: req.user.company, pax: pax._id }).exec();
+            let tc = await TCModel.findOne({ company: req.user.company, pax: pax._id }).exec();
             /** Finds MOFA information of the PAX */
             if (stamping && stamping.stamping_date) {
                 res.render("tc/register", {
@@ -148,8 +148,8 @@ exports.postTC = async (req, res) => {
         };
         let query = { _id: req.params.id, company: req.user.company };
         let pax = await PAXModel.findOne(query).populate("supplier").exec();
-        let stamping = await StampingModel.findOne({ pax: pax._id, company: req.user.company });
-        let tc = await TCModel.findOne({ pax: req.params.id, company: req.user.company }).exec();
+        let stamping = await StampingModel.findOne({ company: req.user.company, pax: pax._id });
+        let tc = await TCModel.findOne({ company: req.user.company, pax: req.params.id }).exec();
 
         if (req.fileValidationError) {
             return res.render("tc/register", {
