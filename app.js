@@ -53,7 +53,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({
-    secret: "keyboard cat",
+    secret: "ghasuiqwuqhwjqwuighsaoisha4897987qwq54w5q897as1sq56w4q",
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 1000 * 60 * 30 }

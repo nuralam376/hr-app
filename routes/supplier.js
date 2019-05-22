@@ -15,6 +15,10 @@ const hasRole = require("../config/hasRole");
 
 const roleCheck = hasRole("supplier");
 
+/** SuperAdmin Access */
+const isSuperAdmin = require("../config/isSuperAdmin");
+
+
 /** Dashboard Controller */
 const SupplierController = require("../controllers/supplierController");
 
@@ -118,8 +122,8 @@ router.post("/update/:id", auth, roleCheck, upload.any(), [
     sanitizeBody("contact").trim().unescape()
 ], SupplierController.updateSupplier);
 
-router.delete("/delete/:id", auth, roleCheck, SupplierController.deleteSupplier);
-router.get("/timeline/:id", auth, roleCheck, SupplierController.suppliersTimeline);
+router.delete("/delete/:id", auth, isSuperAdmin, SupplierController.deleteSupplier);
+router.get("/timeline/:id", auth, isSuperAdmin, SupplierController.suppliersTimeline);
 router.get("/sticker/:id", auth, roleCheck, SupplierController.getSuppliersSticker);
 router.get("/pdf/:id", auth, roleCheck, SupplierController.downloadSuppliersSticker);
 router.get("/:id", auth, roleCheck, SupplierController.getSupplier);

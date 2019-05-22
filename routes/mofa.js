@@ -17,6 +17,10 @@ const hasRole = require("../config/hasRole");
 
 const roleCheck = hasRole("mofa");
 
+/** SuperAdmin Access */
+const isSuperAdmin = require("../config/isSuperAdmin");
+
+
 
 router.get("/", auth, roleCheck, mofaController.getMofas);
 
@@ -38,8 +42,8 @@ router.get("/sticker/:id", auth, roleCheck, mofaController.getSticker);
 
 router.get("/pdf/:id", auth, roleCheck, mofaController.downloadSticker);
 
-router.get("/timeline/:id", auth, roleCheck, mofaController.mofaTimeline);
+router.get("/timeline/:id", auth, isSuperAdmin, mofaController.mofaTimeline);
 
-router.delete("/delete/:id", auth, roleCheck, mofaController.deleteMofa);
+router.delete("/delete/:id", auth, isSuperAdmin, mofaController.deleteMofa);
 
 module.exports = router;

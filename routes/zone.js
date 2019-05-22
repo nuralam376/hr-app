@@ -17,6 +17,8 @@ const hasRole = require("../config/hasRole");
 
 const roleCheck = hasRole("zone");
 
+/** SuperAdmin Access */
+const isSuperAdmin = require("../config/isSuperAdmin");
 
 /** Zone Routes */
 router.get("/", auth, roleCheck, ZoneController.getAllZones);
@@ -34,9 +36,9 @@ router.post("/update/:id", auth, roleCheck, [
     sanitizeBody("name").toString(),
     sanitizeBody("country").toString(),
 ], ZoneController.updateZone);
-router.delete("/delete/:id", auth, roleCheck, ZoneController.deleteZone);
+router.delete("/delete/:id", auth, isSuperAdmin, ZoneController.deleteZone);
 router.get("/names", auth, roleCheck, ZoneController.getAllNames);
-router.get("/timeline/:id", auth, roleCheck, ZoneController.zoneTimeline);
+router.get("/timeline/:id", auth, isSuperAdmin, ZoneController.zoneTimeline);
 router.get("/:id", auth, roleCheck, ZoneController.getZone);
 
 module.exports = router;

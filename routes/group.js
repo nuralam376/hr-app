@@ -14,6 +14,10 @@ const hasRole = require("../config/hasRole");
 
 const roleCheck = hasRole("group");
 
+/** SuperAdmin Access */
+const isSuperAdmin = require("../config/isSuperAdmin");
+
+
 /** Auth Configuration */
 const auth = require("../config/auth");
 
@@ -109,10 +113,10 @@ router.post("/update/:id", auth, roleCheck, upload.any(), [
     sanitizeBody("amount").trim().unescape(),
     sanitizeBody("occupation").trim().unescape(),
 ], GroupController.updateGroup);
-router.delete("/delete/:id", auth, roleCheck, GroupController.deleteGroup);
+router.delete("/delete/:id", auth, isSuperAdmin, GroupController.deleteGroup);
 
 router.get("/getGroupImage/:image", auth, roleCheck, GroupController.getGroupImage);
-router.get("/timeline/:id", auth, roleCheck, GroupController.groupTimeline);
+router.get("/timeline/:id", auth, isSuperAdmin, GroupController.groupTimeline);
 router.get("/:id", auth, roleCheck, GroupController.getGroup);
 
 module.exports = router;

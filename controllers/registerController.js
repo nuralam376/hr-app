@@ -116,9 +116,6 @@ router.post("/", [
             superAdmin.profile_photo = forms.profile_photo;
             superAdmin.password = forms.pass;
             superAdmin.roles = [
-                "dashboard",
-                "company",
-                "admin",
                 "zone",
                 "group",
                 "supplier",
@@ -137,7 +134,7 @@ router.post("/", [
 
             let hashPwd = await bcrypt.hash(superAdmin.password, 10);
             superAdmin.password = hashPwd;
-            superAdmin.emailVerificationToken = `${Date.now()}`+`${uuid()}`;
+            superAdmin.emailVerificationToken = `${Date.now()}` + `${uuid()}`;
 
             let superAdminCreate = await superAdmin.save(); // Creates New SuperAdmin
 

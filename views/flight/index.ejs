@@ -16,7 +16,10 @@
                         <th>Flight Date</th>
                         <th>Flight Airlines</th>
                         <th>Price</th>
-                        <th>Option</th>
+                        <% if(admin.isSuperAdmin) { %>
+
+                        <th colspan="2" class="text-center">Option(s)</th>
+                        <% } %>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,9 +40,13 @@
                         <td>------</td>
                         <td>------</td>
                         <% } %>
-                        <td><a href="#" class="btn btn-danger delete-flight" data-id="<%= flight._id %>"
+                        <% if(admin.isSuperAdmin) { %>
+
+                        <td><a href="#" class="btn btn-sm btn-danger delete-flight" data-id="<%= flight._id %>"
                                 data-csrf="<%= csrfToken %>">Delete</a></td>
+
                         <td> <a href="/flight/timeline/<%= flight._id %>">Timeline</a></td>
+                        <% } %>
                     </tr>
                     <% }) %>
                     <% } %>

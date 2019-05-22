@@ -16,6 +16,10 @@ const hasRole = require("../config/hasRole");
 
 const roleCheck = hasRole("manpower");
 
+/** SuperAdmin Access */
+const isSuperAdmin = require("../config/isSuperAdmin");
+
+
 /** Validation */
 const { check, body } = require("express-validator/check");
 const { sanitizeBody } = require("express-validator/filter");
@@ -49,8 +53,8 @@ router.post("/status/:id", auth, roleCheck, upload.any(), [
     sanitizeBody("card_no").trim().unescape(),
 ], manpowerController.postRegisterManpowerStatus);
 
-router.delete("/delete/:id", auth, roleCheck, manpowerController.deleteManpower);
+router.delete("/delete/:id", auth, isSuperAdmin, manpowerController.deleteManpower);
 
-router.get("/timeline/:id", auth, roleCheck, manpowerController.manpowerTimeline);
+router.get("/timeline/:id", auth, isSuperAdmin, manpowerController.manpowerTimeline);
 
 module.exports = router;

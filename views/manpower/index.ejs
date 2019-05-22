@@ -15,7 +15,9 @@
                         <th>Clearance Date</th>
                         <th>SmartCard No</th>
                         <th>SmartCard Photo</th>
-                        <th>Option</th>
+                        <% if(admin.isSuperAdmin) { %>
+                        <th colspan="2" class="text-center">Option(s)</th>
+                        <% } %>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,9 +45,11 @@
                         <td>------</td>
                         <td>------</td>
                         <% } %>
+                        <% if(admin.isSuperAdmin) { %>
                         <td><a href="#" class="btn btn-danger delete-manpower" data-id="<%= manpower._id %>"
                                 data-csrf="<%= csrfToken %>">Delete</a></td>
                         <td> <a href="/manpower/timeline/<%= manpower._id %>">Timeline</a></td>
+                        <% } %>
                     </tr>
                     <% }) %>
                     <% } %>

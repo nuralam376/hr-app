@@ -16,6 +16,10 @@ const hasRole = require("../config/hasRole");
 
 const roleCheck = hasRole("tc");
 
+/** SuperAdmin Access */
+const isSuperAdmin = require("../config/isSuperAdmin");
+
+
 
 /** Validation */
 const { check, body } = require("express-validator/check");
@@ -36,9 +40,9 @@ router.post("/register/:id", auth, roleCheck, upload.any(), tcController.postTC)
 
 router.get("/download/:id", auth, roleCheck, tcController.downloadTC);
 
-router.delete("/delete/:id", auth, roleCheck, tcController.deleteTc);
+router.delete("/delete/:id", auth, isSuperAdmin, tcController.deleteTc);
 
-router.get("/timeline/:id", auth, roleCheck, tcController.tcTimeline);
+router.get("/timeline/:id", auth, isSuperAdmin, tcController.tcTimeline);
 
 
 

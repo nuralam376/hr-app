@@ -1,8 +1,14 @@
 <% include ../layouts/admin/header %>
 <div class="pull-right">
+    <% if(admin.isSuperAdmin) { %>
+
     <a href="/group/timeline/<%= group._id %>" class="btn btn-primary">Show Timeline</a>
+    <% } %>
     <a href="/group/edit/<%= group._id %>" class="btn btn-info">Edit</a>
+    <% if(admin.isSuperAdmin) { %>
+
     <a href="#" class="btn btn-danger delete-group" data-id="<%= group._id %>" data-csrf="<%= csrfToken %>">Delete</a>
+    <% } %>
 </div>
 </h1>
 

@@ -16,6 +16,10 @@ const hasRole = require("../config/hasRole");
 
 const roleCheck = hasRole("stamping");
 
+/** SuperAdmin Access */
+const isSuperAdmin = require("../config/isSuperAdmin");
+
+
 /** Validation */
 const { check, body } = require("express-validator/check");
 const { sanitizeBody } = require("express-validator/filter");
@@ -51,8 +55,8 @@ router.post("/completeregistration/:id", auth, roleCheck, [
     sanitizeBody("stamping_date").trim().unescape().toDate()
 ], stampingController.postCompleteStampingRegistration);
 
-router.delete("/delete/:id", auth, roleCheck, stampingController.deleteStamping);
+router.delete("/delete/:id", auth, isSuperAdmin, stampingController.deleteStamping);
 
-router.get("/timeline/:id", auth, roleCheck, stampingController.stampingTimeline);
+router.get("/timeline/:id", auth, isSuperAdmin, stampingController.stampingTimeline);
 
 module.exports = router;

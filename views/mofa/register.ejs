@@ -29,7 +29,7 @@
         <div class="card">
             <div class="card-body">
                 <h2>MOFA Info
-                    <% if(typeof mofa != 'undefined') { %>
+                    <% if(typeof mofa != 'undefined' && admin.isSuperAdmin) { %>
                     <a href="#" class="btn btn-danger delete-mofa" data-id="<%= mofa._id %>"
                         data-csrf="<%= csrfToken %>">Delete</a>
                     <% } %>

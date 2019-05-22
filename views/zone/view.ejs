@@ -1,9 +1,13 @@
 <% include ../layouts/admin/header %>
 <div class="pull-right">
+    <% if(admin.isSuperAdmin) { %>
     <a href="/zone/timeline/<%= zone._id %>" class="btn btn-primary">Show Timeline</a>
+    <% } %>
 
     <a href="/zone/edit/<%= zone._id %>" class="btn btn-info">Edit</a>
+    <% if(admin.isSuperAdmin) { %>
     <a href="#" class="btn btn-danger delete-zone" data-id="<%= zone._id %>" data-csrf="<%= csrfToken %>">Delete</a>
+    <% } %>
 </div>
 </h1>
 

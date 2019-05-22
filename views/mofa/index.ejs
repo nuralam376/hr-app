@@ -19,6 +19,7 @@
                         <th>Type</th>
                         <th>E Number</th>
                         <th>Total</th>
+                        <th colspan="2" class="text-center">Option(s)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,7 +43,9 @@
                         <% if(mofa.e_number) { %>
                         <td><a href="/mofa/sticker/<%= mofa._id %>">Sticker</a></td>
                         <% } %>
+                        <% if(admin.isSuperAdmin) { %>
                         <td> <a href="/mofa/timeline/<%= mofa._id %>">Timeline</a></td>
+                        <% } %>
                     </tr>
                     <% }) %>
                 </tbody>

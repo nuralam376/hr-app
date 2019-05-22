@@ -12,7 +12,10 @@
             <th>PAX Code</th>
             <th>PAX Name</th>
             <th>Received By</th>
-            <th>Option</th>
+            <% if(admin.isSuperAdmin) { %>
+
+            <th colspan="2" class="text-center">Option(s)</th>
+            <% } %>
           </tr>
         </thead>
         <tbody>
@@ -24,11 +27,14 @@
             </td>
             <td><%= delivery.pax.name %></td>
             <td><%= delivery.received_by %></td>
+            <% if(admin.isSuperAdmin) { %>
+
             <td>
-              <a href="#" class="btn btn-danger delete-delivery" data-id="<%= delivery._id %>"
+              <a href="#" class="btn btn-sm btn-danger delete-delivery" data-id="<%= delivery._id %>"
                 data-csrf="<%= csrfToken %>">Delete</a>
             </td>
             <td> <a href="/delivery/timeline/<%= delivery._id %>">Timeline</a></td>
+            <% } %>
           </tr>
           <% }) %> <% } %>
         </tbody>

@@ -14,6 +14,10 @@ const hasRole = require("../config/hasRole");
 
 const roleCheck = hasRole("flight");
 
+/** SuperAdmin Access */
+const isSuperAdmin = require("../config/isSuperAdmin");
+
+
 /** Flight Controller */
 const flightController = require("../controllers/flightController");
 
@@ -56,9 +60,9 @@ router.post("/report/:id", auth, roleCheck, [
     sanitizeBody("price").trim().unescape(),
 ], flightController.postReport);
 
-router.delete("/delete/:id", auth, roleCheck, flightController.deleteFlight);
+router.delete("/delete/:id", auth, isSuperAdmin, flightController.deleteFlight);
 
-router.get("/timeline/:id", auth, roleCheck, flightController.flightTimeline);
+router.get("/timeline/:id", auth, isSuperAdmin, flightController.flightTimeline);
 
 
 module.exports = router;

@@ -14,6 +14,10 @@ const hasRole = require("../config/hasRole");
 
 const roleCheck = hasRole("delivery");
 
+/** SuperAdmin Access */
+const isSuperAdmin = require("../config/isSuperAdmin");
+
+
 /** Delivery  Controller */
 const deliveryController = require("../controllers/deliveryController");
 
@@ -35,9 +39,9 @@ router.post("/report/:id", auth, roleCheck, [
     sanitizeBody("received_by").trim().unescape()
 ], deliveryController.postReport);
 
-router.delete("/delete/:id", auth, roleCheck, deliveryController.deleteDelivery);
+router.delete("/delete/:id", auth, isSuperAdmin, deliveryController.deleteDelivery);
 
-router.get("/timeline/:id", auth, roleCheck, deliveryController.deliveryTimeline);
+router.get("/timeline/:id", auth, isSuperAdmin, deliveryController.deliveryTimeline);
 
 
 module.exports = router;

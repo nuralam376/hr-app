@@ -17,6 +17,10 @@ const hasRole = require("../config/hasRole");
 
 const roleCheck = hasRole("pax");
 
+/** SuperAdmin Access */
+const isSuperAdmin = require("../config/isSuperAdmin");
+
+
 /** User Controller Page */
 const UserController = require("../controllers/userController");
 
@@ -97,13 +101,13 @@ router.post("/update/:id", auth, roleCheck, upload.any(), [
     sanitizeBody("passport").trim().unescape(),
 ], UserController.updateUser);
 
-router.delete("/delete/:id", auth, roleCheck, UserController.deleteUser);
+router.delete("/delete/:id", auth, isSuperAdmin, UserController.deleteUser);
 
 router.get("/sticker/:id", auth, roleCheck, UserController.getUsersSticker);
 
 router.get("/pdf/:id", auth, roleCheck, UserController.downloadUsersSticker);
 
-router.get("/timeline/:id", auth, roleCheck, UserController.usersTimeline);
+router.get("/timeline/:id", auth, isSuperAdmin, UserController.usersTimeline);
 
 router.get("/:id", auth, roleCheck, UserController.getUser);
 

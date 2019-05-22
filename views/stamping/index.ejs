@@ -15,7 +15,9 @@
                         <th>Police Clearance Documents</th>
                         <th>Individual Visa Number</th>
                         <th>Stamping Date</th>
-                        <th>Option</th>
+                        <% if(admin.isSuperAdmin) { %>
+                        <th colspan="2" class="text-center">Option(s)</th>
+                        <% } %>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,10 +37,12 @@
                         <td>-----</td>
                         <td>-----</td>
                         <% } %>
-                        <td><a href="#" class="btn btn-danger delete-stamping" data-id="<%= stamping._id %>"
+                        <% if(admin.isSuperAdmin) { %>
+
+                        <td><a href="#" class="btn btn-sm btn-danger delete-stamping" data-id="<%= stamping._id %>"
                                 data-csrf="<%= csrfToken %>">Delete</a></td>
                         <td> <a href="/stamping/timeline/<%= stamping._id %>">Timeline</a></td>
-
+                        <% } %>
                     </tr>
                     <% }) %>
                     <% } %>

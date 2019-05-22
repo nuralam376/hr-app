@@ -23,6 +23,10 @@ const multer = require("multer");
 
 const upload = require("../util/uploadFile");
 
+/** SuperAdmin Access */
+const isSuperAdmin = require("../config/isSuperAdmin");
+
+
 /** Medical Routes */
 // router.get("/",auth,MedicalController.getAllMedicals);
 
@@ -78,12 +82,12 @@ router.post("/report/update/:id", auth, roleCheck, upload.any(), [
 
 router.get("/register/center/:id", auth, roleCheck, MedicalController.getMedicalPAXInfoForCenter);
 router.get("/register/:id", auth, roleCheck, MedicalController.getMedicalPAXInfo);
-router.delete("/delete/:id", auth, roleCheck, MedicalController.deleteMedicalInfo);
+router.delete("/delete/:id", auth, isSuperAdmin, MedicalController.deleteMedicalInfo);
 router.get("/print/:id", auth, roleCheck, MedicalController.printDoc);
 router.get("/passport/:id", auth, roleCheck, MedicalController.printPassport);
 router.get("/application/:id", auth, roleCheck, MedicalController.printApplication);
 router.get("/enjazit/:id", auth, roleCheck, MedicalController.printEnjazit);
-router.get("/timeline/:id", auth, roleCheck, MedicalController.medicalTimeline);
+router.get("/timeline/:id", auth, isSuperAdmin, MedicalController.medicalTimeline);
 router.get("/:id", auth, roleCheck, MedicalController.getMedicalInfo);
 
 

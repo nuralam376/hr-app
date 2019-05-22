@@ -2,10 +2,14 @@
 <h1>
   Code : <%= newUser.code %>
   <div class="pull-right">
+    <% if(admin.isSuperAdmin) { %>
     <a href="/pax/timeline/<%= newUser.seq_id %>" class="btn btn-primary">Show Timeline</a>
+    <% } %>
     <a href="/pax/sticker/<%= newUser.seq_id %>" class="btn btn-warning">Generate Sticker</a>
     <a href="/pax/edit/<%= newUser.seq_id %>" class="btn btn-info">Edit</a>
+    <% if(admin.isSuperAdmin) { %>
     <a href="#" class="btn btn-danger delete-user" data-id="<%= newUser._id %>" data-csrf="<%= csrfToken %>">Delete</a>
+    <% } %>
   </div>
 </h1>
 
