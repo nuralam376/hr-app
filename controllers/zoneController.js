@@ -33,6 +33,8 @@ exports.getAllZones = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 };
 
@@ -43,6 +45,8 @@ exports.getZoneRegistration = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -93,6 +97,8 @@ exports.postZoneRegistration = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -113,6 +119,8 @@ exports.editZone = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -155,6 +163,8 @@ exports.updateZone = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -184,6 +194,8 @@ exports.deleteZone = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -213,6 +225,8 @@ exports.getZone = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -232,5 +246,7 @@ exports.zoneTimeline = async (req, res) => {
         });
     } catch (error) {
         console.log(error);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 };

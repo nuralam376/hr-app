@@ -40,6 +40,8 @@ exports.getAllInfos = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -53,6 +55,8 @@ exports.getSearch = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -98,6 +102,8 @@ exports.postSearch = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -228,6 +234,8 @@ exports.postRequisition = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -241,6 +249,8 @@ exports.getReportSearch = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -286,6 +296,8 @@ exports.postReportSearch = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -388,6 +400,8 @@ exports.postReport = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -419,6 +433,8 @@ exports.deleteFlight = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -444,5 +460,7 @@ exports.flightTimeline = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 };

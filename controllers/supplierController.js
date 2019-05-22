@@ -44,6 +44,8 @@ exports.getAllSuppliers = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -59,6 +61,8 @@ exports.getSupplierRegistration = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -127,6 +131,8 @@ exports.postSupplierRegistration = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -161,6 +167,8 @@ exports.editSupplier = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -265,6 +273,8 @@ exports.updateSupplier = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -306,6 +316,8 @@ exports.deleteSupplier = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -326,6 +338,8 @@ exports.suppliersTimeline = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -358,6 +372,8 @@ exports.getSupplier = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -435,6 +451,8 @@ exports.getSuppliersSticker = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -454,5 +472,7 @@ exports.downloadSuppliersSticker = async (req, res) => {
     stickerPdf(res, supplier);
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };

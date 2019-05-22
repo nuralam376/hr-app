@@ -42,6 +42,8 @@ router.get("/", async (req, res, next) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 });
 
@@ -127,6 +129,8 @@ router.post("/", [
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 });
 

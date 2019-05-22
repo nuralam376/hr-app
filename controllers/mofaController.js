@@ -34,6 +34,8 @@ exports.getMofas = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -46,6 +48,8 @@ exports.getMofaSearch = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -98,6 +102,8 @@ exports.postSearch = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -197,6 +203,8 @@ exports.postMofaRegistration = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -226,6 +234,8 @@ exports.getSticker = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -247,6 +257,8 @@ exports.downloadSticker = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -275,6 +287,8 @@ exports.deleteMofa = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -294,5 +308,7 @@ exports.mofaTimeline = async (req, res) => {
         });
     } catch (error) {
         console.log(error);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 };

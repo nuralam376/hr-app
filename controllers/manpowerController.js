@@ -46,6 +46,8 @@ exports.getAllInfos = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -59,6 +61,8 @@ exports.getSearch = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -104,6 +108,8 @@ exports.postSearch = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -197,6 +203,8 @@ exports.postManpower = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -210,6 +218,8 @@ exports.getStatusSearch = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -254,6 +264,8 @@ exports.postStatusSearch = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -365,6 +377,8 @@ exports.postRegisterManpowerStatus = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -399,6 +413,8 @@ exports.deleteManpower = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -424,5 +440,7 @@ exports.manpowerTimeline = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 };

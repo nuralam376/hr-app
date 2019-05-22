@@ -49,6 +49,8 @@ exports.getAllInfos = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -61,6 +63,8 @@ exports.getSearch = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -106,6 +110,8 @@ exports.postSearch = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -223,6 +229,8 @@ exports.postStamping = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -235,6 +243,8 @@ exports.getCompleteStampingSearch = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -264,6 +274,8 @@ exports.postStampingCompleteSearch = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -288,6 +300,8 @@ exports.getCompleteRegistration = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -338,6 +352,8 @@ exports.postCompleteStampingRegistration = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -371,6 +387,8 @@ exports.deleteStamping = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -396,5 +414,7 @@ exports.stampingTimeline = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 };

@@ -66,6 +66,8 @@ exports.getAllGroups = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -81,6 +83,8 @@ exports.getGroupRegistration = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -121,6 +125,8 @@ exports.postGroupRegistration = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -144,6 +150,8 @@ exports.editGroup = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -211,6 +219,8 @@ exports.updateGroup = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -255,6 +265,8 @@ exports.deleteGroup = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -278,10 +290,12 @@ exports.getGroup = async (req, res) => {
       });
     } else {
       req.flash("danger", "group Not found");
-      res.redirect("/group/");
+      res.redirect("/group");
     }
   } catch (err) {
     console.log(err);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -422,6 +436,8 @@ exports.getGroupImage = async (req, res) => {
     res.end();
   } catch (err) {
     console.log(err);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -443,5 +459,7 @@ exports.groupTimeline = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };

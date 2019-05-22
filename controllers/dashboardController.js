@@ -44,6 +44,8 @@ exports.getDashboard = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -62,6 +64,8 @@ exports.getChartAjaxData = async (req, res) => {
     return res.jsonp(totals);
   } catch (err) {
     console.log(err);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -102,6 +106,8 @@ const getChartTotalResult = async (req, Model) => {
     return total;
   } catch (err) {
     console.log(err);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -171,5 +177,7 @@ exports.getChartPaxData = async (req, res) => {
   }
   catch (err) {
     console.log(err);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 }

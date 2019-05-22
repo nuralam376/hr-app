@@ -122,6 +122,8 @@ router.get("/", auth, isSuperAdmin, async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 });
 
@@ -131,6 +133,8 @@ router.get("/register", auth, isSuperAdmin, async (req, res) => {
     res.render("admins/register");
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 });
 
@@ -283,6 +287,8 @@ router.post(
       }
     } catch (error) {
       console.log(error);
+      res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
   }
 );
@@ -306,6 +312,8 @@ router.get("/profile", auth, async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 });
 
@@ -328,6 +336,8 @@ router.get("/profile/edit", auth, async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 });
 
@@ -359,6 +369,8 @@ router.get("/edit/:id", auth, isSuperAdmin, async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 });
 
@@ -498,6 +510,8 @@ router.post(
       }
     } catch (error) {
       console.log(error);
+      res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
   }
 );
@@ -614,6 +628,8 @@ router.post(
       }
     } catch (error) {
       console.log(error);
+      res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
   }
 );
@@ -638,6 +654,8 @@ router.delete("/delete/:id", auth, isSuperAdmin, async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 });
 
@@ -657,6 +675,8 @@ router.get("/timeline/:id", auth, async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 });
 
@@ -695,6 +715,8 @@ router.get("/verifyEmail/:id", async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 });
 
@@ -732,6 +754,8 @@ router.get("/:id", auth, isSuperAdmin, async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 });
 

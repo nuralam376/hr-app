@@ -78,6 +78,8 @@ exports.getAllUsers = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -99,6 +101,8 @@ exports.getRegistration = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -189,6 +193,8 @@ exports.postRegistration = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 /**
@@ -239,6 +245,8 @@ exports.editUser = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -382,6 +390,8 @@ exports.updateUser = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -426,6 +436,8 @@ exports.deleteUser = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -450,6 +462,8 @@ exports.getUsersSticker = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -473,6 +487,8 @@ exports.downloadUsersSticker = async (req, res) => {
     stickerPdf(res, user, zone);
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -492,6 +508,8 @@ exports.usersTimeline = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -537,6 +555,8 @@ exports.getUser = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };
 
@@ -780,5 +800,7 @@ const paxStageStatus = async (req, pax) => {
     return status;
   } catch (err) {
     console.log(err);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
   }
 };

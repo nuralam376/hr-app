@@ -16,6 +16,8 @@ exports.getAdminRoles = async (req, res) => {
         });
     } catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 };
 
@@ -56,6 +58,8 @@ exports.createAdminRoles = async (req, res) => {
 
     } catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 };
 
@@ -90,6 +94,8 @@ exports.postAdminRoles = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
 
@@ -110,5 +116,7 @@ exports.getAdminRole = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        res.status(422).send("<h1>500,Internal Server Error</h1>");
+
     }
 }
