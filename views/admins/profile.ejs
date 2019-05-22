@@ -1,32 +1,34 @@
 <% include ../layouts/admin/header %>
-    <h1>Admin ID : <%= adminInfo.seq_id %>
-        <div class="pull-right">
-            <a href="/admin/profile/edit" class = "btn btn-info">Edit</a>
-        </div>
-    </h1>
-    <table class = "table table-bordered">
-            <tr>
-                <th>Name</th>
-                <td><%= adminInfo.name %></td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td><%= adminInfo.email %></td>
-            </tr>
-            <tr>
-                <th>Contact</th>
-                <td><%= adminInfo.contact %></td>
-            </tr>
-            <tr>
-                <th>Address</th>
-                <td><%= adminInfo.address %></td>
-            </tr>
-            <tr>
-                <th>Profile Photo</th>
-               
-                <td><a data-fancybox="gallery" href="<%= adminImageUrl %>"><img src = "<%= adminImageUrl %>" alt = "No Pic" height = "300px" width = "500px"></a></td>
-              
-            </tr>
-        </table>
+<h1>Admin ID : <%= adminInfo.seq_id %>
+    <div class="pull-right">
+        <a href="/admin/profile/edit" class="btn btn-info">Edit</a>
+        <a href="/admin/changepassword" class="btn btn-primary">Change Password</a>
+    </div>
+</h1>
+<table class="table table-bordered">
+    <tr>
+        <th>Name</th>
+        <td><%= adminInfo.name %></td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td><%= adminInfo.email %></td>
+    </tr>
+    <tr>
+        <th>Contact</th>
+        <td><%= adminInfo.contact %></td>
+    </tr>
+    <tr>
+        <th>Address</th>
+        <td><%= adminInfo.address %></td>
+    </tr>
+    <tr>
+        <th>Profile Photo</th>
+
+        <td><a data-fancybox="gallery" href="<%= adminImageUrl %>"><img src="<%= adminImageUrl %>" alt="No Pic"
+                    height="300px" width="500px"></a></td>
+
+    </tr>
+</table>
 
 <% include ../layouts/admin/footer %>

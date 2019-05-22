@@ -721,6 +721,81 @@ router.get("/verifyEmail/:id", async (req, res) => {
 });
 
 /**
+ * Shows Change Password
+ * 
+ */
+
+router.get("/changepassword", auth, async (req, res) => {
+  try {
+    res.render("admins/changepassword");
+  } catch (error) {
+    console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+  }
+});
+
+/**
+ * Change Password
+ * 
+ */
+
+router.post("/changepassword", auth, [
+  check("oldpassword").not().isEmpty().withMessage("Old Password is required"),
+  check("newpassword").not().isEmpty().withMessage("New Password is required").isLength({ min: 6 }).withMessage("Password must be 6 characters"),
+  check("confirmpassword").custom((value, { req, loc, path }) => {
+    if (value != req.body.newpassword) {
+      throw new Error("Passwords don't match")
+    }
+    else {
+      return typeof value == undefined ? "" : value;
+    }
+  }),
+  sanitizeBody("oldpassword").trim().unescape(),
+  sanitizeBody("newpassword").trim().unescape(),
+  sanitizeBody("confirmpassword").trim().unescape(),
+], async (req, res) => {
+  try {
+
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.render("admins/changepassword", {
+        errors: errors.array()
+      });
+    }
+    else {
+      let password = req.body.oldpassword;
+      let isMatch = await bcrypt.compare(password, req.user.password);
+      if (isMatch) {
+        let newpassword = req.body.newpassword;
+        let hashNewPassword = await bcrypt.hash(newpassword, 10);
+        let newAdmin = {};
+        newAdmin.password = hashNewPassword;
+        let adminUpdate = await AdminModel.updateOne({ _id: req.user._id }, newAdmin);
+
+        if (adminUpdate) {
+          req.flash("success", "Password has been changed");
+          res.redirect("/admin/profile");
+        }
+        else {
+          req.flash("danger", "Something went wrong");
+          res.redirect("/admin/profile");
+        }
+      } else {
+        res.render("admins/changepassword", {
+          fileError: "Old Password is not correct"
+        });
+      }
+
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+  }
+});
+
+
+/**
  * Shows Individual Admin
  * @param {string} id - The Object Id of the Admin.
  */
