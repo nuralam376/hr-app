@@ -635,6 +635,12 @@ const saveNewUser = async (req, res, forms, suppliers, groups, companyInfo) => {
 
     let userSave = await user.save(); // Saves the new User
 
+    /** Updated Supplier PAX Status */
+    let supplier = await SupplierModel.findById(forms.supplier);
+    let newSupplier = {};
+    newSupplier.lastPAX = Date.now();
+    await SupplierModel.updateOne({ _id: supplier._id }, newSupplier);
+
     if (userSave) {
       let companyInfo = {};
       companyInfo.user = userCount;
@@ -727,6 +733,8 @@ const userUpdate = async (
 
   await createdEvents(req, user, req.params.id, "user");
   let userUpdatedData = await UserModel.updateOne(query, user);
+
+
 
   if (userUpdatedData) {
     req.flash("success", "PAX Details Updated");

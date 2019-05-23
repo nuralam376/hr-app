@@ -9,9 +9,11 @@ $(document).ready(function () {
     if (count) {
         for (let i = 0; i < count; i++) {
             let userId = $("#user-" + i).data("user");
-            console.log(userId);
+            let supplierId = $("#supplier-" + i).data("supplier");
             let user = moment(new Date(userId)).format("llll");
+            let supplier = moment(new Date(supplierId), "YYYYMMDD").fromNow();
             $("#user-" + i).text(user);
+            $("#supplier-" + i).text(supplier);
         }
     }
 

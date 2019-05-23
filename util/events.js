@@ -69,7 +69,10 @@ const createEvents = async (req, user, id, type) => {
       else if (val == "supplier") {
         let oldSupplier = await SupplierModel.findById({ _id: oldUser[val] });
         let newSupplier = await SupplierModel.findById({ _id: user[val] });
-
+        /** Updated Supplier PAX Status */
+        let supplier = {};
+        supplier.lastPAX = Date.now();
+        await SupplierModel.updateOne({ _id: newSupplier._id }, supplier);
         event.description = `${req.user.name} changed supplier from  ${oldSupplier.name} to ${newSupplier.name}`;
       }
       else if (val == "zone") {

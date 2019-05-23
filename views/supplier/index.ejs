@@ -15,12 +15,13 @@
                     <th>Name</th>
                     <th>NID / Passport</th>
                     <th>Introducer Name</th>
+                    <th>Last PAX registered</th>
                     <th>Photo</th>
                     <th>Date</th>
                 </tr>
             </thead>
             <tbody>
-                <% if(suppliers) { let i = 0; %>
+                <% if(suppliers) { let i = 0;j=0; %>
                 <input type="hidden" id="userCount" data-length="<%= suppliers.length %>">
 
                 <% suppliers.forEach((supplier) => { %>
@@ -29,6 +30,12 @@
                     <td><%= supplier.name %></td>
                     <td><%= supplier.nid %></td>
                     <td><%= supplier.introducer_name %></td>
+                    <% if(supplier.lastPAX) { %>
+                    <td id="supplier-<%= j++ %>" data-supplier="<%= supplier.lastPAX %>">
+                        <% } else { %>
+                    <td>NO PAX</td>
+                    <% } %>
+
                     <td><a data-fancybox="gallery" href="<%= supplier.imageUrl %>"><img src="<%= supplier.imageUrl %>"
                                 height="50px" width="50px"></a></td>
                     <td id="user-<%= i++ %>" data-user="<%= supplier.created_at %>">

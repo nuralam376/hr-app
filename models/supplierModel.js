@@ -73,6 +73,11 @@ const SupplierSchema = mongoose.Schema({
         required: true,
         default: 0
     },
+    lastPAX:
+    {
+        type: Date,
+        required: false
+    },
     created_at:
     {
         type: Date,

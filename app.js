@@ -193,28 +193,6 @@ app.get("/", async (req, res) => {
   }
 });
 
-/** AWS S3 */
-app.get("/aws", async (req, res) => {
-  try {
-    const key = `${Date.now()}/${uuid()}.jpeg`;
-    const params = {
-      Bucket: "hr-app-test",
-      ContentType: "jpeg",
-      Key: key,
-      Expires: 60
-      // ResponseContentType: 'image/png'
-    };
-
-    s3.getSignedUrl("putObject", params, (err, url) => {
-      if (err) {
-        console.log(err);
-      }
-      res.send({ key, url });
-    });
-  } catch (error) {
-    console.log(error);
-  }
-});
 /** Required Controllers */
 const register = require("./controllers/registerController");
 const dashboard = require("./routes/dashboard");
