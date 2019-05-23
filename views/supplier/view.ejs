@@ -4,6 +4,7 @@
         <% if(admin.isSuperAdmin) { %>
         <a href="/supplier/timeline/<%= supplier.seq_id %>" class="btn btn-primary">Show Timeline</a>
         <% } %>
+        <a href="/supplier/pax/<%= supplier._id %>" class="btn btn-info">PAX</a>
         <a href="/supplier/sticker/<%= supplier.seq_id %>" class="btn btn-warning">Generate Sticker</a>
         <a href="/supplier/edit/<%= supplier.seq_id %>" class="btn btn-info">Edit</a>
         <% if(admin.isSuperAdmin) { %>
@@ -45,6 +46,15 @@
     <tr>
         <th>Introducer Number</th>
         <td><%= supplier.introducer_number %></td>
+    </tr>
+    <tr>
+        <th>Last PAX Registration</th>
+        <td><% if(supplier.lastPAX) { %>
+            <%= supplier.lastPAX %>
+            <% } else { %>
+            No PAX
+            <% } %>
+        </td>
     </tr>
     <tr>
         <th>Profile Photo</th>

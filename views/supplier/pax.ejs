@@ -1,0 +1,55 @@
+<% include ../layouts/admin/header %>
+
+<h1 class="text-center">PAX Home</h1>
+<div class="card">
+    <div class="card-body">
+        <h2>All PAX</h2>
+        <div class="pull-right">
+            <a href="/pax/register" class="btn btn-primary">Create New PAX</a>
+        </div>
+        <br><br>
+
+        <table id="myTable" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Passport ID</th>
+                    <th>Assigned Supplier</th>
+                    <th>Group</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th>Photo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(users) { %>
+                <input type="hidden" id="userCount" data-length="<%= users.length %>">
+                <% let i = 0; %>
+                <% users.forEach(function(user) { %>
+                <tr>
+                    <td><a href="/pax/<%= user.seq_id %>"><%= user.code %></a></td>
+                    <td><%= user.name %></td>
+                    <td><%= user.contact %></td>
+                    <td><%= user.passport %></td>
+                    <% if(user.supplier) { %>
+                    <td><a href="/supplier/<%= user.supplier.seq_id %>"><%= user.supplier.name %></a></td>
+                    <% } else { %>
+                    <td>No Supplier</td>
+                    <% } %>
+                    <td><a href="/group/<%= user.group._id %>"><%= user.group.group_seq %> /
+                            <%= user.group.group_sl %></a></td>
+                    <td><%= user.category %></td>
+                    <td id="user-<%= i++ %>" data-user="<%= user.created_at %>">
+                    </td>
+                    <td><a data-fancybox="gallery" href="<%= user.imageUrl %>"><img src="<%= user.imageUrl %>" alt=""
+                                style="width:100px; height : 50px"></a></td>
+                </tr>
+                <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+<% include ../layouts/admin/footer %>

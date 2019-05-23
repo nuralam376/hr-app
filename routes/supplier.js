@@ -126,6 +126,7 @@ router.delete("/delete/:id", auth, isSuperAdmin, SupplierController.deleteSuppli
 router.get("/timeline/:id", auth, isSuperAdmin, SupplierController.suppliersTimeline);
 router.get("/sticker/:id", auth, roleCheck, SupplierController.getSuppliersSticker);
 router.get("/pdf/:id", auth, roleCheck, SupplierController.downloadSuppliersSticker);
+router.get("/pax/:id", auth, roleCheck, SupplierController.getAllPAX);
 router.get("/:id", auth, roleCheck, SupplierController.getSupplier);
 
 module.exports = router;

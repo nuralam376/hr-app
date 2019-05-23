@@ -1,4 +1,4 @@
-/** This is the Suuplier controller page. Supplier CRUD functions are here. */
+/** This is the Supplier controller page. Supplier CRUD functions are here. */
 
 /** Required modules */
 const path = require("path");
@@ -470,6 +470,35 @@ exports.downloadSuppliersSticker = async (req, res) => {
     let stickerPdf = require("../util/supplierPdf");
 
     stickerPdf(res, supplier);
+  } catch (error) {
+    console.log(error);
+    res.status(422).send("<h1>500,Internal Server Error</h1>");
+
+  }
+};
+
+/**
+ * Gets All PAX
+ * @param {string} id - The Object Id of the Supplier.
+ */
+
+exports.getAllPAX = async (req, res) => {
+  try {
+    let query = { supplier: req.params.id, company: req.user.company };
+
+    let users = await PAXModel.find(query).sort({ created_at: -1 }).populate("supplier", "name").populate("group", "group_seq group_sl");
+
+    let newUsers = users.map(user => {
+      let url = s3GetFile(req, "/pax/" + user.code + "/", user.profile_photo);
+
+      user["imageUrl"] = url;
+
+      return user;
+    });
+
+    res.render("supplier/pax", {
+      users: users
+    });
   } catch (error) {
     console.log(error);
     res.status(422).send("<h1>500,Internal Server Error</h1>");
